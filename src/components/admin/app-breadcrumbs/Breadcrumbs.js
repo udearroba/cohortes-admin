@@ -8,6 +8,12 @@ export const breadcrumbs = {
       name: 'dashboard',
       displayName: 'menu.dashboard',
     },
+
+    {
+      name: 'reunion',
+      displayName: 'menu.reunion',
+    },
+
     {
       name: 'statistics',
       displayName: 'menu.statistics',

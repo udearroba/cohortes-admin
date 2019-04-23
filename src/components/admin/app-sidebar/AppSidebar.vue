@@ -9,6 +9,16 @@
           <span>{{ $t('menu.dashboard') }}</span>
         </span>
       </sidebar-link>
+
+      <sidebar-link
+        :to="{ name: 'reunion' }">
+        <span slot="title">
+          <span
+            class="sidebar-menu-item-icon vuestic-icon vuestic-icon-tables"></span>
+          <span>{{ $t('menu.reunion') }}</span>
+        </span>
+      </sidebar-link>
+
       <sidebar-link-group>
         <span slot="title">
           <span

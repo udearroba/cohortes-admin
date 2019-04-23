@@ -92,6 +92,13 @@ export default new Router({
           component: lazyLoading('dashboard/Dashboard'),
           default: true,
         },
+
+        {
+          name: 'reunion',
+          path: 'reunion',
+          component: lazyLoading('ReunionVideoConferencia/FormularioRv'),
+        },
+
         {
           name: 'statistics',
           path: 'statistics',
