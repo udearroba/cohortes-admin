@@ -10,14 +10,31 @@
         </span>
       </sidebar-link>
 
-      <sidebar-link
-        :to="{ name: 'reunion' }">
+      <sidebar-link-group>
         <span slot="title">
           <span
             class="sidebar-menu-item-icon vuestic-icon vuestic-icon-tables"></span>
           <span>{{ $t('menu.reunion') }}</span>
         </span>
-      </sidebar-link>
+        <sidebar-link
+          :to="{ name: 'reunionVideo' }">
+          <span slot="title">
+            <span>{{ $t('menu.reunion') }}</span>
+          </span>
+        </sidebar-link>
+        <sidebar-link
+          :to="{ name: 'grabacion' }">
+          <span slot="title">
+            <span>{{ $t('menu.grabacion') }}</span>
+          </span>
+        </sidebar-link>
+        <!-- <sidebar-link
+          :to="{ name: 'files' }">
+          <span slot="title">
+            <span>{{ $t('menu.files') }}</span>
+          </span>
+        </sidebar-link> -->
+      </sidebar-link-group>
 
       <sidebar-link-group>
         <span slot="title">
