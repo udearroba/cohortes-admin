@@ -2,8 +2,9 @@
   <div>
 
     <div class="va-row">
+      <!-- DETALLES DE LA GRABACIÓN -->
       <div class="flex md6">
-        <vuestic-widget :headerText="'Agregar Grabación'">
+        <vuestic-widget :headerText="'Detalles grabación'">
           <form>
             <div class="va-row">
               <div class="flex md8">
@@ -18,15 +19,57 @@
                       </label><i class="bar"></i>
                     </div>
                   </div>
+                </fieldset>
+              </div>
+            </div>
+          </form>
+        </vuestic-widget>
+      </div>
+
+      <!-- FORMULARIO PARA AGREGAR ARCHIVO -->
+      <div class="flex md6">
+        <vuestic-widget :headerText="'Agregar Archivo'">
+          <form>
+            <div class="va-row">
+              <div class="flex md8">
+                <fieldset>
+                  <div class="form-group with-icon-left">
+                    <div class="input-group">
+                      <input id="input-icon-left" name="input-icon-left"
+                             required/>
+                      <i class="fa fa-key icon-left input-icon"></i>
+                      <label class="control-label" for="input-icon-left">
+                        {{'Id externo'}}
+                      </label><i class="bar"></i>
+                    </div>
+                  </div>
+                  <div class="form-group with-icon-left">
+                    <div class="input-group">
+                      <input id="input-icon-left" name="input-icon-left"
+                             required/>
+                      <i class="fa fa-file-o icon-left input-icon"></i>
+                      <label class="control-label" for="input-icon-left">
+                        {{'Formato'}}
+                      </label><i class="bar"></i>
+                    </div>
+                  </div>
+                  <div class="form-group with-icon-left">
+                    <div class="input-group">
+                      <input id="input-icon-left" name="input-icon-left"
+                             required/>
+                      <i class="fa fa-link icon-left input-icon"></i>
+                      <label class="control-label" for="input-icon-left">
+                        {{'Url'}}
+                      </label><i class="bar"></i>
+                    </div>
+                  </div>
                   <div class="btn btn-micro btn-primary"
-                  @click="mostrarGrabaciones">
+                  @click="mostrarArchivos">
                     {{'Agregar'}}
                   </div>
                 </fieldset>
               </div>
-
             </div>
-
           </form>
         </vuestic-widget>
       </div>
@@ -34,23 +77,22 @@
 
     <div class="va-row">
       <div class="flex xs12 md12">
-        <vuestic-widget :headerText="'Grabaciones'">
+        <vuestic-widget :headerText="'Archivos'">
           <div class="table-responsive">
             <table class="table table-striped first-td-padding">
               <thead>
               <tr>
                 <td>{{'id externo'}}</td>
+                <td>{{'formato'}}</td>
+                <td>{{'url'}}</td>
                 <td></td>
               </tr>
               </thead>
               <tbody>
-                <tr v-for="grabacion in grabaciones">
-                  <td>{{grabacion.idexterno}}</td>
-                  <td align="right" class="valid">
-                    <router-link to="./archivo">
-                      <i class="fa fa-plus success-icon icon-right input-icon"></i>
-                    </router-link>
-                  </td>
+                <tr v-for="archivo in archivos">
+                  <td>{{archivo.idexterno}}</td>
+                  <td>{{archivo.formato}}</td>
+                  <td>{{archivo.url}}</td>
                 </tr>
               </tbody>
             </table>
@@ -89,18 +131,19 @@ export default {
       paginationPath: '',
       defaultTablePerPage: 6,
       queryParams: QueryParams,
-      grabaciones: {}
+      archivos: {}
     }
   },
   methods: {
-    mostrarGrabaciones () {
-      axios.post('http://localhost:3000/grabaciones', {
+    mostrarArchivos () {
+      console.log(this.archivos[0]);
+      axios.post('http://localhost:3000/archivos', {
         "id": 8,
         "idexterno": "idexterno8",
         "ocurrenciaId": 3
       }).then(res => {
         console.log(res);
-        this.grabaciones.push(res.data);
+        this.archivos.push(res.data);
       }).catch(error => {
         console.log(error);
       })
@@ -108,11 +151,12 @@ export default {
   },
   beforeCreate () {
     axios.all([
-      axios.get('http://localhost:3000/grabaciones'),
+      axios.get('http://localhost:3000/archivos'),
     ])
       .then(axios.spread(res => {
-        this.grabaciones = res.data
+        this.archivos = res.data
         console.log(res.data)
+        // fillTable();
       }))
       .catch(error => {
         console.log(error)

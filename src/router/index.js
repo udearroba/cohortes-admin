@@ -106,6 +106,11 @@ export default new Router({
               name: 'grabacion',
               path: 'grabacion',
               component: lazyLoading('ReunionVideoConferencia/Grabacion'),
+            },
+            {
+              name: 'archivo',
+              path: 'archivo',
+              component: lazyLoading('ReunionVideoConferencia/Archivo'),
             }
           ],
         },

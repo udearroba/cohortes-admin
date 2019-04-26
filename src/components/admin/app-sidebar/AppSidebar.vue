@@ -28,12 +28,12 @@
             <span>{{ $t('menu.grabacion') }}</span>
           </span>
         </sidebar-link>
-        <!-- <sidebar-link
-          :to="{ name: 'files' }">
+        <sidebar-link
+          :to="{ name: 'archivo' }">
           <span slot="title">
-            <span>{{ $t('menu.files') }}</span>
+            <span>{{ $t('menu.archivo') }}</span>
           </span>
-        </sidebar-link> -->
+        </sidebar-link>
       </sidebar-link-group>
 
       <sidebar-link-group>

@@ -147,6 +147,7 @@
     "spanish": "Spanish"
   },
   "menu": {
+    "archivo": "Archivo",
     "auth": "Autenticación",
     "buttons": "Botones",
     "charts": "Gráficos",
@@ -154,7 +155,6 @@
     "colorPickers": "Selector de color",
     "dashboard": "Dashboard",
     "extra": "Extra",
-    "files": "Archivos",
     "formElements": "Elementos de un Formulario",
     "forms": "Formularios",
     "formWizards": "Asistente para Formularios",
