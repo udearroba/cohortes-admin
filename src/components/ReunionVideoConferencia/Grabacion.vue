@@ -20,33 +20,8 @@
                       </label><i class="bar"></i>
                     </div>
                   </div>
-                  <!-- <div class="form-group with-icon-right">
-                    <div class="input-group">
-                      <input v-model="clearableText" id="clear-input"
-                             name="clear-input" required/>
-                      <i class="fa fa-times icon-right input-icon pointer"
-                         @click="clear('clearableText')"></i>
-                      <label class="control-label" for="clear-input"
-                             role="button">{{'forms.inputs.inputWithClearButton'
-                        | translate}}</label><i
-                      class="bar"></i>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="input-group">
-                      <input id="inputWithDescription" required title=""/>
-                      <label class="control-label" for="simple-input">{{'forms.inputs.textInputWithDescription'
-                        | translate}}</label><i
-                      class="bar"></i>
-                      <small class="help text-secondary">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed
-                        do eiusmod tempor incididunt ut labore et dolore magna
-                        aliqua.
-                      </small>
-                    </div>
-                  </div> -->
-                  <div class="btn btn-micro btn-primary">
+                  <div class="btn btn-micro btn-primary"
+                  @click="mostrarGrabaciones">
                     {{'Agregar'}}
                   </div>
                 </fieldset>
@@ -70,85 +45,9 @@
                 <td></td>
               </tr>
               </thead>
-              <!-- <tbody>
-                <tr>
-                  <td>Matthew McCormick</td>
-                  <td>matthew30@mail.ol</td>
-                  <td>Vancouver</td>
-                  <td align="right">93</td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td>Nancy Bo</td>
-                  <td>nancy@boonweb.com</td>
-                  <td>Washington</td>
-                  <td align="right">280</td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td>Frederiko Lopez</td>
-                  <td>fr.lopez@webmail.sp</td>
-                  <td>Barcelona</td>
-                  <td align="right">16</td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td>Stanley Hummer</td>
-                  <td>mr_winner_2999@gmail.cb</td>
-                  <td>Manchester</td>
-                  <td align="right">57</td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td>Lendley Wintz</td>
-                  <td>9938198146@mailster.io</td>
-                  <td>Wien</td>
-                  <td align="right">113</td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td>Barbara Noz</td>
-                  <td>barbaranoz@mailster.io</td>
-                  <td>Brussels</td>
-                  <td align="right">68</td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td>Matthew McCormick</td>
-                  <td>matthew30@mail.ol</td>
-                  <td>Vancouver</td>
-                  <td align="right">93</td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td>Nancy Bo</td>
-                  <td>nancy@boonweb.com</td>
-                  <td>Washington</td>
-                  <td align="right">280</td>
-                  <td></td>
-                </tr>
-              </tbody> -->
               <tbody>
-                <tr>
-                  <td>Matthew McCormick</td>
-                  <td align="right" class="valid">
-                    <i class="fa fa-plus success-icon icon-right input-icon"></i>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Matthew McCormick</td>
-                  <td align="right" class="valid">
-                    <i class="fa fa-plus success-icon icon-right input-icon"></i>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Matthew McCormick</td>
-                  <td align="right" class="valid">
-                    <i class="fa fa-plus success-icon icon-right input-icon"></i>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Matthew McCormick</td>
+                <tr v-for="grabacion in grabaciones">
+                  <td>{{grabacion.idexterno}}</td>
                   <td align="right" class="valid">
                     <i class="fa fa-plus success-icon icon-right input-icon"></i>
                   </td>
@@ -272,6 +171,7 @@ import ItemsPerPageDef
   from '../../vuestic-theme/vuestic-components/vuestic-datatable/data/items-per-page-definition'
 import QueryParams from '../../vuestic-theme/vuestic-components/vuestic-datatable/data/query-params'
 import { SpringSpinner } from 'epic-spinners'
+import axios from 'axios'
 
 Vue.component('badge-column', BadgeColumn)
 
@@ -290,9 +190,33 @@ export default {
       paginationPath: '',
       defaultTablePerPage: 6,
       queryParams: QueryParams,
+      grabaciones: {}
     }
   },
+  methods: {
+    mostrarGrabaciones () {
+      console.log(this.grabaciones[0])
+    }
+  },
+  beforeCreate () {
+    axios.all([
+      axios.get('http://localhost:3000/grabaciones'),
+    ])
+      .then(axios.spread(res => {
+        this.grabaciones = res.data
+        console.log(res.data)
+        // fillTable();
+      }))
+      .catch(error => {
+        console.log(error)
+        this.errored = true
+      })
+      .finally(() => {
+        this.loading = false
+      })
+  }
 }
+
 </script>
 
 <style lang="scss">
