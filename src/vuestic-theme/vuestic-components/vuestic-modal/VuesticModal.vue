@@ -6,9 +6,12 @@
           <div class="modal-dialog" :class="modalClass">
             <div class="modal-content">
               <!--Header-->
-              <div class="modal-header">
+              <div
+                v-if="!noHeader"
+                class="modal-header" >
                 <slot name="header">
-                  <div class="modal-title">
+                  <div
+                  class="modal-title">
                     <slot name="title"></slot>
                   </div>
 
@@ -94,6 +97,10 @@ export default {
       default: false,
     },
     noButtons: {
+      type: Boolean,
+      default: false,
+    },
+    noHeader: {
       type: Boolean,
       default: false,
     },

@@ -35,8 +35,11 @@
                 <fieldset>
                   <div class="form-group with-icon-left">
                     <div class="input-group">
-                      <input id="input-icon-left" name="input-icon-left"
-                             required/>
+                      <input
+                      v-model="archivo.idexterno"
+                      id="input-icon-left"
+                      name="input-icon-left"
+                      required/>
                       <i class="fa fa-key icon-left input-icon"></i>
                       <label class="control-label" for="input-icon-left">
                         {{'Id externo'}}
@@ -45,8 +48,11 @@
                   </div>
                   <div class="form-group with-icon-left">
                     <div class="input-group">
-                      <input id="input-icon-left" name="input-icon-left"
-                             required/>
+                      <input
+                      v-model="archivo.formato"
+                      id="input-icon-left"
+                      name="input-icon-left"
+                      required/>
                       <i class="fa fa-file-o icon-left input-icon"></i>
                       <label class="control-label" for="input-icon-left">
                         {{'Formato'}}
@@ -55,8 +61,11 @@
                   </div>
                   <div class="form-group with-icon-left">
                     <div class="input-group">
-                      <input id="input-icon-left" name="input-icon-left"
-                             required/>
+                      <input
+                      v-model="archivo.url"
+                      id="input-icon-left"
+                      name="input-icon-left"
+                      required/>
                       <i class="fa fa-link icon-left input-icon"></i>
                       <label class="control-label" for="input-icon-left">
                         {{'Url'}}
@@ -64,7 +73,7 @@
                     </div>
                   </div>
                   <div class="btn btn-micro btn-primary"
-                  @click="mostrarArchivos">
+                  @click="onAgregar">
                     {{'Agregar'}}
                   </div>
                 </fieldset>
@@ -89,10 +98,15 @@
               </tr>
               </thead>
               <tbody>
-                <tr v-for="archivo in archivos">
+                <tr v-for="(archivo, index) in archivos">
                   <td>{{archivo.idexterno}}</td>
                   <td>{{archivo.formato}}</td>
                   <td>{{archivo.url}}</td>
+                  <td align="right" class="valid">
+                    <i
+                      class="fa fa-minus error-icon icon-right input-icon"
+                      @click="onEliminar(index)"></i>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -100,6 +114,20 @@
         </vuestic-widget>
       </div>
     </div>
+    <!-- MODAL -->
+                   <!-- v-bind:small="true" -->
+    <vuestic-modal ref="modal"
+                   :ok-class="'btn btn-danger btn-micro'"
+                   :cancel-class="'btn btn-pale btn-micro'"
+                   :close-icon-shown="false"
+                   :no-header="true"
+                   :okText="'Eliminar' | translate"
+                   :cancelText="'Cancelar' | translate">
+      <div>¿Seguro que desea elminar el registro?</div>
+      <div>
+      </div>
+    </vuestic-modal>
+
   </div>
 </template>
 
@@ -131,23 +159,45 @@ export default {
       paginationPath: '',
       defaultTablePerPage: 6,
       queryParams: QueryParams,
-      archivos: {}
+      archivos: {},
+      archivo: {
+        "idexterno": '',
+        "formato": '',
+        "url": '',
+        "grabacionId": 9
+      }
     }
   },
   methods: {
-    mostrarArchivos () {
-      console.log(this.archivos[0]);
-      axios.post('http://localhost:3000/archivos', {
-        "id": 8,
-        "idexterno": "idexterno8",
-        "ocurrenciaId": 3
-      }).then(res => {
-        console.log(res);
-        this.archivos.push(res.data);
+    onAgregar () {
+      axios.post('http://localhost:3000/archivos', this.archivo
+      ).then(res => {
+        this.archivo.idexterno = ''
+        this.archivo.formato = ''
+        this.archivo.url = ''
+        this.archivos.push(res.data)
       }).catch(error => {
         console.log(error);
       })
-    }
+    },
+    onEliminar(index) {
+      // this.$refs.modal.open()
+      // console.log(index);
+      // this.archivos.push(res.data)
+      // console.log(this.archivos[index])
+      let idArchivo = this.archivos[index].id
+      
+
+
+
+
+
+      axios.delete(`http://localhost:3000/archivos/${idArchivo}`)
+      .then(res => {
+        // console.log(res);
+        this.archivos.splice(index,1)
+      });
+    },
   },
   beforeCreate () {
     axios.all([
@@ -156,7 +206,6 @@ export default {
       .then(axios.spread(res => {
         this.archivos = res.data
         console.log(res.data)
-        // fillTable();
       }))
       .catch(error => {
         console.log(error)
@@ -176,5 +225,15 @@ export default {
   td:first-child {
     width: 1rem;
   }
+}
+
+i:hover {
+  cursor: pointer;
+}
+
+.btn
+  .btn-pale {
+    color: black !important;
+    background-color: yellowgreen !important;
 }
 </style>
