@@ -117,6 +117,8 @@
     <!-- MODAL -->
                    <!-- v-bind:small="true" -->
     <vuestic-modal ref="modal"
+                   v-on:ok="onEliminarConfirmado"
+                   v-on:canceled="onEliminarCanceled"
                    :ok-class="'btn btn-danger btn-micro'"
                    :cancel-class="'btn btn-pale btn-micro'"
                    :close-icon-shown="false"
@@ -127,7 +129,6 @@
       <div>
       </div>
     </vuestic-modal>
-
   </div>
 </template>
 
@@ -165,7 +166,8 @@ export default {
         "formato": '',
         "url": '',
         "grabacionId": 9
-      }
+      },
+      datoEliminar: ''
     }
   },
   methods: {
@@ -180,23 +182,34 @@ export default {
         console.log(error);
       })
     },
+    launchDeletedToast() {
+      this.showToast(`Data deleted`, {
+        icon: 'fa-trash',
+        position: 'bottom-right',
+        duration: 1300,
+        containerClass: 'toast-container-class'
+      })
+    },
     onEliminar(index) {
-      // this.$refs.modal.open()
-      // console.log(index);
-      // this.archivos.push(res.data)
-      // console.log(this.archivos[index])
-      let idArchivo = this.archivos[index].id
-      
-
-
-
-
-
+      this.$refs.modal.open();
+      this.datoEliminar = index;
+    },
+    onEliminarConfirmado() {
+      let idArchivo = this.archivos[this.datoEliminar].id
       axios.delete(`http://localhost:3000/archivos/${idArchivo}`)
       .then(res => {
-        // console.log(res);
-        this.archivos.splice(index,1)
+        this.archivos.splice(this.datoEliminar,1)
+        this.launchDeletedToast();
       });
+    },
+    onEliminarCanceled() {
+      this.datoEliminar = '';
+    }
+  },
+  
+  computed: {
+    isToastContentPresent () {
+      return !!(this.toastText || this.toastIcon)
     },
   },
   beforeCreate () {
@@ -235,5 +248,17 @@ i:hover {
   .btn-pale {
     color: black !important;
     background-color: yellowgreen !important;
+}
+
+.toast-container-class {
+  .toasted.vuestic-toast {
+    color: black;
+    background-color: #ffcece;
+    webkit-box-shadow: 0 4px 9.6px 0.4px rgba(206, 79, 79, 0.5);
+    box-shadow: 0 4px 9.6px 0.4px rgba(206, 79, 79, 0.5);
+    i.fa{
+      color: red;
+    }
+  }
 }
 </style>
