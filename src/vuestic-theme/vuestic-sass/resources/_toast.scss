@@ -1,0 +1,17 @@
+@mixin toast-estile($toast-background-color, $toast-box-shadow) {
+  .toasted.vuestic-toast {
+    color: $almost-black;
+    background-color: $toast-background-color;
+    box-shadow: $toast-box-shadow;
+    i.fa{
+      color: $charcoal;
+    }
+  }
+}
+
+.toast-deleted {
+  @include toast-estile($state-danger-bg, $alert-danger-shadow);
+}
+.toast-added {
+  @include toast-estile($state-success-bg, $alert-success-shadow);
+}

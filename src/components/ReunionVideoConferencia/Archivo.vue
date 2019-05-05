@@ -76,6 +76,10 @@
                   @click="onAgregar">
                     {{'Agregar'}}
                   </div>
+                  <div class="btn btn-micro btn-primary"
+                  @click="onAddDummy">
+                    {{'Add dummy data'}}
+                  </div>
                 </fieldset>
               </div>
             </div>
@@ -182,12 +186,19 @@ export default {
         console.log(error);
       })
     },
-    launchDeletedToast() {
-      this.showToast(`Data deleted`, {
-        icon: 'fa-trash',
-        position: 'bottom-right',
-        duration: 1300,
-        containerClass: 'toast-container-class'
+    onAddDummy () {
+      axios.post('http://localhost:3000/archivos',
+      {
+        "idexterno": 'idDummy',
+        "formato": 'formatoDummy',
+        "url": 'urlDummy',
+        "grabacionId": 9
+      }
+      ).then(res => {
+        this.archivos.push(res.data)
+        this.showAddedToast()
+      }).catch(error => {
+        console.log(error);
       })
     },
     onEliminar(index) {
@@ -199,7 +210,7 @@ export default {
       axios.delete(`http://localhost:3000/archivos/${idArchivo}`)
       .then(res => {
         this.archivos.splice(this.datoEliminar,1)
-        this.launchDeletedToast();
+        this.showDeletedToast()
       });
     },
     onEliminarCanceled() {
@@ -242,23 +253,5 @@ export default {
 
 i:hover {
   cursor: pointer;
-}
-
-.btn
-  .btn-pale {
-    color: black !important;
-    background-color: yellowgreen !important;
-}
-
-.toast-container-class {
-  .toasted.vuestic-toast {
-    color: black;
-    background-color: #ffcece;
-    webkit-box-shadow: 0 4px 9.6px 0.4px rgba(206, 79, 79, 0.5);
-    box-shadow: 0 4px 9.6px 0.4px rgba(206, 79, 79, 0.5);
-    i.fa{
-      color: red;
-    }
-  }
 }
 </style>
