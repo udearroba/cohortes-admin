@@ -9,6 +9,13 @@ const toastOptions = {
   duration: 2500,
 }
 
+const errorToast = {
+  icon: 'null',
+  position: 'bottom-right',
+  duration: 1300,
+  containerClass: 'toast-error'
+}
+
 const dangerToast = {
   icon: 'fa-trash',
   position: 'bottom-right',
@@ -35,6 +42,9 @@ export default {
     },
     showAddedToast (msg, options) {
       this.$toasted.show(msg || `Datos agregados`, options || addedToast)
+    },
+    showErrorToast (msg, options) {
+      this.$toasted.show(msg || `Fallo en la operación`, options || errorToast)
     },
   },
 }

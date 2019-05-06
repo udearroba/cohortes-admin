@@ -109,7 +109,7 @@ export default new Router({
             },
             {
               name: 'archivo',
-              path: 'archivo',
+              path: 'archivo/:id',
               component: lazyLoading('ReunionVideoConferencia/Archivo'),
             }
           ],

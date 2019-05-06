@@ -9,9 +9,9 @@
   }
 }
 
-.toast-deleted {
+.toast-error {
   @include toast-estile($state-danger-bg, $alert-danger-shadow);
 }
-.toast-added {
+.toast-added,.toast-deleted {
   @include toast-estile($state-success-bg, $alert-success-shadow);
 }

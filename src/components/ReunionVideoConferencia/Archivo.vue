@@ -2,30 +2,6 @@
   <div>
 
     <div class="va-row">
-      <!-- DETALLES DE LA GRABACIÓN -->
-      <div class="flex md6">
-        <vuestic-widget :headerText="'Detalles grabación'">
-          <form>
-            <div class="va-row">
-              <div class="flex md8">
-                <fieldset>
-                  <div class="form-group with-icon-left">
-                    <div class="input-group">
-                      <input id="input-icon-left" name="input-icon-left"
-                             required/>
-                      <i class="fa fa-key icon-left input-icon"></i>
-                      <label class="control-label" for="input-icon-left">
-                        {{'Id externo'}}
-                      </label><i class="bar"></i>
-                    </div>
-                  </div>
-                </fieldset>
-              </div>
-            </div>
-          </form>
-        </vuestic-widget>
-      </div>
-
       <!-- FORMULARIO PARA AGREGAR ARCHIVO -->
       <div class="flex md6">
         <vuestic-widget :headerText="'Agregar Archivo'">
@@ -86,6 +62,16 @@
           </form>
         </vuestic-widget>
       </div>
+
+      <!-- DETALLES DE LA GRABACIÓN -->
+      <div class="detalles flex md6">
+        <vuestic-widget :headerText="`Detalles grabación ${this.grabacion.id}`">
+          <i
+            class="fa fa-key info-icon">
+          </i>
+          <span>id externo: {{this.grabacion.idexterno}}</span>
+        </vuestic-widget>
+      </div>
     </div>
 
     <div class="va-row">
@@ -132,8 +118,8 @@
 
     <!-- MODAL -->
     <vuestic-modal ref="detail_modal"
-                   v-bind:small="true"
-                   no-buttons="true">
+                   :no-buttons="true"
+                   v-bind:small="true">
       <div slot="title">Detalles</div>
       <div>
         <ul>
@@ -236,7 +222,6 @@ export default {
   },
   data () {
     return {
-      apiUrl: 'https://vuetable.ratiw.net/api/users',
       apiMode: true,
       tableFields: FieldsDef.tableFields,
       itemsPerPage: ItemsPerPageDef.itemsPerPage,
@@ -249,36 +234,46 @@ export default {
         "idexterno": '',
         "formato": '',
         "url": '',
-        "grabacionId": 9
+        "grabacionId": ''
       },
-      datoEliminar: ''
+      datoEliminar: '',
+      id: this.$route.params.id,
+      grabacion: {
+        "id": '',
+        "idexterno": '',
+        "ocurrenciaId": ''
+      }
     }
   },
   methods: {
     onAgregar () {
+      console.log(this.archivo)
       axios.post('http://localhost:3000/archivos', this.archivo
       ).then(res => {
         this.archivo.idexterno = ''
         this.archivo.formato = ''
         this.archivo.url = ''
         this.archivos.push(res.data)
+        this.showAddedToast()
       }).catch(error => {
         console.log(error);
+        this.showErrorToast()
       })
     },
     onAddDummy () {
-      axios.post('http://localhost:3000/archivos',
+      axios.post('http://localhost:3000/archivos', 
       {
         "idexterno": 'idDummy',
         "formato": 'formatoDummy',
         "url": 'urlDummy',
-        "grabacionId": 9
-      }
-      ).then(res => {
+        "grabacionId": +this.id
+      })
+      .then(res => {
         this.archivos.push(res.data)
         this.showAddedToast()
       }).catch(error => {
         console.log(error);
+        this.showErrorToast()
       })
     },
     onEliminar(index) {
@@ -291,6 +286,10 @@ export default {
       .then(res => {
         this.archivos.splice(this.datoEliminar,1)
         this.showDeletedToast()
+      })
+      .catch(error => {
+        console.log(error)
+        this.showErrorToast()
       });
     },
     onEliminarCanceled() {
@@ -311,11 +310,10 @@ export default {
   },
   beforeCreate () {
     axios.all([
-      axios.get('http://localhost:3000/archivos'),
+      axios.get(`http://localhost:3000/grabaciones/${this.$route.params.id}/archivos`),
     ])
       .then(axios.spread(res => {
         this.archivos = res.data
-        console.log(res.data)
       }))
       .catch(error => {
         console.log(error)
@@ -324,6 +322,19 @@ export default {
       .finally(() => {
         this.loading = false
       })
+  },
+  created () {
+    axios.all([
+      axios.get(`http://localhost:3000/grabaciones/${this.id}`),
+    ])
+    .then(axios.spread(res => {
+      this.grabacion = res.data
+      this.archivo.grabacionId = +this.id
+    }))
+    .catch(error => {
+      console.log(error)
+      this.errored = true
+    })
   }
 }
 
@@ -345,5 +356,9 @@ i:hover {
   width: 60%;
   display: flex;
   justify-content: space-around;
+}
+
+.detalles span {
+  margin-left: 8px;
 }
 </style>
