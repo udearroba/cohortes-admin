@@ -258,6 +258,11 @@ h5, .h5 {
   color: $vue-green;
 }
 
+.info-icon {
+  display: inline-block;
+  color: $brand-info;
+}
+
 //Tables
 .table-striped {
   tbody tr:nth-of-type(odd) {

@@ -107,9 +107,20 @@
                   <td>{{archivo.formato}}</td>
                   <td>{{archivo.url}}</td>
                   <td align="right" class="valid">
-                    <i
-                      class="fa fa-minus error-icon icon-right input-icon"
-                      @click="onEliminar(index)"></i>
+                    <div class="icon-slot">
+                      <i
+                        class="fa fa-eye info-icon"
+                        @click="onDetail(index)">
+                      </i>
+                      <i
+                        class="fa fa-pencil info-icon"
+                        @click="onEdit(index)">
+                      </i>
+                      <i
+                        class="fa fa-minus error-icon"
+                        @click="onEliminar(index)">
+                      </i>
+                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -118,9 +129,80 @@
         </vuestic-widget>
       </div>
     </div>
+
     <!-- MODAL -->
-                   <!-- v-bind:small="true" -->
-    <vuestic-modal ref="modal"
+    <vuestic-modal ref="detail_modal"
+                   v-bind:small="true"
+                   no-buttons="true">
+      <div slot="title">Detalles</div>
+      <div>
+        <ul>
+          <li>Detail 1: detail 1</li>
+          <li>Detail 2: detail 2</li>
+          <li>Detail 3: detail 3</li>
+        </ul>
+      </div>
+    </vuestic-modal>
+    <vuestic-modal ref="edit_modal"
+                   v-on:ok="onEliminarConfirmado"
+                   v-on:canceled="onEliminarCanceled"
+                   :ok-class="'btn btn-info btn-micro'"
+                   :cancel-class="'btn btn-pale btn-micro'"
+                   :close-icon-shown="false"
+                   :okText="'Aceptar' | translate"
+                   :cancelText="'Cancelar' | translate">
+      <div slot="title">Editar</div>
+      <div>
+        <form>
+          <div class="va-row">
+            <div class="flex md8">
+              <fieldset>
+                <div class="form-group with-icon-left">
+                  <div class="input-group">
+                    <input
+                    v-model="archivo.idexterno"
+                    id="input-icon-left"
+                    name="input-icon-left"
+                    required/>
+                    <i class="fa fa-key icon-left input-icon"></i>
+                    <label class="control-label" for="input-icon-left">
+                      {{'Id externo'}}
+                    </label><i class="bar"></i>
+                  </div>
+                </div>
+                <div class="form-group with-icon-left">
+                  <div class="input-group">
+                    <input
+                    v-model="archivo.formato"
+                    id="input-icon-left"
+                    name="input-icon-left"
+                    required/>
+                    <i class="fa fa-file-o icon-left input-icon"></i>
+                    <label class="control-label" for="input-icon-left">
+                      {{'Formato'}}
+                    </label><i class="bar"></i>
+                  </div>
+                </div>
+                <div class="form-group with-icon-left">
+                  <div class="input-group">
+                    <input
+                    v-model="archivo.url"
+                    id="input-icon-left"
+                    name="input-icon-left"
+                    required/>
+                    <i class="fa fa-link icon-left input-icon"></i>
+                    <label class="control-label" for="input-icon-left">
+                      {{'Url'}}
+                    </label><i class="bar"></i>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </form>
+      </div>
+    </vuestic-modal>
+    <vuestic-modal ref="confirm_modal"
                    v-on:ok="onEliminarConfirmado"
                    v-on:canceled="onEliminarCanceled"
                    :ok-class="'btn btn-danger btn-micro'"
@@ -129,9 +211,7 @@
                    :no-header="true"
                    :okText="'Eliminar' | translate"
                    :cancelText="'Cancelar' | translate">
-      <div>¿Seguro que desea elminar el registro?</div>
-      <div>
-      </div>
+      <div>¿Seguro que desea eliminar el registro?</div>
     </vuestic-modal>
   </div>
 </template>
@@ -202,7 +282,7 @@ export default {
       })
     },
     onEliminar(index) {
-      this.$refs.modal.open();
+      this.$refs.confirm_modal.open();
       this.datoEliminar = index;
     },
     onEliminarConfirmado() {
@@ -215,7 +295,13 @@ export default {
     },
     onEliminarCanceled() {
       this.datoEliminar = '';
-    }
+    },
+    onDetail(index) {
+      this.$refs.detail_modal.open();
+    },
+    onEdit(index) {
+      this.$refs.edit_modal.open();
+    },
   },
   
   computed: {
@@ -253,5 +339,11 @@ export default {
 
 i:hover {
   cursor: pointer;
+}
+
+.icon-slot {
+  width: 60%;
+  display: flex;
+  justify-content: space-around;
 }
 </style>
