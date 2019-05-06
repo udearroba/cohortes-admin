@@ -52,10 +52,6 @@
                   @click="onAgregar">
                     {{'Agregar'}}
                   </div>
-                  <div class="btn btn-micro btn-primary"
-                  @click="onAddDummy">
-                    {{'Add dummy data'}}
-                  </div>
                 </fieldset>
               </div>
             </div>
@@ -253,22 +249,6 @@ export default {
         this.archivo.idexterno = ''
         this.archivo.formato = ''
         this.archivo.url = ''
-        this.archivos.push(res.data)
-        this.showAddedToast()
-      }).catch(error => {
-        console.log(error);
-        this.showErrorToast()
-      })
-    },
-    onAddDummy () {
-      axios.post('http://localhost:3000/archivos', 
-      {
-        "idexterno": 'idDummy',
-        "formato": 'formatoDummy',
-        "url": 'urlDummy',
-        "grabacionId": +this.id
-      })
-      .then(res => {
         this.archivos.push(res.data)
         this.showAddedToast()
       }).catch(error => {

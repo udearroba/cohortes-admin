@@ -104,7 +104,7 @@ export default new Router({
             },
             {
               name: 'grabacion',
-              path: 'grabacion',
+              path: 'grabacion/:id',
               component: lazyLoading('ReunionVideoConferencia/Grabacion'),
             },
             {

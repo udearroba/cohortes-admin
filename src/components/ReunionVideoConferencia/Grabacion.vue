@@ -2,6 +2,7 @@
   <div>
 
     <div class="va-row">
+      <!-- FORMULARIO PARA AGREGAR GRABACIÓN -->
       <div class="flex md6">
         <vuestic-widget :headerText="'Agregar Grabación'">
           <form>
@@ -10,24 +11,60 @@
                 <fieldset>
                   <div class="form-group with-icon-left">
                     <div class="input-group">
-                      <input id="input-icon-left" name="input-icon-left"
-                             required/>
+                      <input
+                      v-model="grabacion.idexterno"
+                      id="input-icon-left"
+                      name="input-icon-left"
+                      required/>
                       <i class="fa fa-key icon-left input-icon"></i>
                       <label class="control-label" for="input-icon-left">
-                        {{'Id externo'}}
+                        Id externo
                       </label><i class="bar"></i>
                     </div>
                   </div>
                   <div class="btn btn-micro btn-primary"
-                  @click="mostrarGrabaciones">
+                  @click="onAgregar">
                     {{'Agregar'}}
+                  </div>
+                  <div class="btn btn-micro btn-primary"
+                  @click="onAddDummy">
+                    {{'Add dummy data'}}
                   </div>
                 </fieldset>
               </div>
-
             </div>
-
           </form>
+        </vuestic-widget>
+      </div>
+
+      <!-- DETALLES DE LA OCURRENCIA -->
+      <div class="detalles flex md6">
+        <vuestic-widget :headerText="`Detalles Ocurrencia ${this.ocurrencia.id}`">
+          <div class="detalle-item">
+            <i
+              class="fa fa-key info-icon">
+            </i>
+            <span>id externo: {{this.ocurrencia.idexterno}}</span>
+          </div>
+          <div class="detalle-item">
+            <i
+              class="fa fa-clock-o info-icon">
+            </i>
+            <span>start time: {{this.ocurrencia.starttime}}</span>
+          </div>
+          <div class="detalle-item">
+            <i
+              class="fa fa-clock-o info-icon">
+            </i>
+            <span>duración: {{this.ocurrencia.duracion}}</span>
+          </div>
+          <div class="detalle-item">
+            <i
+              class="fa fa-check-square info-icon">
+            </i>
+            <span>estado: {{this.ocurrencia.status}}</span>
+          </div>
+          
         </vuestic-widget>
       </div>
     </div>
@@ -44,12 +81,23 @@
               </tr>
               </thead>
               <tbody>
-                <tr v-for="grabacion in grabaciones">
+                <tr v-for="(grabacion, index) in grabaciones">
                   <td>{{grabacion.idexterno}}</td>
                   <td align="right" class="valid">
-                    <router-link to="./archivo">
-                      <i class="fa fa-plus success-icon icon-right input-icon"></i>
-                    </router-link>
+                    <div class="icon-slot">
+                      <i
+                        class="fa fa-eye info-icon"
+                        @click="onDetail(index)">
+                      </i>
+                      <i
+                        class="fa fa-pencil info-icon"
+                        @click="onEdit(index)">
+                      </i>
+                      <i
+                        class="fa fa-minus error-icon"
+                        @click="onEliminar(index)">
+                      </i>
+                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -58,6 +106,64 @@
         </vuestic-widget>
       </div>
     </div>
+
+    <!-- MODAL -->
+    <vuestic-modal ref="detail_modal"
+                   :no-buttons="true"
+                   v-bind:small="true">
+      <div slot="title">Detalles</div>
+      <div>
+        <ul>
+          <li>Detail 1: detail 1</li>
+          <li>Detail 2: detail 2</li>
+          <li>Detail 3: detail 3</li>
+        </ul>
+      </div>
+    </vuestic-modal>
+    <vuestic-modal ref="edit_modal"
+                   v-on:ok="onEliminarConfirmado"
+                   v-on:canceled="onEliminarCanceled"
+                   :ok-class="'btn btn-info btn-micro'"
+                   :cancel-class="'btn btn-pale btn-micro'"
+                   :close-icon-shown="false"
+                   :okText="'Aceptar' | translate"
+                   :cancelText="'Cancelar' | translate">
+      <div slot="title">Editar</div>
+      <div>
+        <form>
+          <div class="va-row">
+            <div class="flex md8">
+              <fieldset>
+                <div class="form-group with-icon-left">
+                  <div class="input-group">
+                    <input
+                    v-model="grabacion.idexterno"
+                    id="input-icon-left"
+                    name="input-icon-left"
+                    required/>
+                    <i class="fa fa-key icon-left input-icon"></i>
+                    <label class="control-label" for="input-icon-left">
+                      {{'Id externo'}}
+                    </label><i class="bar"></i>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </form>
+      </div>
+    </vuestic-modal>
+    <vuestic-modal ref="confirm_modal"
+                   v-on:ok="onEliminarConfirmado"
+                   v-on:canceled="onEliminarCanceled"
+                   :ok-class="'btn btn-danger btn-micro'"
+                   :cancel-class="'btn btn-pale btn-micro'"
+                   :close-icon-shown="false"
+                   :no-header="true"
+                   :okText="'Eliminar' | translate"
+                   :cancelText="'Cancelar' | translate">
+      <div>¿Seguro que desea eliminar el registro?</div>
+    </vuestic-modal>
   </div>
 </template>
 
@@ -81,7 +187,6 @@ export default {
   },
   data () {
     return {
-      apiUrl: 'https://vuetable.ratiw.net/api/users',
       apiMode: true,
       tableFields: FieldsDef.tableFields,
       itemsPerPage: ItemsPerPageDef.itemsPerPage,
@@ -89,30 +194,90 @@ export default {
       paginationPath: '',
       defaultTablePerPage: 6,
       queryParams: QueryParams,
-      grabaciones: {}
+      grabaciones: {},
+      grabacion: {
+        "idexterno": '',
+        "ocurrenciaId": ''
+      },
+      datoEliminar: '',
+      id: this.$route.params.id,
+      ocurrencia: {
+        "id": '',
+        "idexterno": '',
+        "starttime": '',
+        "duracion": '',
+        "status": '',
+        "reunionvideoconferenciaId": '',
+      }
     }
   },
   methods: {
-    mostrarGrabaciones () {
-      axios.post('http://localhost:3000/grabaciones', {
-        "id": 8,
-        "idexterno": "idexterno8",
-        "ocurrenciaId": 3
-      }).then(res => {
-        console.log(res);
-        this.grabaciones.push(res.data);
+    onAgregar () {
+      console.log(this.grabacion)
+      axios.post('http://localhost:3000/grabaciones', this.grabacion
+      ).then(res => {
+        this.grabacion.idexterno = ''
+        this.grabaciones.push(res.data)
+        this.showAddedToast()
       }).catch(error => {
         console.log(error);
+        this.showErrorToast()
       })
-    }
+    },
+    onAddDummy () {
+      let grabacionTest = 
+      {
+        "idexterno": 'idDummy',
+        "ocurrenciaId": +this.id
+      }
+      console.log(grabacionTest)
+      axios.post('http://localhost:3000/grabaciones', grabacionTest)
+      .then(res => {
+        this.grabaciones.push(res.data)
+        this.showAddedToast()
+      }).catch(error => {
+        console.log(error);
+        this.showErrorToast()
+      })
+    },
+    onEliminar(index) {
+      this.$refs.confirm_modal.open();
+      this.datoEliminar = index;
+    },
+    onEliminarConfirmado() {
+      let idArchivo = this.grabaciones[this.datoEliminar].id
+      axios.delete(`http://localhost:3000/grabaciones/${idArchivo}`)
+      .then(res => {
+        this.grabaciones.splice(this.datoEliminar,1)
+        this.showDeletedToast()
+      })
+      .catch(error => {
+        console.log(error)
+        this.showErrorToast()
+      });
+    },
+    onEliminarCanceled() {
+      this.datoEliminar = '';
+    },
+    onDetail(index) {
+      this.$refs.detail_modal.open();
+    },
+    onEdit(index) {
+      this.$refs.edit_modal.open();
+    },
+  },
+  
+  computed: {
+    isToastContentPresent () {
+      return !!(this.toastText || this.toastIcon)
+    },
   },
   beforeCreate () {
     axios.all([
-      axios.get('http://localhost:3000/grabaciones'),
+      axios.get(`http://localhost:3000/ocurrencias/${this.$route.params.id}/grabaciones`),
     ])
       .then(axios.spread(res => {
         this.grabaciones = res.data
-        console.log(res.data)
       }))
       .catch(error => {
         console.log(error)
@@ -121,6 +286,19 @@ export default {
       .finally(() => {
         this.loading = false
       })
+  },
+  created () {
+    axios.all([
+      axios.get(`http://localhost:3000/ocurrencias/${this.id}`),
+    ])
+    .then(axios.spread(res => {
+      this.ocurrencia = res.data
+      this.grabacion.ocurrenciaId = +this.id
+    }))
+    .catch(error => {
+      console.log(error)
+      this.errored = true
+    })
   }
 }
 
@@ -132,5 +310,19 @@ export default {
   td:first-child {
     width: 1rem;
   }
+}
+
+i:hover {
+  cursor: pointer;
+}
+
+.icon-slot {
+  width: 60%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.detalles span {
+  margin-left: 8px;
 }
 </style>
