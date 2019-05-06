@@ -85,6 +85,13 @@
                   <td>{{grabacion.idexterno}}</td>
                   <td align="right" class="valid">
                     <div class="icon-slot">
+                      <router-link
+                        v-bind:to="'../archivo/' + grabacion.id"
+                        :target="_self">
+                        <i
+                          class="fa fa-plus success-icon">
+                        </i>
+                      </router-link>
                       <i
                         class="fa fa-eye info-icon"
                         @click="onDetail(index)">
