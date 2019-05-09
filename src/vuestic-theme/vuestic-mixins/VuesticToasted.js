@@ -30,6 +30,13 @@ const addedToast = {
   containerClass: 'toast-added'
 }
 
+const successToast = {
+  icon: 'fa-check',
+  position: 'bottom-right',
+  duration: 1300,
+  containerClass: 'toast-added'
+}
+
 Vue.use(Toasted, toastOptions)
 
 export default {
@@ -45,6 +52,12 @@ export default {
     },
     showErrorToast (msg, options) {
       this.$toasted.show(msg || `Fallo en la operación`, options || errorToast)
+    },
+    showSuccessToast (msg, icon, options) {
+      if (icon){
+        successToast.icon = icon
+      }
+      this.$toasted.show(msg || `Oparación exitosa`, options || successToast)
     },
   },
 }

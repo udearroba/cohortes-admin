@@ -64,7 +64,7 @@
             </i>
             <span>estado: {{this.ocurrencia.status}}</span>
           </div>
-          
+
         </vuestic-widget>
       </div>
     </div>
@@ -225,14 +225,14 @@ export default {
       ).then(res => {
         this.grabacion.idexterno = ''
         this.grabaciones.push(res.data)
-        this.showAddedToast()
+        // this.showAddedToast()
       }).catch(error => {
         console.log(error);
         this.showErrorToast()
       })
     },
     onAddDummy () {
-      let grabacionTest = 
+      let grabacionTest =
       {
         "idexterno": 'idDummy',
         "ocurrenciaId": +this.id
@@ -241,7 +241,7 @@ export default {
       axios.post('http://localhost:3000/grabaciones', grabacionTest)
       .then(res => {
         this.grabaciones.push(res.data)
-        this.showAddedToast()
+        // this.showAddedToast()
       }).catch(error => {
         console.log(error);
         this.showErrorToast()
@@ -273,7 +273,7 @@ export default {
       this.$refs.edit_modal.open();
     },
   },
-  
+
   computed: {
     isToastContentPresent () {
       return !!(this.toastText || this.toastIcon)

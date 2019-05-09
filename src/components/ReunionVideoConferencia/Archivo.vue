@@ -118,20 +118,19 @@
                    v-bind:small="true">
       <div slot="title">Detalles</div>
       <div>
-        <ul>
-          <li>Detail 1: detail 1</li>
-          <li>Detail 2: detail 2</li>
-          <li>Detail 3: detail 3</li>
+        <ul class="detail-list">
+          <li><span class="detail-item-title">Id externo:</span> {{archivoAux.idexterno}}</li>
+          <li><span class="detail-item-title">Formato:</span> {{archivoAux.formato}}</li>
+          <li><span class="detail-item-title">Url:</span> {{archivoAux.url}}</li>
         </ul>
       </div>
     </vuestic-modal>
     <vuestic-modal ref="edit_modal"
-                   v-on:ok="onEliminarConfirmado"
-                   v-on:canceled="onEliminarCanceled"
-                   :ok-class="'btn btn-info btn-micro'"
+                   v-on:ok="onGuardarCambios"
+                   :ok-class="'btn btn-success btn-micro'"
                    :cancel-class="'btn btn-pale btn-micro'"
                    :close-icon-shown="false"
-                   :okText="'Aceptar' | translate"
+                   :okText="'Guardar cambios' | translate"
                    :cancelText="'Cancelar' | translate">
       <div slot="title">Editar</div>
       <div>
@@ -142,7 +141,7 @@
                 <div class="form-group with-icon-left">
                   <div class="input-group">
                     <input
-                    v-model="archivo.idexterno"
+                    v-model="archivoAux.idexterno"
                     id="input-icon-left"
                     name="input-icon-left"
                     required/>
@@ -155,7 +154,7 @@
                 <div class="form-group with-icon-left">
                   <div class="input-group">
                     <input
-                    v-model="archivo.formato"
+                    v-model="archivoAux.formato"
                     id="input-icon-left"
                     name="input-icon-left"
                     required/>
@@ -168,7 +167,7 @@
                 <div class="form-group with-icon-left">
                   <div class="input-group">
                     <input
-                    v-model="archivo.url"
+                    v-model="archivoAux.url"
                     id="input-icon-left"
                     name="input-icon-left"
                     required/>
@@ -232,7 +231,13 @@ export default {
         "url": '',
         "grabacionId": ''
       },
-      datoEliminar: '',
+      archivoAux: {
+        "idexterno": '',
+        "formato": '',
+        "url": '',
+        "grabacionId": ''
+      },
+      indexDato: '',
       id: this.$route.params.id,
       grabacion: {
         "id": '',
@@ -258,13 +263,13 @@ export default {
     },
     onEliminar(index) {
       this.$refs.confirm_modal.open();
-      this.datoEliminar = index;
+      this.indexDato = index;
     },
     onEliminarConfirmado() {
-      let idArchivo = this.archivos[this.datoEliminar].id
+      let idArchivo = this.archivos[this.indexDato].id
       axios.delete(`http://localhost:3000/archivos/${idArchivo}`)
       .then(res => {
-        this.archivos.splice(this.datoEliminar,1)
+        this.archivos.splice(this.indexDato,1)
         this.showDeletedToast()
       })
       .catch(error => {
@@ -273,16 +278,35 @@ export default {
       });
     },
     onEliminarCanceled() {
-      this.datoEliminar = '';
+      this.indexDato = '';
     },
     onDetail(index) {
       this.$refs.detail_modal.open();
+      this.archivoAux = this.archivos[index]
     },
     onEdit(index) {
+      this.archivoAux = JSON.parse(JSON.stringify(this.archivos[index]));
+      this.indexDato = index;
       this.$refs.edit_modal.open();
     },
+    onGuardarCambios(){
+      let idArchivo = this.archivos[this.indexDato].id
+      axios.patch(`http://localhost:3000/archivos/${idArchivo}`, this.archivoAux)
+      .then(res => {
+        delete this.archivos[this.indexDato]
+        console.log(this.archivos)
+        let newArchivo = JSON.parse(JSON.stringify(this.archivoAux))
+        console.log(newArchivo)
+        Vue.set(this.archivos, this.indexDato, newArchivo);
+        this.showSuccessToast('Cambios guardados')
+      })
+      .catch(error => {
+        console.log(error)
+        this.showErrorToast()
+      });
+    }
   },
-  
+
   computed: {
     isToastContentPresent () {
       return !!(this.toastText || this.toastIcon)
@@ -340,5 +364,12 @@ i:hover {
 
 .detalles span {
   margin-left: 8px;
+}
+
+.detail-list{
+  color: $charcoal;
+  .detail-item-title {
+    color: $almost-black;
+  }
 }
 </style>
