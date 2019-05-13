@@ -100,7 +100,7 @@ export default new Router({
             {
               name: 'reunionVideo',
               path: 'reunionVideo',
-              component: lazyLoading('ReunionVideoConferencia/FormularioRv'),
+              component: lazyLoading('ReunionVideoConferencia/Reunion'),
             },
             {
               name: 'grabacion',
