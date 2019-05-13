@@ -22,13 +22,35 @@
                       </label><i class="bar"></i>
                     </div>
                   </div>
+                  <div class="form-group with-icon-left">
+                    <div class="input-group">
+                      <input
+                      v-model="grabacion.idexterno"
+                      id="input-icon-left"
+                      name="input-icon-left"
+                      required/>
+                      <i class="fa fa-play-circle icon-left input-icon"></i>
+                      <label class="control-label" for="input-icon-left">
+                        Play url
+                      </label><i class="bar"></i>
+                    </div>
+                  </div>
+                  <div class="form-group with-icon-left">
+                    <div class="input-group">
+                      <input
+                      v-model="grabacion.idexterno"
+                      id="input-icon-left"
+                      name="input-icon-left"
+                      required/>
+                      <i class="fa fa-hourglass-3 icon-left input-icon"></i>
+                      <label class="control-label" for="input-icon-left">
+                        Duración
+                      </label><i class="bar"></i>
+                    </div>
+                  </div>
                   <div class="btn btn-micro btn-primary"
                   @click="onAgregar">
                     {{'Agregar'}}
-                  </div>
-                  <div class="btn btn-micro btn-primary"
-                  @click="onAddDummy">
-                    {{'Add dummy data'}}
                   </div>
                 </fieldset>
               </div>
@@ -76,13 +98,17 @@
             <table class="table table-striped first-td-padding">
               <thead>
               <tr>
-                <td>{{'id externo'}}</td>
+                <td>{{'id  externo'}}</td>
+                <td>{{'play url'}}</td>
+                <td>{{'duración'}}</td>
                 <td></td>
               </tr>
               </thead>
               <tbody>
                 <tr v-for="(grabacion, index) in grabaciones">
                   <td>{{grabacion.idexterno}}</td>
+                  <td>{{grabacion.playurl}}</td>
+                  <td>{{grabacion.duracion}}</td>
                   <td align="right" class="valid">
                     <div class="icon-slot">
                       <router-link
@@ -204,7 +230,9 @@ export default {
       grabaciones: {},
       grabacion: {
         "idexterno": '',
-        "ocurrenciaId": ''
+        "ocurrenciaId": '',
+        "playurl": '',
+        "duracion": '',
       },
       datoEliminar: '',
       id: this.$route.params.id,
@@ -224,22 +252,6 @@ export default {
       axios.post('http://localhost:3000/grabaciones', this.grabacion
       ).then(res => {
         this.grabacion.idexterno = ''
-        this.grabaciones.push(res.data)
-        // this.showAddedToast()
-      }).catch(error => {
-        console.log(error);
-        this.showErrorToast()
-      })
-    },
-    onAddDummy () {
-      let grabacionTest =
-      {
-        "idexterno": 'idDummy',
-        "ocurrenciaId": +this.id
-      }
-      console.log(grabacionTest)
-      axios.post('http://localhost:3000/grabaciones', grabacionTest)
-      .then(res => {
         this.grabaciones.push(res.data)
         // this.showAddedToast()
       }).catch(error => {

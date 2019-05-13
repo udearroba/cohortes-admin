@@ -48,6 +48,19 @@
                       </label><i class="bar"></i>
                     </div>
                   </div>
+                  <div class="form-group with-icon-left">
+                    <div class="input-group">
+                      <input
+                      v-model="archivo.url"
+                      id="input-icon-left"
+                      name="input-icon-left"
+                      required/>
+                      <i class="fa fa-files-o icon-left input-icon"></i>
+                      <label class="control-label" for="input-icon-left">
+                        {{'Peso'}}
+                      </label><i class="bar"></i>
+                    </div>
+                  </div>
                   <div class="btn btn-micro btn-primary"
                   @click="onAgregar">
                     {{'Agregar'}}
@@ -62,10 +75,24 @@
       <!-- DETALLES DE LA GRABACIÓN -->
       <div class="detalles flex md6">
         <vuestic-widget :headerText="`Detalles grabación ${this.grabacion.id}`">
-          <i
-            class="fa fa-key info-icon">
-          </i>
-          <span>id externo: {{this.grabacion.idexterno}}</span>
+          <div class="detalle-item">
+            <i
+              class="fa fa-clock-o info-icon">
+            </i>
+            <span>id externo: {{this.grabacion.idexterno}}</span>
+          </div>
+          <div class="detalle-item">
+            <i
+              class="fa fa-play-circle info-icon">
+            </i>
+            <span>play url: {{this.grabacion.playurl}}</span>
+          </div>
+          <div class="detalle-item">
+            <i
+              class="fa fa-hourglass-3 info-icon">
+            </i>
+            <span>duración: {{this.grabacion.duracion}}</span>
+          </div>
         </vuestic-widget>
       </div>
     </div>
@@ -80,6 +107,7 @@
                 <td>{{'id externo'}}</td>
                 <td>{{'formato'}}</td>
                 <td>{{'url'}}</td>
+                <td>{{'Peso'}}</td>
                 <td></td>
               </tr>
               </thead>
@@ -88,6 +116,7 @@
                   <td>{{archivo.idexterno}}</td>
                   <td>{{archivo.formato}}</td>
                   <td>{{archivo.url}}</td>
+                  <td>{{archivo.pesobyte}}</td>
                   <td align="right" class="valid">
                     <div class="icon-slot">
                       <i
@@ -122,6 +151,7 @@
           <li><span class="detail-item-title">Id externo:</span> {{archivoAux.idexterno}}</li>
           <li><span class="detail-item-title">Formato:</span> {{archivoAux.formato}}</li>
           <li><span class="detail-item-title">Url:</span> {{archivoAux.url}}</li>
+          <li><span class="detail-item-title">Peso:</span> {{archivoAux.pesobyte}}</li>
         </ul>
       </div>
     </vuestic-modal>
@@ -177,6 +207,19 @@
                     </label><i class="bar"></i>
                   </div>
                 </div>
+                <div class="form-group with-icon-left">
+                  <div class="input-group">
+                    <input
+                    v-model="archivoAux.pesobyte"
+                    id="input-icon-left"
+                    name="input-icon-left"
+                    required/>
+                    <i class="fa fa-files-o icon-left input-icon"></i>
+                    <label class="control-label" for="input-icon-left">
+                      {{'Peso'}}
+                    </label><i class="bar"></i>
+                  </div>
+                </div>
               </fieldset>
             </div>
           </div>
@@ -229,20 +272,24 @@ export default {
         "idexterno": '',
         "formato": '',
         "url": '',
-        "grabacionId": ''
+        "grabacionId": '',
+        "pesobyte": '',
       },
       archivoAux: {
         "idexterno": '',
         "formato": '',
         "url": '',
-        "grabacionId": ''
+        "grabacionId": '',
+        "pesobyte": '',
       },
       indexDato: '',
       id: this.$route.params.id,
       grabacion: {
         "id": '',
         "idexterno": '',
-        "ocurrenciaId": ''
+        "ocurrenciaId": '',
+        "playurl": '',
+        "duracion": '',
       }
     }
   },
