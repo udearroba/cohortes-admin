@@ -2,7 +2,7 @@
   <div>
 
     <div class="va-row">
-      <!-- FORMULARIO PARA AGREGAR RENIÓN -->
+      <!-- FORMULARIO PARA AGREGAR REUNIÓN -->
       <div class="flex md12">
         <vuestic-widget :headerText="'Agregar Reunión'">
           <form>
@@ -139,7 +139,8 @@
                   <td align="right" class="valid">
                     <div class="icon-slot">
                       <i
-                        class="fa fa-plus success-icon">
+                        class="fa fa-plus success-icon"
+                        @click="navegarSiguienteNivel(index)">
                       </i>
                       <i
                         class="fa fa-eye info-icon"
@@ -395,6 +396,9 @@ export default {
     onEliminarCanceled() {
       this.indexDato = '';
     },
+    navegarSiguienteNivel(index) {
+      this.$router.push({ name: 'ocurrencia', params: { id: this.reuniones[index].id } })
+    },
     onDetail(index) {
       this.$refs.detail_modal.open();
       this.reunionAux = this.reuniones[index]
@@ -419,7 +423,7 @@ export default {
         console.log(error)
         this.showErrorToast()
       });
-    }
+    },
   },
 
   computed: {

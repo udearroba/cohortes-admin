@@ -115,7 +115,8 @@
                         v-bind:to="'../archivo/' + grabacion.id"
                         :target="_self">
                         <i
-                          class="fa fa-plus success-icon">
+                          class="fa fa-plus success-icon"
+                          @click="navegarSiguienteNivel(index)">
                         </i>
                       </router-link>
                       <i
@@ -277,6 +278,9 @@ export default {
     },
     onEliminarCanceled() {
       this.datoEliminar = '';
+    },
+    navegarSiguienteNivel(index) {
+      this.$router.push({ name: 'archivo', params: { id: this.grabaciones[index].id } })
     },
     onDetail(index) {
       this.$refs.detail_modal.open();

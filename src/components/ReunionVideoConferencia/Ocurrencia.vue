@@ -145,7 +145,8 @@
                   <td align="right" class="valid">
                     <div class="icon-slot">
                       <i
-                        class="fa fa-plus success-icon">
+                        class="fa fa-plus success-icon"
+                        @click="navegarSiguienteNivel(index)">
                       </i>
                       <i
                         class="fa fa-eye info-icon"
@@ -349,6 +350,9 @@ export default {
     },
     onEliminarCanceled() {
       this.indexDato = '';
+    },
+    navegarSiguienteNivel(index) {
+      this.$router.push({ name: 'grabacion', params: { id: this.ocurrencias[index].id } })
     },
     onDetail(index) {
       this.$refs.detail_modal.open();
