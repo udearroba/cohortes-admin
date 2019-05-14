@@ -31,7 +31,7 @@
                       required/>
                       <i class="fa fa-play-circle icon-left input-icon"></i>
                       <label class="control-label" for="input-icon-left">
-                        Play url
+                        Play URL
                       </label><i class="bar"></i>
                     </div>
                   </div>
@@ -99,7 +99,7 @@
               <thead>
               <tr>
                 <td>{{'id  externo'}}</td>
-                <td>{{'play url'}}</td>
+                <td>{{'play URL'}}</td>
                 <td>{{'duración'}}</td>
                 <td></td>
               </tr>
@@ -147,20 +147,19 @@
                    v-bind:small="true">
       <div slot="title">Detalles</div>
       <div>
-        <ul>
-          <li>Detail 1: detail 1</li>
-          <li>Detail 2: detail 2</li>
-          <li>Detail 3: detail 3</li>
+        <ul class="detail-list">
+          <li><span class="detail-item-title">Id externo:</span> {{grabacionAux.idexterno}}</li>
+          <li><span class="detail-item-title">Play URL:</span> {{grabacionAux.playurl}}</li>
+          <li><span class="detail-item-title">Duración:</span> {{grabacionAux.duracion}}</li>
         </ul>
       </div>
     </vuestic-modal>
     <vuestic-modal ref="edit_modal"
-                   v-on:ok="onEliminarConfirmado"
-                   v-on:canceled="onEliminarCanceled"
-                   :ok-class="'btn btn-info btn-micro'"
+                   v-on:ok="onGuardarCambios"
+                   :ok-class="'btn btn-success btn-micro'"
                    :cancel-class="'btn btn-pale btn-micro'"
                    :close-icon-shown="false"
-                   :okText="'Aceptar' | translate"
+                   :okText="'Guardar cambios' | translate"
                    :cancelText="'Cancelar' | translate">
       <div slot="title">Editar</div>
       <div>
@@ -171,13 +170,39 @@
                 <div class="form-group with-icon-left">
                   <div class="input-group">
                     <input
-                    v-model="grabacion.idexterno"
+                    v-model="grabacionAux.idexterno"
                     id="input-icon-left"
                     name="input-icon-left"
                     required/>
                     <i class="fa fa-key icon-left input-icon"></i>
                     <label class="control-label" for="input-icon-left">
                       {{'Id externo'}}
+                    </label><i class="bar"></i>
+                  </div>
+                </div>
+                <div class="form-group with-icon-left">
+                  <div class="input-group">
+                    <input
+                    v-model="grabacionAux.idexterno"
+                    id="input-icon-left"
+                    name="input-icon-left"
+                    required/>
+                    <i class="fa fa-play-circle icon-left input-icon"></i>
+                    <label class="control-label" for="input-icon-left">
+                      {{'Play URL'}}
+                    </label><i class="bar"></i>
+                  </div>
+                </div>
+                <div class="form-group with-icon-left">
+                  <div class="input-group">
+                    <input
+                    v-model="grabacionAux.idexterno"
+                    id="input-icon-left"
+                    name="input-icon-left"
+                    required/>
+                    <i class="fa fa-hourglass-3 icon-left input-icon"></i>
+                    <label class="control-label" for="input-icon-left">
+                      {{'Duración'}}
                     </label><i class="bar"></i>
                   </div>
                 </div>
@@ -235,6 +260,12 @@ export default {
         "playurl": '',
         "duracion": '',
       },
+      grabacionAux: {
+        "idexterno": '',
+        "ocurrenciaId": '',
+        "playurl": '',
+        "duracion": '',
+      },
       datoEliminar: '',
       id: this.$route.params.id,
       ocurrencia: {
@@ -284,10 +315,29 @@ export default {
     },
     onDetail(index) {
       this.$refs.detail_modal.open();
+      this.grabacionAux = this.grabaciones[index]
     },
     onEdit(index) {
+      this.grabacionAux = JSON.parse(JSON.stringify(this.grabaciones[index]));
+      this.indexDato = index;
       this.$refs.edit_modal.open();
     },
+    onGuardarCambios(){
+      let idGrabacion = this.grabaciones[this.indexDato].id
+      axios.patch(`http://localhost:3000/archivos/${idGrabacion}`, this.grabacionAux)
+      .then(res => {
+        delete this.grabaciones[this.indexDato]
+        console.log(this.grabaciones)
+        let newGrabacion = JSON.parse(JSON.stringify(this.grabacionAux))
+        console.log(newGrabacion)
+        Vue.set(this.grabaciones, this.indexDato, newGrabacion);
+        this.showSuccessToast('Cambios guardados')
+      })
+      .catch(error => {
+        console.log(error)
+        this.showErrorToast()
+      });
+    }
   },
 
   computed: {
