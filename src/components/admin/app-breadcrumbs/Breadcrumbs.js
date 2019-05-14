@@ -8,12 +8,36 @@ export const breadcrumbs = {
       name: 'dashboard',
       displayName: 'menu.dashboard',
     },
-
     {
       name: 'reunion',
       displayName: 'menu.reunion',
-    },
+      disabled: true,
+      children: [
+        {
+          name: 'reunionVideo',
+          displayName: 'reunionVideo',
+          children: [
+            {
+              name: 'ocurrencia',
+              displayName: 'ocurrencia',
+              children: [
+                {
+                  name: 'grabacion',
+                  displayName: 'grabación',
+                  children: [
+                    {
+                      name: 'archivo',
+                      displayName: 'archivo',
+                    },
+                  ]
+                },
+              ]
+            },
+          ]
+        },
 
+      ],
+    },
     {
       name: 'statistics',
       displayName: 'menu.statistics',
