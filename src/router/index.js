@@ -103,6 +103,11 @@ export default new Router({
               component: lazyLoading('ReunionVideoConferencia/Reunion'),
             },
             {
+              name: 'ocurrencia',
+              path: 'ocurrencia/:id',
+              component: lazyLoading('ReunionVideoConferencia/Ocurrencia'),
+            },
+            {
               name: 'grabacion',
               path: 'grabacion/:id',
               component: lazyLoading('ReunionVideoConferencia/Grabacion'),
