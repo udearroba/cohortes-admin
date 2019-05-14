@@ -397,7 +397,7 @@ export default {
       this.indexDato = '';
     },
     navegarSiguienteNivel(index) {
-      this.$router.push({ name: 'ocurrencia', params: { id: this.reuniones[index].id } })
+      this.$router.push({ name: 'ocurrencia', params: { reunionId: this.reuniones[index].id } })
     },
     onDetail(index) {
       this.$refs.detail_modal.open();

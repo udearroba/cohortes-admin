@@ -283,7 +283,7 @@ export default {
         "pesobyte": '',
       },
       indexDato: '',
-      id: this.$route.params.id,
+      id: this.$route.params.grabacionId,
       grabacion: {
         "id": '',
         "idexterno": '',
@@ -361,7 +361,7 @@ export default {
   },
   beforeCreate () {
     axios.all([
-      axios.get(`http://localhost:3000/grabaciones/${this.$route.params.id}/archivos`),
+      axios.get(`http://localhost:3000/grabaciones/${this.$route.params.grabacionId}/archivos`),
     ])
       .then(axios.spread(res => {
         this.archivos = res.data

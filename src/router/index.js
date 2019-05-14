@@ -93,31 +93,24 @@ export default new Router({
           default: true,
         },
         {
-          name: 'reunion',
-          path: 'reunion',
-          component: EmptyParentComponent,
-          children: [
-            {
-              name: 'reunionVideo',
-              path: 'reunionVideo',
-              component: lazyLoading('ReunionVideoConferencia/Reunion'),
-            },
-            {
-              name: 'ocurrencia',
-              path: 'ocurrencia/:id',
-              component: lazyLoading('ReunionVideoConferencia/Ocurrencia'),
-            },
-            {
-              name: 'grabacion',
-              path: 'grabacion/:id',
-              component: lazyLoading('ReunionVideoConferencia/Grabacion'),
-            },
-            {
-              name: 'archivo',
-              path: 'archivo/:id',
-              component: lazyLoading('ReunionVideoConferencia/Archivo'),
-            }
-          ],
+          name: 'reuniones',
+          path: 'reuniones',
+          component: lazyLoading('ReunionVideoConferencia/Reunion'),
+        },
+        {
+          name: 'ocurrencia',
+          path: 'reuniones/:reunionId/ocurrencias',
+          component: lazyLoading('ReunionVideoConferencia/Ocurrencia'),
+        },
+        {
+          name: 'grabacion',
+          path: 'reuniones/:reunionId/ocurrencias/:ocurrenciaId/grabaciones',
+          component: lazyLoading('ReunionVideoConferencia/Grabacion'),
+        },
+        {
+          name: 'archivo',
+          path: 'reuniones/:reunionId/ocurrencias/:ocurrenciaId/grabaciones/:grabacionId/archivos',
+          component: lazyLoading('ReunionVideoConferencia/Archivo'),
         },
         {
           name: 'statistics',

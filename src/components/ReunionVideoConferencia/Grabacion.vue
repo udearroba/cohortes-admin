@@ -111,14 +111,10 @@
                   <td>{{grabacion.duracion}}</td>
                   <td align="right" class="valid">
                     <div class="icon-slot">
-                      <router-link
-                        v-bind:to="'../archivo/' + grabacion.id"
-                        :target="_self">
-                        <i
-                          class="fa fa-plus success-icon"
-                          @click="navegarSiguienteNivel(index)">
-                        </i>
-                      </router-link>
+                      <i
+                        class="fa fa-plus success-icon"
+                        @click="navegarSiguienteNivel(index)">
+                      </i>
                       <i
                         class="fa fa-eye info-icon"
                         @click="onDetail(index)">
@@ -267,7 +263,7 @@ export default {
         "duracion": '',
       },
       datoEliminar: '',
-      id: this.$route.params.id,
+      id: this.$route.params.ocurrenciaId,
       ocurrencia: {
         "id": '',
         "idexterno": '',
@@ -311,7 +307,7 @@ export default {
       this.datoEliminar = '';
     },
     navegarSiguienteNivel(index) {
-      this.$router.push({ name: 'archivo', params: { id: this.grabaciones[index].id } })
+      this.$router.push({ name: 'archivo', params: { grabacionId: this.grabaciones[index].id } })
     },
     onDetail(index) {
       this.$refs.detail_modal.open();
@@ -347,7 +343,7 @@ export default {
   },
   beforeCreate () {
     axios.all([
-      axios.get(`http://localhost:3000/ocurrencias/${this.$route.params.id}/grabaciones`),
+      axios.get(`http://localhost:3000/ocurrencias/${this.$route.params.ocurrenciaId}/grabaciones`),
     ])
       .then(axios.spread(res => {
         this.grabaciones = res.data

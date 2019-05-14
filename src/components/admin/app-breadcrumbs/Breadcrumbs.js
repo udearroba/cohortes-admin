@@ -9,27 +9,20 @@ export const breadcrumbs = {
       displayName: 'menu.dashboard',
     },
     {
-      name: 'reunion',
-      displayName: 'menu.reunion',
-      disabled: true,
+      name: 'reuniones',
+      displayName: 'reuniones',
       children: [
         {
-          name: 'reunionVideo',
-          displayName: 'reunionVideo',
+          name: 'ocurrencia',
+          displayName: 'ocurrencias',
           children: [
             {
-              name: 'ocurrencia',
-              displayName: 'ocurrencia',
+              name: 'grabacion',
+              displayName: 'grabaciones',
               children: [
                 {
-                  name: 'grabacion',
-                  displayName: 'grabación',
-                  children: [
-                    {
-                      name: 'archivo',
-                      displayName: 'archivo',
-                    },
-                  ]
+                  name: 'archivo',
+                  displayName: 'archivos',
                 },
               ]
             },

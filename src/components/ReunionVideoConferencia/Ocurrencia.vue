@@ -307,7 +307,7 @@ export default {
         "idexterno": '',
       },
       indexDato: '',
-      id: this.$route.params.id,
+      id: this.$route.params.reunionId,
       reunion: {
         "uuid": '',
         "idsistemaexterno": '',
@@ -352,7 +352,7 @@ export default {
       this.indexDato = '';
     },
     navegarSiguienteNivel(index) {
-      this.$router.push({ name: 'grabacion', params: { id: this.ocurrencias[index].id } })
+      this.$router.push({ name: 'grabacion', params: { ocurrenciaId: this.ocurrencias[index].id } })
     },
     onDetail(index) {
       this.$refs.detail_modal.open();
@@ -387,7 +387,7 @@ export default {
   },
   beforeCreate () {
     axios.all([
-      axios.get(`http://localhost:3000/reunionvideoconferencias/${this.$route.params.id}/ocurrencias`),
+      axios.get(`http://localhost:3000/reunionvideoconferencias/${this.$route.params.reunionId}/ocurrencias`),
     ])
       .then(axios.spread(res => {
         this.ocurrencias = res.data

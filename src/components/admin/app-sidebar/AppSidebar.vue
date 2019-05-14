@@ -9,33 +9,14 @@
           <span>{{ $t('menu.dashboard') }}</span>
         </span>
       </sidebar-link>
-
-      <sidebar-link-group>
+      <sidebar-link
+        :to="{ name: 'reuniones' }">
         <span slot="title">
           <span
             class="sidebar-menu-item-icon vuestic-icon vuestic-icon-tables"></span>
-          <span>{{ $t('menu.reunion') }}</span>
+          <span>{{ $t('Reuniones') }}</span>
         </span>
-        <sidebar-link
-          :to="{ name: 'reunionVideo' }">
-          <span slot="title">
-            <span>{{ $t('menu.reunion') }}</span>
-          </span>
-        </sidebar-link>
-        <sidebar-link
-          :to="{ name: 'grabacion' }">
-          <span slot="title">
-            <span>{{ $t('menu.grabacion') }}</span>
-          </span>
-        </sidebar-link>
-        <sidebar-link
-          :to="{ name: 'archivo' }">
-          <span slot="title">
-            <span>{{ $t('menu.archivo') }}</span>
-          </span>
-        </sidebar-link>
-      </sidebar-link-group>
-
+      </sidebar-link>
       <sidebar-link-group>
         <span slot="title">
           <span
