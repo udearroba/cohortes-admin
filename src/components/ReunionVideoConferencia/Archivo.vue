@@ -72,8 +72,9 @@
         </vuestic-widget>
       </div>
 
-      <!-- DETALLES DE LA GRABACIÓN -->
+
       <div class="detalles flex md6">
+        <!-- DETALLES DE LA GRABACIÓN -->
         <vuestic-widget :headerText="`Detalles grabación ${this.grabacion.id}`">
           <div class="detalle-item">
             <i
@@ -93,6 +94,34 @@
             </i>
             <span>duración: {{this.grabacion.duracion}}</span>
           </div>
+        </vuestic-widget>
+        <!-- DETALLES DE LA OCURRENCIA -->
+        <vuestic-widget :headerText="`Detalles Ocurrencia ${this.ocurrenciaId}`">
+          <div class="detalle-item">
+            <i
+              class="fa fa-key info-icon">
+            </i>
+            <span>id externo: {{this.ocurrencia.idexterno}}</span>
+          </div>
+          <div class="detalle-item">
+            <i
+              class="fa fa-clock-o info-icon">
+            </i>
+            <span>start time: {{this.ocurrencia.starttime}}</span>
+          </div>
+          <div class="detalle-item">
+            <i
+              class="fa fa-clock-o info-icon">
+            </i>
+            <span>duración: {{this.ocurrencia.duracion}}</span>
+          </div>
+          <div class="detalle-item">
+            <i
+              class="fa fa-check-square info-icon">
+            </i>
+            <span>estado: {{this.ocurrencia.status}}</span>
+          </div>
+
         </vuestic-widget>
       </div>
     </div>
@@ -290,7 +319,16 @@ export default {
         "ocurrenciaId": '',
         "playurl": '',
         "duracion": '',
-      }
+      },
+      ocurrenciaId: this.$route.params.ocurrenciaId,
+      ocurrencia: {
+        "id": '',
+        "idexterno": '',
+        "starttime": '',
+        "duracion": '',
+        "status": '',
+        "reunionvideoconferenciaId": '',
+      },
     }
   },
   methods: {
@@ -360,6 +398,7 @@ export default {
     },
   },
   beforeCreate () {
+    //GET PARA OBTENER DETALLES DE GRABACIÓN
     axios.all([
       axios.get(`http://localhost:3000/grabaciones/${this.$route.params.grabacionId}/archivos`),
     ])
@@ -381,6 +420,19 @@ export default {
     .then(axios.spread(res => {
       this.grabacion = res.data
       this.archivo.grabacionId = +this.id
+    }))
+    .catch(error => {
+      console.log(error)
+      this.errored = true
+    })
+
+    //GET PARA OBTENER DETALLES DE OCURRENCIA
+    axios.all([
+      axios.get(`http://localhost:3000/ocurrencias/${this.id}`),
+    ])
+    .then(axios.spread(res => {
+      this.ocurrencia = res.data
+      this.grabacion.ocurrenciaId = +this.id
     }))
     .catch(error => {
       console.log(error)

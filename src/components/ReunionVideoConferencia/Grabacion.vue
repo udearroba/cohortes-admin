@@ -59,8 +59,8 @@
         </vuestic-widget>
       </div>
 
-      <!-- DETALLES DE LA OCURRENCIA -->
       <div class="detalles flex md6">
+        <!-- DETALLES DE LA OCURRENCIA -->
         <vuestic-widget :headerText="`Detalles Ocurrencia ${this.ocurrencia.id}`">
           <div class="detalle-item">
             <i
@@ -87,6 +87,51 @@
             <span>estado: {{this.ocurrencia.status}}</span>
           </div>
 
+        </vuestic-widget>
+        <!-- DETALLES DE LA REUNIÓN -->
+        <vuestic-widget :headerText="`Detalles reunión ${this.reunionId}`">
+          <div class="detalle-item">
+            <i
+              class="fa fa-key info-icon">
+            </i>
+            <span>Uuid: {{this.reunion.uuid}}</span>
+          </div>
+          <div class="detalle-item">
+            <i
+              class="fa fa-key info-icon">
+            </i>
+            <span>Id externo: {{this.reunion.idsistemaexterno}}</span>
+          </div>
+          <div class="detalle-item">
+            <i
+              class="fa fa-link info-icon">
+            </i>
+            <span>URL join: {{this.reunion.urljoin}}</span>
+          </div>
+          <div class="detalle-item">
+            <i
+              class="fa fa-link info-icon">
+            </i>
+            <span>URL start: {{this.reunion.urlstart}}</span>
+          </div>
+          <div class="detalle-item">
+            <i
+              class="fa fa-id-card info-icon">
+            </i>
+            <span>Host id: {{this.reunion.hostid}}</span>
+          </div>
+          <div class="detalle-item">
+            <i
+              class="fa fa-calendar-o info-icon">
+            </i>
+            <span>Fecha creación: {{this.reunion.createdat}}</span>
+          </div>
+          <div class="detalle-item">
+            <i
+              class="fa fa-paperclip info-icon">
+            </i>
+            <span>Nombre: {{this.reunion.nombre}}</span>
+          </div>
         </vuestic-widget>
       </div>
     </div>
@@ -271,7 +316,17 @@ export default {
         "duracion": '',
         "status": '',
         "reunionvideoconferenciaId": '',
-      }
+      },
+      reunionId: this.$route.params.reunionId,
+      reunion: {
+        "uuid": '',
+        "idsistemaexterno": '',
+        "urljoin": '',
+        "urlstart": '',
+        "hostid": '',
+        "createdat": '',
+        "nombre": '',
+      },
     }
   },
   methods: {
@@ -357,12 +412,26 @@ export default {
       })
   },
   created () {
+    //GET PARA OBTENER DETALLES DE OCURRENCIA
     axios.all([
       axios.get(`http://localhost:3000/ocurrencias/${this.id}`),
     ])
     .then(axios.spread(res => {
       this.ocurrencia = res.data
       this.grabacion.ocurrenciaId = +this.id
+    }))
+    .catch(error => {
+      console.log(error)
+      this.errored = true
+    })
+
+    //GET PARA OBTENER DETALLES DE REUNIÓN
+    axios.all([
+      axios.get(`http://localhost:3000/reunionvideoconferencias/${this.reunionId}`),
+    ])
+    .then(axios.spread(res => {
+      this.reunion = res.data
+      // this.grabacion.ocurrenciaId = +this.id
     }))
     .catch(error => {
       console.log(error)
