@@ -443,7 +443,7 @@ export default {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 .color-icon-label-table {
   td:first-child {

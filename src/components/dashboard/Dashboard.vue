@@ -2,7 +2,7 @@
   <div class="dashboard">
 
     <dashboard-info-widgets></dashboard-info-widgets>
-
+    <p @click="launchEpicmaxToast()">launch toast</p>
     <vuestic-widget class="no-padding no-v-padding">
       <vuestic-tabs
         :names="[$t('dashboard.dataVisualization'), $t('dashboard.usersAndMembers'), $t('dashboard.setupProfile'), $t('dashboard.features')]"

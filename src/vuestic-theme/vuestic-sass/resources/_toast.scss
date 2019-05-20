@@ -15,3 +15,6 @@
 .toast-added,.toast-deleted {
   @include toast-estile($state-success-bg, $alert-success-shadow);
 }
+.toast-action {
+  color: $almost-black;
+}

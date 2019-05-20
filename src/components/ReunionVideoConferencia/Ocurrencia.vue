@@ -25,7 +25,7 @@
                   <div class="form-group with-icon-left">
                     <div class="input-group">
                       <input
-                      v-model="ocurrencia.idexterno"
+                      v-model="ocurrencia.starttime"
                       id="input-icon-left"
                       name="input-icon-left"
                       required/>
@@ -38,9 +38,10 @@
                   <div class="form-group with-icon-left">
                     <div class="input-group">
                       <input
-                      v-model="ocurrencia.idexterno"
+                      v-model="ocurrencia.duracion"
                       id="input-icon-left"
                       name="input-icon-left"
+                      type="number"
                       required/>
                       <i class="fa fa-hourglass-3 icon-left input-icon"></i>
                       <label class="control-label" for="input-icon-left">
@@ -51,7 +52,7 @@
                   <div class="form-group with-icon-left">
                     <div class="input-group">
                       <input
-                      v-model="ocurrencia.idexterno"
+                      v-model="ocurrencia.status"
                       id="input-icon-left"
                       name="input-icon-left"
                       required/>
@@ -321,12 +322,29 @@ export default {
   },
   methods: {
     onAgregar () {
+      this.ocurrencia.duracion = +this.ocurrencia.duracion
       console.log(this.ocurrencia)
       axios.post('http://localhost:3000/ocurrencias', this.ocurrencia
       ).then(res => {
         this.ocurrencia.idexterno = ''
         this.ocurrencias.push(res.data)
-        this.showAddedToast()
+        let idGenerado = res.data.id
+        console.log(res.data)
+        this.showAddedToast('',
+        {
+          icon: 'fa-plus',
+          position: 'bottom-right',
+          duration: 5000,
+          containerClass: 'toast-added',
+          action: {
+            text: 'Agregar Grabación',
+            onClick: (e, toastObject) => {
+              this.navegarSiguienteNivel('', idGenerado)
+              toastObject.goAway(0)
+            },
+            class: 'toast-action'
+          },
+        })
       }).catch(error => {
         console.log(error);
         this.showErrorToast()
@@ -351,7 +369,11 @@ export default {
     onEliminarCanceled() {
       this.indexDato = '';
     },
-    navegarSiguienteNivel(index) {
+    navegarSiguienteNivel(index, id) {
+      if (id) {
+        this.$router.push({ name: 'grabacion', params: { ocurrenciaId: id } })
+        return;
+      }
       this.$router.push({ name: 'grabacion', params: { ocurrenciaId: this.ocurrencias[index].id } })
     },
     onDetail(index) {
@@ -406,7 +428,7 @@ export default {
     ])
     .then(axios.spread(res => {
       this.reunion = res.data
-      this.ocurrencia.reunionId = +this.id
+      this.ocurrencia.reunionvideoconferenciaId = +this.id
     }))
     .catch(error => {
       console.log(error)

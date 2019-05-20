@@ -25,7 +25,7 @@
                   <div class="form-group with-icon-left">
                     <div class="input-group">
                       <input
-                      v-model="grabacion.idexterno"
+                      v-model="grabacion.playurl"
                       id="input-icon-left"
                       name="input-icon-left"
                       required/>
@@ -38,9 +38,10 @@
                   <div class="form-group with-icon-left">
                     <div class="input-group">
                       <input
-                      v-model="grabacion.idexterno"
+                      v-model="grabacion.duracion"
                       id="input-icon-left"
                       name="input-icon-left"
+                      type="number"
                       required/>
                       <i class="fa fa-hourglass-3 icon-left input-icon"></i>
                       <label class="control-label" for="input-icon-left">
@@ -308,7 +309,7 @@ export default {
         "duracion": '',
       },
       datoEliminar: '',
-      id: this.$route.params.ocurrenciaId,
+      id: this.$route.params.grabacionId,
       ocurrencia: {
         "id": '',
         "idexterno": '',
@@ -331,12 +332,26 @@ export default {
   },
   methods: {
     onAgregar () {
-      console.log(this.grabacion)
+      this.grabacion.duracion = +this.grabacion.duracion
       axios.post('http://localhost:3000/grabaciones', this.grabacion
       ).then(res => {
         this.grabacion.idexterno = ''
         this.grabaciones.push(res.data)
-        // this.showAddedToast()
+        this.showAddedToast('',
+        {
+          icon: 'fa-plus',
+          position: 'bottom-right',
+          duration: 5000,
+          containerClass: 'toast-added',
+          action: {
+            text: 'Agregar Archivo',
+            onClick: (e, toastObject) => {
+              this.navegarSiguienteNivel('', idGenerado)
+              toastObject.goAway(0)
+            },
+            class: 'toast-action'
+          },
+        })
       }).catch(error => {
         console.log(error);
         this.showErrorToast()
@@ -361,7 +376,11 @@ export default {
     onEliminarCanceled() {
       this.datoEliminar = '';
     },
-    navegarSiguienteNivel(index) {
+    navegarSiguienteNivel(index, id) {
+      if (id) {
+        this.$router.push({ name: 'archivo', params: { grabacionId: id } })
+        return;
+      }
       this.$router.push({ name: 'archivo', params: { grabacionId: this.grabaciones[index].id } })
     },
     onDetail(index) {
@@ -449,17 +468,14 @@ export default {
     width: 1rem;
   }
 }
-
 i:hover {
   cursor: pointer;
 }
-
 .icon-slot {
   width: 60%;
   display: flex;
   justify-content: space-around;
 }
-
 .detalles span {
   margin-left: 8px;
 }

@@ -360,7 +360,6 @@ export default {
   },
   methods: {
     onAgregar () {
-      console.log(this.reunion)
       axios.post('http://localhost:3000/reunionvideoconferencias', this.reunion
       ).then(res => {
         this.reunion.uuid = '',
@@ -371,7 +370,22 @@ export default {
         this.reunion.createdat = '',
         this.reunion.nombre = '',
         this.reuniones.push(res.data)
-        this.showAddedToast()
+        let idGenerado = res.data.id
+        this.showAddedToast('',
+        {
+          icon: 'fa-plus',
+          position: 'bottom-right',
+          duration: 5000,
+          containerClass: 'toast-added',
+          action: {
+            text: 'Agregar Ocurrencia',
+            onClick: (e, toastObject) => {
+              this.navegarSiguienteNivel('', idGenerado)
+              toastObject.goAway(0)
+            },
+            class: 'toast-action'
+          },
+        })
       }).catch(error => {
         console.log(error);
         this.showErrorToast()
@@ -396,7 +410,11 @@ export default {
     onEliminarCanceled() {
       this.indexDato = '';
     },
-    navegarSiguienteNivel(index) {
+    navegarSiguienteNivel(index, id) {
+      if (id) {
+        this.$router.push({ name: 'ocurrencia', params: { reunionId: id } })
+        return;
+      }
       this.$router.push({ name: 'ocurrencia', params: { reunionId: this.reuniones[index].id } })
     },
     onDetail(index) {
