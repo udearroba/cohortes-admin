@@ -119,7 +119,7 @@
     <div class="va-row">
       <div class="flex xs12 md12">
         <vuestic-widget :headerText="'Reuniones'">
-          <div class="table-responsive">
+          <div class="table-responsive" v-if="hayDatos()">
             <table class="table table-striped first-td-padding">
               <thead>
               <tr>
@@ -160,6 +160,7 @@
               </tbody>
             </table>
           </div>
+          <p v-else>No hay datos para mostrar</p>
         </vuestic-widget>
       </div>
     </div>
@@ -441,6 +442,9 @@ export default {
         console.log(error)
         this.showErrorToast()
       });
+    },
+    hayDatos() {
+      return this.reuniones.length > 0
     },
   },
 

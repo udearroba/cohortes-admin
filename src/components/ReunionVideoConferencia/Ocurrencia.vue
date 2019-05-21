@@ -126,7 +126,7 @@
     <div class="va-row">
       <div class="flex xs12 md12">
         <vuestic-widget :headerText="'Ocurrencias'">
-          <div class="table-responsive">
+          <div class="table-responsive" v-if="hayDatos()">
             <table class="table table-striped first-td-padding">
               <thead>
               <tr>
@@ -167,6 +167,7 @@
               </tbody>
             </table>
           </div>
+          <p v-else>No hay datos para mostrar</p>
         </vuestic-widget>
       </div>
     </div>
@@ -300,6 +301,7 @@ export default {
       paginationPath: '',
       defaultTablePerPage: 6,
       queryParams: QueryParams,
+
       ocurrencias: {},
       ocurrencia: {
         "idexterno": '',
@@ -329,7 +331,6 @@ export default {
   methods: {
     onAgregar () {
       this.ocurrencia.duracion = +this.ocurrencia.duracion
-      console.log(this.ocurrencia)
       axios.post('http://localhost:3000/ocurrencias', this.ocurrencia
       ).then(res => {
         this.ocurrencia.idexterno = '',
@@ -399,7 +400,6 @@ export default {
       .then(res => {
         delete this.ocurrencias[this.indexDato]
         let newOcurrencia = JSON.parse(JSON.stringify(this.ocurrenciaAux))
-        console.log(newOcurrencia)
         Vue.set(this.ocurrencias, this.indexDato, newOcurrencia);
         this.showSuccessToast('Cambios guardados')
       })
@@ -407,13 +407,17 @@ export default {
         console.log(error)
         this.showErrorToast()
       });
-    }
+    },
+    hayDatos() {
+      return this.ocurrencias.length > 0
+    },
   },
 
   computed: {
     isToastContentPresent () {
       return !!(this.toastText || this.toastIcon)
     },
+
   },
   beforeCreate () {
     axios.all([
