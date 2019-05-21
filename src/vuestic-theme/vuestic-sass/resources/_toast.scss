@@ -6,6 +6,9 @@
     i.fa{
       color: $charcoal;
     }
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
   }
 }
 
@@ -17,4 +20,6 @@
 }
 .toast-action {
   color: $almost-black;
+  flex: 0 0 100%;
+  width: 20px;
 }
