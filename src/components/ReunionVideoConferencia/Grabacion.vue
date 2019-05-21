@@ -309,7 +309,7 @@ export default {
         "duracion": '',
       },
       datoEliminar: '',
-      id: this.$route.params.grabacionId,
+      id: this.$route.params.ocurrenciaId,
       ocurrencia: {
         "id": '',
         "idexterno": '',
@@ -333,10 +333,12 @@ export default {
   methods: {
     onAgregar () {
       this.grabacion.duracion = +this.grabacion.duracion
+      console.log(this.grabacion)
       axios.post('http://localhost:3000/grabaciones', this.grabacion
       ).then(res => {
         this.grabacion.idexterno = ''
         this.grabaciones.push(res.data)
+        let idGenerado = res.data.id
         this.showAddedToast('',
         {
           icon: 'fa-plus',

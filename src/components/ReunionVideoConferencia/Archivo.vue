@@ -51,9 +51,10 @@
                   <div class="form-group with-icon-left">
                     <div class="input-group">
                       <input
-                      v-model="archivo.url"
+                      v-model="archivo.pesobyte"
                       id="input-icon-left"
                       name="input-icon-left"
+                      type="number"
                       required/>
                       <i class="fa fa-files-o icon-left input-icon"></i>
                       <label class="control-label" for="input-icon-left">
@@ -333,15 +334,17 @@ export default {
   },
   methods: {
     onAgregar () {
-      console.log(this.archivo)
+      this.archivo.pesobyte = +this.archivo.pesobyte
       axios.post('http://localhost:3000/archivos', this.archivo
       ).then(res => {
         this.archivo.idexterno = ''
         this.archivo.formato = ''
         this.archivo.url = ''
+        this.archivo.pesobyte = ''
         this.archivos.push(res.data)
         this.showAddedToast()
       }).catch(error => {
+        console.log(this.archivo);
         console.log(error);
         this.showErrorToast()
       })
@@ -428,7 +431,7 @@ export default {
 
     //GET PARA OBTENER DETALLES DE OCURRENCIA
     axios.all([
-      axios.get(`http://localhost:3000/ocurrencias/${this.id}`),
+      axios.get(`http://localhost:3000/ocurrencias/${this.ocurrenciaId}`),
     ])
     .then(axios.spread(res => {
       this.ocurrencia = res.data

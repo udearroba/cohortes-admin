@@ -303,9 +303,15 @@ export default {
       ocurrencias: {},
       ocurrencia: {
         "idexterno": '',
+        "starttime": '',
+        "duracion": '',
+        "status": '',
       },
       ocurrenciaAux: {
         "idexterno": '',
+        "starttime": '',
+        "duracion": '',
+        "status": '',
       },
       indexDato: '',
       id: this.$route.params.reunionId,
@@ -326,10 +332,12 @@ export default {
       console.log(this.ocurrencia)
       axios.post('http://localhost:3000/ocurrencias', this.ocurrencia
       ).then(res => {
-        this.ocurrencia.idexterno = ''
+        this.ocurrencia.idexterno = '',
+        this.ocurrencia.starttime = '',
+        this.ocurrencia.duracion = '',
+        this.ocurrencia.status = '',
         this.ocurrencias.push(res.data)
         let idGenerado = res.data.id
-        console.log(res.data)
         this.showAddedToast('',
         {
           icon: 'fa-plus',
