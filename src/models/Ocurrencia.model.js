@@ -1,9 +1,9 @@
-const GrabacionModel =  {
-  ocurrenciaId: {
+const OcurrenciaModel =  {
+  reunionvideoconferenciaId: {
     requiredOnForm: false,
     type: 'Number',
     foreignKey: true,
-    alias: 'ocurrenciaId',
+    alias: 'reunionId',
   },
   idexterno: {
     requiredOnForm: true,
@@ -11,11 +11,11 @@ const GrabacionModel =  {
     icon: 'fa fa-key',
     alias: 'Id externo',
   },
-  playurl: {
+  starttime: {
     requiredOnForm: true,
     type: 'String',
-    icon: 'fa fa-play-circle',
-    alias: 'Play URL',
+    icon: 'fa fa-clock-o',
+    alias: 'Fecha de inicio',
   },
   duracion: {
     requiredOnForm: true,
@@ -23,6 +23,12 @@ const GrabacionModel =  {
     icon: 'fa fa-hourglass-3',
     alias: 'Duración',
   },
+  status: {
+    requiredOnForm: true,
+    type: 'Number',
+    icon: 'fa fa-check-square',
+    alias: 'Estado',
+  },
 }
 
-export default GrabacionModel
+export default OcurrenciaModel

@@ -15,7 +15,7 @@
                 <i v-bind:class="value.icon"
                 class="icon-left input-icon"></i>
                 <label class="control-label" :for="name">
-                  {{ name }}
+                  {{ value.alias }}
                 </label><i class="bar"></i>
               </div>
             </div>

@@ -5,7 +5,7 @@
       <div class="flex md6">
         <vuestic-widget :headerText="'Agregar Grabación'">
           <model-form ref="modelFormComponent"
-          v-bind:entityModel="entityModel"
+          v-bind:entityModel="modeloGrabacion"
           v-bind:foreignKey="id"
           v-on:on-agregar="onAgregar">
           </model-form>
@@ -15,76 +15,17 @@
       <div class="detalles flex md6">
         <!-- DETALLES DE LA OCURRENCIA -->
         <vuestic-widget :headerText="`Detalles Ocurrencia ${this.ocurrencia.id}`">
-          <div class="detalle-item">
-            <i
-              class="fa fa-key info-icon">
-            </i>
-            <span>id externo: {{this.ocurrencia.idexterno}}</span>
-          </div>
-          <div class="detalle-item">
-            <i
-              class="fa fa-clock-o info-icon">
-            </i>
-            <span>start time: {{this.ocurrencia.starttime}}</span>
-          </div>
-          <div class="detalle-item">
-            <i
-              class="fa fa-clock-o info-icon">
-            </i>
-            <span>duración: {{this.ocurrencia.duracion}}</span>
-          </div>
-          <div class="detalle-item">
-            <i
-              class="fa fa-check-square info-icon">
-            </i>
-            <span>estado: {{this.ocurrencia.status}}</span>
-          </div>
-
+          <model-detail
+          v-bind:entityModel="modeloOcurrencia"
+          v-bind:entityData="datosOcurrencia">
+          </model-detail>
         </vuestic-widget>
         <!-- DETALLES DE LA REUNIÓN -->
         <vuestic-widget :headerText="`Detalles reunión ${this.reunionId}`">
-          <div class="detalle-item">
-            <i
-              class="fa fa-key info-icon">
-            </i>
-            <span>Uuid: {{this.reunion.uuid}}</span>
-          </div>
-          <div class="detalle-item">
-            <i
-              class="fa fa-key info-icon">
-            </i>
-            <span>Id externo: {{this.reunion.idsistemaexterno}}</span>
-          </div>
-          <div class="detalle-item">
-            <i
-              class="fa fa-link info-icon">
-            </i>
-            <span>URL join: {{this.reunion.urljoin}}</span>
-          </div>
-          <div class="detalle-item">
-            <i
-              class="fa fa-link info-icon">
-            </i>
-            <span>URL start: {{this.reunion.urlstart}}</span>
-          </div>
-          <div class="detalle-item">
-            <i
-              class="fa fa-id-card info-icon">
-            </i>
-            <span>Host id: {{this.reunion.hostid}}</span>
-          </div>
-          <div class="detalle-item">
-            <i
-              class="fa fa-calendar-o info-icon">
-            </i>
-            <span>Fecha creación: {{this.reunion.createdat}}</span>
-          </div>
-          <div class="detalle-item">
-            <i
-              class="fa fa-paperclip info-icon">
-            </i>
-            <span>Nombre: {{this.reunion.nombre}}</span>
-          </div>
+          <model-detail
+          v-bind:entityModel="modeloReunion"
+          v-bind:entityData="datosReunion">
+          </model-detail>
         </vuestic-widget>
       </div>
     </div>
@@ -232,6 +173,7 @@ import QueryParams from '../../vuestic-theme/vuestic-components/vuestic-datatabl
 import { SpringSpinner } from 'epic-spinners'
 import axios from 'axios'
 import ModelForm from '../self-components/model-form/ModelForm'
+import ModelDetail from '../self-components/model-detail/ModelDetail'
 import DBModels from '../../models/index'
 
 Vue.component('badge-column', BadgeColumn)
@@ -240,7 +182,8 @@ export default {
   name: 'Table',
   components: {
     SpringSpinner,
-    ModelForm
+    ModelForm,
+    ModelDetail,
   },
   data () {
     return {
@@ -284,7 +227,11 @@ export default {
         "createdat": '',
         "nombre": '',
       },
-      entityModel: DBModels.GrabacionModel
+      modeloGrabacion: DBModels.GrabacionModel,
+      modeloOcurrencia: DBModels.OcurrenciaModel,
+      modeloReunion: DBModels.ReunionModel,
+      datosOcurrencia: {},
+      datosReunion: {},
     }
   },
   methods: {
@@ -402,6 +349,9 @@ export default {
     ])
     .then(axios.spread(res => {
       this.ocurrencia = res.data
+      this.datosOcurrencia = res.data
+      console.log(this.datosOcurrencia);
+
       this.grabacion.ocurrenciaId = +this.id
     }))
     .catch(error => {
@@ -415,6 +365,7 @@ export default {
     ])
     .then(axios.spread(res => {
       this.reunion = res.data
+      this.datosReunion = res.data
       // this.grabacion.ocurrenciaId = +this.id
     }))
     .catch(error => {
