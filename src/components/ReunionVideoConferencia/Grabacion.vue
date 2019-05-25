@@ -1,62 +1,14 @@
 <template>
   <div>
-
     <div class="va-row">
       <!-- FORMULARIO PARA AGREGAR GRABACIÓN -->
       <div class="flex md6">
         <vuestic-widget :headerText="'Agregar Grabación'">
-          <form>
-            <div class="va-row">
-              <div class="flex md8">
-                <fieldset>
-                  <div class="form-group with-icon-left">
-                    <div class="input-group">
-                      <input
-                      v-model="grabacion.idexterno"
-                      id="input-icon-left"
-                      name="input-icon-left"
-                      required/>
-                      <i class="fa fa-key icon-left input-icon"></i>
-                      <label class="control-label" for="input-icon-left">
-                        Id externo
-                      </label><i class="bar"></i>
-                    </div>
-                  </div>
-                  <div class="form-group with-icon-left">
-                    <div class="input-group">
-                      <input
-                      v-model="grabacion.playurl"
-                      id="input-icon-left"
-                      name="input-icon-left"
-                      required/>
-                      <i class="fa fa-play-circle icon-left input-icon"></i>
-                      <label class="control-label" for="input-icon-left">
-                        Play URL
-                      </label><i class="bar"></i>
-                    </div>
-                  </div>
-                  <div class="form-group with-icon-left">
-                    <div class="input-group">
-                      <input
-                      v-model="grabacion.duracion"
-                      id="input-icon-left"
-                      name="input-icon-left"
-                      type="number"
-                      required/>
-                      <i class="fa fa-hourglass-3 icon-left input-icon"></i>
-                      <label class="control-label" for="input-icon-left">
-                        Duración
-                      </label><i class="bar"></i>
-                    </div>
-                  </div>
-                  <div class="btn btn-micro btn-primary"
-                  @click="onAgregar">
-                    {{'Agregar'}}
-                  </div>
-                </fieldset>
-              </div>
-            </div>
-          </form>
+          <model-form ref="modelFormComponent"
+          v-bind:entityModel="entityModel"
+          v-bind:foreignKey="id"
+          v-on:on-agregar="onAgregar">
+          </model-form>
         </vuestic-widget>
       </div>
 
@@ -279,6 +231,8 @@ import ItemsPerPageDef
 import QueryParams from '../../vuestic-theme/vuestic-components/vuestic-datatable/data/query-params'
 import { SpringSpinner } from 'epic-spinners'
 import axios from 'axios'
+import ModelForm from '../self-components/model-form/ModelForm'
+import DBModels from '../../models/index'
 
 Vue.component('badge-column', BadgeColumn)
 
@@ -286,6 +240,7 @@ export default {
   name: 'Table',
   components: {
     SpringSpinner,
+    ModelForm
   },
   data () {
     return {
@@ -329,15 +284,19 @@ export default {
         "createdat": '',
         "nombre": '',
       },
+      entityModel: DBModels.GrabacionModel
     }
   },
   methods: {
-    onAgregar () {
-      this.grabacion.duracion = +this.grabacion.duracion
-      console.log(this.grabacion)
-      axios.post('http://localhost:3000/grabaciones', this.grabacion
+    onAgregar (formStatus) {
+      console.log(formStatus.model)
+      this.$refs.modelFormComponent.clearForm()
+      // this.grabacion.duracion = +this.grabacion.duracion
+      // console.log(this.grabacion)
+      axios.post('http://localhost:3000/grabaciones', formStatus.model
       ).then(res => {
-        this.grabacion.idexterno = ''
+        // LIMPIAR FORMULARIO
+        this.$refs.modelFormComponent.clearForm()
         this.grabaciones.push(res.data)
         let idGenerado = res.data.id
         this.showAddedToast('',
