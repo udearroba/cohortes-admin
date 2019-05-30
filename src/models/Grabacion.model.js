@@ -23,6 +23,10 @@ const GrabacionModel =  {
     icon: 'fa fa-hourglass-3',
     alias: 'Duración',
   },
+  _metadata: {
+    requiredOnForm: false,
+    alias: 'Grabación'
+  }
 }
 
 export default GrabacionModel

@@ -3,18 +3,16 @@
     <div class="va-row">
       <!-- FORMULARIO PARA AGREGAR GRABACIÓN -->
       <div class="flex md6">
-        <vuestic-widget :headerText="'Agregar Grabación'">
-          <model-form ref="modelFormComponent"
-          v-bind:entityModel="modeloGrabacion"
-          v-bind:foreignKey="id"
-          v-on:on-agregar="onAgregar">
-          </model-form>
-        </vuestic-widget>
+        <model-form ref="modelFormComponent"
+        :entityModel="modeloGrabacion"
+        :foreignKey="id"
+        v-on:on-agregar="onAgregar">
+        </model-form>
       </div>
 
       <div class="detalles flex md6">
         <!-- DETALLES DE LA OCURRENCIA -->
-        <vuestic-widget :headerText="`Detalles Ocurrencia ${this.ocurrencia.id}`">
+        <vuestic-widget :headerText="`Detalles ocurrencia ${this.ocurrencia.id}`">
           <model-detail
           v-bind:entityModel="modeloOcurrencia"
           v-bind:entityData="datosOcurrencia">

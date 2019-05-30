@@ -1,4 +1,5 @@
 <template>
+<vuestic-widget :headerText="headerTextComputed">
   <form>
     <div class="va-row">
       <div class="flex md8">
@@ -29,6 +30,7 @@
       </div>
     </div>
   </form>
+</vuestic-widget>
 </template>
 
 <script>
@@ -37,12 +39,16 @@ export default {
   props: {
     entityModel: {
       type: Object,
-      required: true
+      required: true,
     },
     foreignKey: {
       type: [Number, String],
-      required: false
+      required: false,
     },
+    headerText: {
+      type: String,
+      required: false,
+    }
   },
   data () {
     return {
@@ -76,6 +82,14 @@ export default {
         this.model[key] = ''
       }
     },
+  },
+  computed: {
+    headerTextComputed(){
+      let headerTextProp =this.$props.headerText
+      if (headerTextProp)
+        return headerTextProp
+      return 'Agregar ' + this.entityModel._metadata.alias
+    }
   },
   created() {
     // Aquí se procesa el modelo para transformalo.
