@@ -1,8 +1,5 @@
 <template>
-  <vuestic-dropdown
-    class="form-group"
-    placement="bottom"
-  >
+  <div>
     <button
       class="btn btn-primary btn-sm dropdown-toggle"
       type="button"
@@ -11,17 +8,23 @@
       {{selected}} {{label}}
       <i class="ion-ios-arrow-down arrow-down"/>
     </button>
-    <template>
-      <a
-        class="dropdown-item"
-        v-for="(option, index) in options"
-        :key="index"
-        @click="selectedItemsPerPage(option.value)"
-      >
-        {{option.value}} per page
-      </a>
-    </template>
-  </vuestic-dropdown>
+    <vuestic-dropdown
+      class="form-group"
+      placement="bottom"
+    >
+      <template>
+        <a
+          class="dropdown-item"
+          v-for="(option, index) in options"
+          :key="index"
+          @click="selectedItemsPerPage(option.value)"
+        >
+          {{option.value}}
+        </a>
+      </template>
+    </vuestic-dropdown>
+  </div>
+
 </template>
 
 <script>
@@ -45,6 +48,8 @@ export default {
   },
   methods: {
     selectedItemsPerPage (optionValue) {
+      console.log(optionValue);
+
       this.selected = optionValue
       this.$emit('items-per-page', this.selected)
     },

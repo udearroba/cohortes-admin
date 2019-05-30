@@ -9,9 +9,9 @@
         v-show="filterInputShown"
       />
       <div class="datatable-controls flex">
-        <div class="form-group">
+        <!-- <div class="form-group">
           <slot name="additionalTableControl"></slot>
-        </div>
+        </div> -->
         <items-per-page
           :options="itemsPerPage"
           :label="itemsPerPageLabel"
@@ -191,7 +191,7 @@ export default {
   computed: {
     controlsAlignmentClass () {
       return {
-        'justify--space-between': this.filterInputShown,
+        'justify--space-around': this.filterInputShown,
         'justify--end': !this.filterInputShown,
       }
     },
