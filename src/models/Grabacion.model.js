@@ -4,7 +4,6 @@ const GrabacionModel =  {
     type: 'Number',
     foreignKey: true,
     alias: 'ocurrenciaId',
-
   },
   idexterno: {
     requiredOnForm: true,

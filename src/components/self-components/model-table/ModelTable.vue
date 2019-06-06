@@ -72,6 +72,7 @@ export default {
       this.$emit('addClicked', data, index)
     },
     onDetails(data, index) {
+      this.$emit('detailsClicked', data, index)
     },
     onModify(data, index) {
     },

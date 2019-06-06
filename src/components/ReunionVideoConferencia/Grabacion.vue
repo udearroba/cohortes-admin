@@ -35,6 +35,7 @@
           :tableFields="tableFields"
           :tableData="grabaciones"
           @addClicked="onAddClicked"
+          @detailsClicked="onDetailsClicked"
           @deleteClicked="onDeleteClicked"
           ></model-table>
         </vuestic-widget>
@@ -42,18 +43,13 @@
     </div>
 
     <!-- MODAL -->
-    <vuestic-modal ref="detail_modal"
-                   :no-buttons="true"
-                   v-bind:small="true">
-      <div slot="title">Detalles</div>
-      <div>
-        <ul class="detail-list">
-          <li><span class="detail-item-title">Id externo:</span> {{grabacionAux.idexterno}}</li>
-          <li><span class="detail-item-title">Play URL:</span> {{grabacionAux.playurl}}</li>
-          <li><span class="detail-item-title">Duración:</span> {{grabacionAux.duracion}}</li>
-        </ul>
-      </div>
-    </vuestic-modal>
+
+    <details-modal
+      :entityModel="modeloGrabacion"
+      :entityData="grabacionAux"
+      @initialized="handleEditorInitialization"
+    ></details-modal>
+
     <vuestic-modal ref="edit_modal"
                    v-on:ok="onGuardarCambios"
                    :ok-class="'btn btn-success btn-micro'"
@@ -139,6 +135,7 @@ import axios from 'axios'
 import ModelForm from '../self-components/model-form/ModelForm'
 import ModelDetail from '../self-components/model-detail/ModelDetail'
 import ModelTable from '../self-components/model-table/ModelTable'
+import DetailsModal from '../self-components/modals/details/DetailsModal'
 import DBModels from '../../models/index'
 
 Vue.component('badge-column', BadgeColumn)
@@ -159,6 +156,7 @@ export default {
     ModelForm,
     ModelDetail,
     ModelTable,
+    DetailsModal,
   },
   data () {
     return {
@@ -169,12 +167,7 @@ export default {
         "playurl": '',
         "duracion": '',
       },
-      grabacionAux: {
-        "idexterno": '',
-        "ocurrenciaId": '',
-        "playurl": '',
-        "duracion": '',
-      },
+      grabacionAux: { },
       datoEliminar: '',
       id: this.$route.params.ocurrenciaId,
       ocurrencia: {
@@ -254,10 +247,10 @@ export default {
     navegarSiguienteNivel(id) {
         this.$router.push({ name: siguienteNivel, params: { grabacionId: id }})
     },
-    onDetail(index) {
-      this.$refs.detail_modal.open();
-      this.grabacionAux = this.grabaciones[index]
-    },
+    // onDetail(index) {
+    //   this.$refs.detail_modal.open();
+    //   this.grabacionAux = this.grabaciones[index]
+    // },
     onEdit(index) {
       this.grabacionAux = JSON.parse(JSON.stringify(this.grabaciones[index]));
       this.indexDato = index;
@@ -282,8 +275,15 @@ export default {
     onAddClicked(data, index) {
       this.navegarSiguienteNivel(data.id)
     },
+    onDetailsClicked(data, index) {
+      this.grabacionAux = data
+      this.$data.detailsModalRef.open();
+    },
     onDeleteClicked(data, index) {
       this.onEliminar(index)
+    },
+    handleEditorInitialization(detailsModalRef){
+      this.$data.detailsModalRef = detailsModalRef
     },
   },
 
@@ -331,7 +331,6 @@ export default {
     .then(axios.spread(res => {
       this.reunion = res.data
       this.datosReunion = res.data
-      // this.grabacion.ocurrenciaId = +this.id
     }))
     .catch(error => {
       console.log(error)
