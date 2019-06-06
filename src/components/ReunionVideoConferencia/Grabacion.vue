@@ -6,7 +6,7 @@
         <model-form ref="modelFormComponent"
         :entityModel="modeloGrabacion"
         :foreignKey="id"
-        v-on:on-agregar="onAgregar">
+        @on-agregar="onAgregar">
         </model-form>
       </div>
 
@@ -31,46 +31,12 @@
     <div class="va-row">
       <div class="flex xs12 md12">
         <vuestic-widget :headerText="'Grabaciones'">
-          <div class="table-responsive" v-if="hayDatos()">
-            <table class="table table-striped first-td-padding">
-              <thead>
-              <tr>
-                <td>{{'id  externo'}}</td>
-                <td>{{'play URL'}}</td>
-                <td>{{'duración'}}</td>
-                <td></td>
-              </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(grabacion, index) in grabaciones">
-                  <td>{{grabacion.idexterno}}</td>
-                  <td>{{grabacion.playurl}}</td>
-                  <td>{{grabacion.duracion}}</td>
-                  <td align="right" class="valid">
-                    <div class="icon-slot">
-                      <i
-                        class="fa fa-plus success-icon"
-                        @click="navegarSiguienteNivel(index)">
-                      </i>
-                      <i
-                        class="fa fa-eye info-icon"
-                        @click="onDetail(index)">
-                      </i>
-                      <i
-                        class="fa fa-pencil info-icon"
-                        @click="onEdit(index)">
-                      </i>
-                      <i
-                        class="fa fa-minus error-icon"
-                        @click="onEliminar(index)">
-                      </i>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <p v-else>No hay datos para mostrar</p>
+          <model-table
+          :tableFields="tableFields"
+          :tableData="grabaciones"
+          @addClicked="onAddClicked"
+          @deleteClicked="onDeleteClicked"
+          ></model-table>
         </vuestic-widget>
       </div>
     </div>
@@ -172,9 +138,19 @@ import { SpringSpinner } from 'epic-spinners'
 import axios from 'axios'
 import ModelForm from '../self-components/model-form/ModelForm'
 import ModelDetail from '../self-components/model-detail/ModelDetail'
+import ModelTable from '../self-components/model-table/ModelTable'
 import DBModels from '../../models/index'
 
 Vue.component('badge-column', BadgeColumn)
+
+let API_route = "http://localhost:3000";
+let grabacionesRoute = `${API_route}/grabaciones`;
+let getGrabacionesFromIdArchivo = function(idArchivo) {
+  return `${grabacionesRoute}/${idArchivo}`
+}
+
+let siguienteNivel = 'archivo'
+
 
 export default {
   name: 'Table',
@@ -182,17 +158,11 @@ export default {
     SpringSpinner,
     ModelForm,
     ModelDetail,
+    ModelTable,
   },
   data () {
     return {
-      apiMode: true,
-      tableFields: FieldsDef.tableFields,
-      itemsPerPage: ItemsPerPageDef.itemsPerPage,
-      sortFunctions: FieldsDef.sortFunctions,
-      paginationPath: '',
-      defaultTablePerPage: 6,
-      queryParams: QueryParams,
-      grabaciones: {},
+      grabaciones: [],
       grabacion: {
         "idexterno": '',
         "ocurrenciaId": '',
@@ -230,15 +200,12 @@ export default {
       modeloReunion: DBModels.ReunionModel,
       datosOcurrencia: {},
       datosReunion: {},
+      tableFields: [],
     }
   },
   methods: {
     onAgregar (formStatus) {
-      console.log(formStatus.model)
-      this.$refs.modelFormComponent.clearForm()
-      // this.grabacion.duracion = +this.grabacion.duracion
-      // console.log(this.grabacion)
-      axios.post('http://localhost:3000/grabaciones', formStatus.model
+      axios.post(grabacionesRoute, formStatus.model
       ).then(res => {
         // LIMPIAR FORMULARIO
         this.$refs.modelFormComponent.clearForm()
@@ -253,7 +220,7 @@ export default {
           action: {
             text: 'Agregar Archivo',
             onClick: (e, toastObject) => {
-              this.navegarSiguienteNivel('', idGenerado)
+              this.navegarSiguienteNivel(idGenerado)
               toastObject.goAway(0)
             },
             class: 'toast-action'
@@ -270,7 +237,7 @@ export default {
     },
     onEliminarConfirmado() {
       let idArchivo = this.grabaciones[this.datoEliminar].id
-      axios.delete(`http://localhost:3000/grabaciones/${idArchivo}`)
+      axios.delete(getGrabacionesFromIdArchivo(idArchivo))
       .then(res => {
         this.grabaciones.splice(this.datoEliminar,1)
         this.showDeletedToast()
@@ -283,12 +250,9 @@ export default {
     onEliminarCanceled() {
       this.datoEliminar = '';
     },
-    navegarSiguienteNivel(index, id) {
-      if (id) {
-        this.$router.push({ name: 'archivo', params: { grabacionId: id } })
-        return;
-      }
-      this.$router.push({ name: 'archivo', params: { grabacionId: this.grabaciones[index].id } })
+    //este método permite navegar al siguiente nivel basado en el id del elemento.
+    navegarSiguienteNivel(id) {
+        this.$router.push({ name: siguienteNivel, params: { grabacionId: id }})
     },
     onDetail(index) {
       this.$refs.detail_modal.open();
@@ -315,8 +279,11 @@ export default {
         this.showErrorToast()
       });
     },
-    hayDatos() {
-      return this.grabaciones.length > 0
+    onAddClicked(data, index) {
+      this.navegarSiguienteNivel(data.id)
+    },
+    onDeleteClicked(data, index) {
+      this.onEliminar(index)
     },
   },
 
@@ -370,6 +337,13 @@ export default {
       console.log(error)
       this.errored = true
     })
+
+    for (let modelAttr in this.modeloGrabacion) {
+      let valor = this.modeloGrabacion[modelAttr]
+
+      if(valor.isTableField)
+        this.tableFields.push(modelAttr)
+      }
   }
 }
 

@@ -99,9 +99,9 @@ export default {
       if(this.entityModel[modelAttr].requiredOnForm) {
         this.formModel[modelAttr] = this.entityModel[modelAttr]
       }
-      //los campos que son llaves primarias tienen un campo foreignKey = true
+      //los campos que son llaves foráneas tienen un campo foreignKey = true
       if(this.entityModel[modelAttr].foreignKey) {
-        this.foreignKeys[modelAttr] = this.foreignKey
+        this.foreignKeys[modelAttr] = +this.foreignKey
       }
     }
   },
