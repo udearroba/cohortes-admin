@@ -18,7 +18,7 @@
         </i>
         <i
           class="fa fa-pencil info-icon"
-          @click="onModify(props.rowData, props.rowIndex)">
+          @click="onEdit(props.rowData, props.rowIndex)">
         </i>
         <i
           class="fa fa-minus error-icon"
@@ -74,7 +74,8 @@ export default {
     onDetails(data, index) {
       this.$emit('detailsClicked', data, index)
     },
-    onModify(data, index) {
+    onEdit(data, index) {
+      this.$emit('editClicked', data, index)
     },
     onDelete(data, index) {
       this.$emit('deleteClicked', data, index)

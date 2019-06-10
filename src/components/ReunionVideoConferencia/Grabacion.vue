@@ -36,6 +36,7 @@
           :tableData="grabaciones"
           @addClicked="onAddClicked"
           @detailsClicked="onDetailsClicked"
+          @editClicked="onEditClicked"
           @deleteClicked="onDeleteClicked"
           ></model-table>
         </vuestic-widget>
@@ -43,71 +44,19 @@
     </div>
 
     <!-- MODAL -->
-
     <details-modal
       :entityModel="modeloGrabacion"
       :entityData="grabacionAux"
-      @initialized="handleEditorInitialization"
+      @initialized="handleDetailsModalInitialization"
     ></details-modal>
 
-    <vuestic-modal ref="edit_modal"
-                   v-on:ok="onGuardarCambios"
-                   :ok-class="'btn btn-success btn-micro'"
-                   :cancel-class="'btn btn-pale btn-micro'"
-                   :close-icon-shown="false"
-                   :okText="'Guardar cambios' | translate"
-                   :cancelText="'Cancelar' | translate">
-      <div slot="title">Editar</div>
-      <div>
-        <form>
-          <div class="va-row">
-            <div class="flex md8">
-              <fieldset>
-                <div class="form-group with-icon-left">
-                  <div class="input-group">
-                    <input
-                    v-model="grabacionAux.idexterno"
-                    id="input-icon-left"
-                    name="input-icon-left"
-                    required/>
-                    <i class="fa fa-key icon-left input-icon"></i>
-                    <label class="control-label" for="input-icon-left">
-                      {{'Id externo'}}
-                    </label><i class="bar"></i>
-                  </div>
-                </div>
-                <div class="form-group with-icon-left">
-                  <div class="input-group">
-                    <input
-                    v-model="grabacionAux.idexterno"
-                    id="input-icon-left"
-                    name="input-icon-left"
-                    required/>
-                    <i class="fa fa-play-circle icon-left input-icon"></i>
-                    <label class="control-label" for="input-icon-left">
-                      {{'Play URL'}}
-                    </label><i class="bar"></i>
-                  </div>
-                </div>
-                <div class="form-group with-icon-left">
-                  <div class="input-group">
-                    <input
-                    v-model="grabacionAux.idexterno"
-                    id="input-icon-left"
-                    name="input-icon-left"
-                    required/>
-                    <i class="fa fa-hourglass-3 icon-left input-icon"></i>
-                    <label class="control-label" for="input-icon-left">
-                      {{'Duración'}}
-                    </label><i class="bar"></i>
-                  </div>
-                </div>
-              </fieldset>
-            </div>
-          </div>
-        </form>
-      </div>
-    </vuestic-modal>
+    <edit-modal
+      :entityModel="modeloGrabacion"
+      :entityData="grabacionAux"
+      @initialized="handleEditModalInitialization"
+      @cambios-guardados="onGuardarCambios"
+    ></edit-modal>
+
     <vuestic-modal ref="confirm_modal"
                    v-on:ok="onEliminarConfirmado"
                    v-on:canceled="onEliminarCanceled"
@@ -136,6 +85,7 @@ import ModelForm from '../self-components/model-form/ModelForm'
 import ModelDetail from '../self-components/model-detail/ModelDetail'
 import ModelTable from '../self-components/model-table/ModelTable'
 import DetailsModal from '../self-components/modals/details/DetailsModal'
+import EditModal from '../self-components/modals/edit/EditModal'
 import DBModels from '../../models/index'
 
 Vue.component('badge-column', BadgeColumn)
@@ -157,16 +107,12 @@ export default {
     ModelDetail,
     ModelTable,
     DetailsModal,
+    EditModal,
   },
   data () {
     return {
       grabaciones: [],
-      grabacion: {
-        "idexterno": '',
-        "ocurrenciaId": '',
-        "playurl": '',
-        "duracion": '',
-      },
+      grabacion: { },
       grabacionAux: { },
       datoEliminar: '',
       id: this.$route.params.ocurrenciaId,
@@ -247,18 +193,17 @@ export default {
     navegarSiguienteNivel(id) {
         this.$router.push({ name: siguienteNivel, params: { grabacionId: id }})
     },
-    // onDetail(index) {
-    //   this.$refs.detail_modal.open();
-    //   this.grabacionAux = this.grabaciones[index]
-    // },
     onEdit(index) {
       this.grabacionAux = JSON.parse(JSON.stringify(this.grabaciones[index]));
       this.indexDato = index;
       this.$refs.edit_modal.open();
     },
-    onGuardarCambios(){
+    onGuardarCambios(model){
       let idGrabacion = this.grabaciones[this.indexDato].id
-      axios.patch(`http://localhost:3000/archivos/${idGrabacion}`, this.grabacionAux)
+      this.grabacionAux = model
+      console.log("model");
+      console.log(model);
+      axios.patch(`http://localhost:3000/grabaciones/${idGrabacion}`, this.grabacionAux)
       .then(res => {
         delete this.grabaciones[this.indexDato]
         console.log(this.grabaciones)
@@ -279,11 +224,19 @@ export default {
       this.grabacionAux = data
       this.$data.detailsModalRef.open();
     },
+    onEditClicked(data, index) {
+      this.grabacionAux = data
+      this.indexDato = index;
+      this.$data.editModalRef.open();
+    },
     onDeleteClicked(data, index) {
       this.onEliminar(index)
     },
-    handleEditorInitialization(detailsModalRef){
+    handleDetailsModalInitialization(detailsModalRef){
       this.$data.detailsModalRef = detailsModalRef
+    },
+    handleEditModalInitialization(editModalRef){
+      this.$data.editModalRef = editModalRef
     },
   },
 

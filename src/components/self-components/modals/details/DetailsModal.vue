@@ -32,9 +32,8 @@ export default {
       model: {},
     }
   },
-  methods: {
-  },
   created() {
+    console.log("created()");
     // Aquí se procesa el modelo para transformalo.
     // Se separan los campos que van finalmente a mostrarse
     for (let modelAttr in this.entityModel) {
