@@ -73,13 +73,6 @@
 
 <script>
 import Vue from 'vue'
-import BadgeColumn from '../tables/BadgeColumn.vue'
-import FieldsDef
-  from '../../vuestic-theme/vuestic-components/vuestic-datatable/data/fields-definition'
-import ItemsPerPageDef
-  from '../../vuestic-theme/vuestic-components/vuestic-datatable/data/items-per-page-definition'
-import QueryParams from '../../vuestic-theme/vuestic-components/vuestic-datatable/data/query-params'
-import { SpringSpinner } from 'epic-spinners'
 import axios from 'axios'
 import ModelForm from '../self-components/model-form/ModelForm'
 import ModelDetail from '../self-components/model-detail/ModelDetail'
@@ -88,13 +81,27 @@ import DetailsModal from '../self-components/modals/details/DetailsModal'
 import EditModal from '../self-components/modals/edit/EditModal'
 import DBModels from '../../models/index'
 
-Vue.component('badge-column', BadgeColumn)
 
 let API_route = "http://localhost:3000";
-let grabacionesRoute = `${API_route}/grabaciones`;
-let getGrabacionesFromIdArchivo = function(idArchivo) {
-  return `${grabacionesRoute}/${idArchivo}`
+let reunionesTableName = "reunionvideoconferencias"
+let grabacionesTableName = "grabaciones"
+let ocurrenciasTableName = "ocurrencias"
+let reunionesRoute = `${API_route}/${reunionesTableName}`;
+let grabacionesRoute = `${API_route}/${grabacionesTableName}`;
+let ocurrenciasRoute = `${API_route}/${ocurrenciasTableName}`;
+let getGrabacionesFromId = function(idGrabacion) {
+  return `${grabacionesRoute}/${idGrabacion}`
 }
+let getGrabacionesFromIdOcurrencia = function(idOcurrencia) {
+  return `${ocurrenciasRoute}/${idOcurrencia}/${grabacionesTableName}`
+}
+let getOcurrenciasFromId = function(idOcurrencia) {
+  return `${ocurrenciasRoute}/${idOcurrencia}`
+}
+let getReunionesFromId = function(idReunion) {
+  return `${reunionesRoute}/${idReunion}`
+}
+
 
 let siguienteNivel = 'archivo'
 
@@ -102,7 +109,6 @@ let siguienteNivel = 'archivo'
 export default {
   name: 'Table',
   components: {
-    SpringSpinner,
     ModelForm,
     ModelDetail,
     ModelTable,
@@ -112,7 +118,6 @@ export default {
   data () {
     return {
       grabaciones: [],
-      grabacion: { },
       grabacionAux: { },
       datoEliminar: '',
       id: this.$route.params.ocurrenciaId,
@@ -144,6 +149,7 @@ export default {
   },
   methods: {
     onAgregar (formStatus) {
+      console.log(formStatus);
       axios.post(grabacionesRoute, formStatus.model
       ).then(res => {
         // LIMPIAR FORMULARIO
@@ -175,8 +181,8 @@ export default {
       this.datoEliminar = index;
     },
     onEliminarConfirmado() {
-      let idArchivo = this.grabaciones[this.datoEliminar].id
-      axios.delete(getGrabacionesFromIdArchivo(idArchivo))
+      let idGrabacion = this.grabaciones[this.datoEliminar].id
+      axios.delete(getGrabacionesFromId(idGrabacion))
       .then(res => {
         this.grabaciones.splice(this.datoEliminar,1)
         this.showDeletedToast()
@@ -201,9 +207,7 @@ export default {
     onGuardarCambios(model){
       let idGrabacion = this.grabaciones[this.indexDato].id
       this.grabacionAux = model
-      console.log("model");
-      console.log(model);
-      axios.patch(`http://localhost:3000/grabaciones/${idGrabacion}`, this.grabacionAux)
+      axios.patch(getGrabacionesFromId(idGrabacion), this.grabacionAux)
       .then(res => {
         delete this.grabaciones[this.indexDato]
         console.log(this.grabaciones)
@@ -247,7 +251,7 @@ export default {
   },
   beforeCreate () {
     axios.all([
-      axios.get(`http://localhost:3000/ocurrencias/${this.$route.params.ocurrenciaId}/grabaciones`),
+      axios.get(getGrabacionesFromIdOcurrencia(this.$route.params.ocurrenciaId))
     ])
       .then(axios.spread(res => {
         this.grabaciones = res.data
@@ -263,14 +267,11 @@ export default {
   created () {
     //GET PARA OBTENER DETALLES DE OCURRENCIA
     axios.all([
-      axios.get(`http://localhost:3000/ocurrencias/${this.id}`),
+      axios.get(getOcurrenciasFromId(this.id)),
     ])
     .then(axios.spread(res => {
       this.ocurrencia = res.data
       this.datosOcurrencia = res.data
-      console.log(this.datosOcurrencia);
-
-      this.grabacion.ocurrenciaId = +this.id
     }))
     .catch(error => {
       console.log(error)
@@ -279,7 +280,7 @@ export default {
 
     //GET PARA OBTENER DETALLES DE REUNIÓN
     axios.all([
-      axios.get(`http://localhost:3000/reunionvideoconferencias/${this.reunionId}`),
+      axios.get(getReunionesFromId(this.reunionId)),
     ])
     .then(axios.spread(res => {
       this.reunion = res.data
