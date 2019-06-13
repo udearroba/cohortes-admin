@@ -47,7 +47,7 @@ export default {
       required: true,
     },
     tableData: {
-      type: Array,
+      type: [Array, Object],
       required: true,
     },
     deleteVisible: {

@@ -12,14 +12,14 @@
 
       <div class="detalles flex md6">
         <!-- DETALLES DE LA OCURRENCIA -->
-        <vuestic-widget :headerText="`Detalles ocurrencia ${this.ocurrencia.id}`">
+        <vuestic-widget :headerText="`Detalles ocurrencia`">
           <model-detail
-          v-bind:entityModel="modeloOcurrencia"
-          v-bind:entityData="datosOcurrencia">
+          :entityModel="modeloOcurrencia"
+          :entityData="datosOcurrencia">
           </model-detail>
         </vuestic-widget>
         <!-- DETALLES DE LA REUNIÓN -->
-        <vuestic-widget :headerText="`Detalles reunión ${this.reunionId}`">
+        <vuestic-widget :headerText="`Detalles reunión`">
           <model-detail
           v-bind:entityModel="modeloReunion"
           v-bind:entityData="datosReunion">
@@ -149,7 +149,6 @@ export default {
   },
   methods: {
     onAgregar (formStatus) {
-      console.log(formStatus);
       axios.post(grabacionesRoute, formStatus.model
       ).then(res => {
         // LIMPIAR FORMULARIO
@@ -210,9 +209,7 @@ export default {
       axios.patch(getGrabacionesFromId(idGrabacion), this.grabacionAux)
       .then(res => {
         delete this.grabaciones[this.indexDato]
-        console.log(this.grabaciones)
         let newGrabacion = JSON.parse(JSON.stringify(this.grabacionAux))
-        console.log(newGrabacion)
         Vue.set(this.grabaciones, this.indexDato, newGrabacion);
         this.showSuccessToast('Cambios guardados')
       })
@@ -296,7 +293,7 @@ export default {
 
       if(valor.isTableField)
         this.tableFields.push(modelAttr)
-      }
+    }
   }
 }
 

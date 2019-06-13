@@ -4,120 +4,20 @@
     <div class="va-row">
       <!-- FORMULARIO PARA AGREGAR OCURRENCIA -->
       <div class="flex md6">
-        <vuestic-widget :headerText="'Agregar Ocurrencia'">
-          <form>
-            <div class="va-row">
-              <div class="flex md8">
-                <fieldset>
-                  <div class="form-group with-icon-left">
-                    <div class="input-group">
-                      <input
-                      v-model="ocurrencia.idexterno"
-                      id="input-icon-left"
-                      name="input-icon-left"
-                      required/>
-                      <i class="fa fa-key icon-left input-icon"></i>
-                      <label class="control-label" for="input-icon-left">
-                        {{'Id externo'}}
-                      </label><i class="bar"></i>
-                    </div>
-                  </div>
-                  <div class="form-group with-icon-left">
-                    <div class="input-group">
-                      <input
-                      v-model="ocurrencia.starttime"
-                      id="input-icon-left"
-                      name="input-icon-left"
-                      required/>
-                      <i class="fa fa-clock-o icon-left input-icon"></i>
-                      <label class="control-label" for="input-icon-left">
-                        {{'Hora de inicio'}}
-                      </label><i class="bar"></i>
-                    </div>
-                  </div>
-                  <div class="form-group with-icon-left">
-                    <div class="input-group">
-                      <input
-                      v-model="ocurrencia.duracion"
-                      id="input-icon-left"
-                      name="input-icon-left"
-                      type="number"
-                      required/>
-                      <i class="fa fa-hourglass-3 icon-left input-icon"></i>
-                      <label class="control-label" for="input-icon-left">
-                        {{'Duración'}}
-                      </label><i class="bar"></i>
-                    </div>
-                  </div>
-                  <div class="form-group with-icon-left">
-                    <div class="input-group">
-                      <input
-                      v-model="ocurrencia.status"
-                      id="input-icon-left"
-                      name="input-icon-left"
-                      required/>
-                      <i class="fa fa-check icon-left input-icon"></i>
-                      <label class="control-label" for="input-icon-left">
-                        {{'Estado'}}
-                      </label><i class="bar"></i>
-                    </div>
-                  </div>
-                  <div class="btn btn-micro btn-primary"
-                  @click="onAgregar">
-                    {{'Agregar'}}
-                  </div>
-                </fieldset>
-              </div>
-            </div>
-          </form>
-        </vuestic-widget>
+        <model-form ref="modelFormComponent"
+        :entityModel="modeloOcurrencia"
+        :foreignKey="id"
+        @on-agregar="onAgregar">
+        </model-form>
       </div>
 
       <!-- DETALLES DE LA REUNIÓN -->
       <div class="detalles flex md6">
-        <vuestic-widget :headerText="`Detalles reunión ${this.reunion.id}`">
-          <div class="detalle-item">
-            <i
-              class="fa fa-key info-icon">
-            </i>
-            <span>Uuid: {{this.reunion.uuid}}</span>
-          </div>
-          <div class="detalle-item">
-            <i
-              class="fa fa-key info-icon">
-            </i>
-            <span>Id externo: {{this.reunion.idsistemaexterno}}</span>
-          </div>
-          <div class="detalle-item">
-            <i
-              class="fa fa-link info-icon">
-            </i>
-            <span>URL join: {{this.reunion.urljoin}}</span>
-          </div>
-          <div class="detalle-item">
-            <i
-              class="fa fa-link info-icon">
-            </i>
-            <span>URL start: {{this.reunion.urlstart}}</span>
-          </div>
-          <div class="detalle-item">
-            <i
-              class="fa fa-id-card info-icon">
-            </i>
-            <span>Host id: {{this.reunion.hostid}}</span>
-          </div>
-          <div class="detalle-item">
-            <i
-              class="fa fa-calendar-o info-icon">
-            </i>
-            <span>Fecha creación: {{this.reunion.createdat}}</span>
-          </div>
-          <div class="detalle-item">
-            <i
-              class="fa fa-paperclip info-icon">
-            </i>
-            <span>Nombre: {{this.reunion.nombre}}</span>
-          </div>
+        <vuestic-widget :headerText="`Detalles reunión`">
+          <model-detail
+          :entityModel="modeloReunion"
+          :entityData="datosReunion">
+          </model-detail>
         </vuestic-widget>
       </div>
     </div>
@@ -126,140 +26,34 @@
     <div class="va-row">
       <div class="flex xs12 md12">
         <vuestic-widget :headerText="'Ocurrencias'">
-          <div class="table-responsive" v-if="hayDatos()">
-            <table class="table table-striped first-td-padding">
-              <thead>
-              <tr>
-                <td>{{'id externo'}}</td>
-                <td>{{'start time'}}</td>
-                <td>{{'duración'}}</td>
-                <td>{{'estado'}}</td>
-                <td></td>
-              </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(ocurrencia, index) in ocurrencias">
-                  <td>{{ocurrencia.idexterno}}</td>
-                  <td>{{ocurrencia.starttime}}</td>
-                  <td>{{ocurrencia.duracion}}</td>
-                  <td>{{ocurrencia.status}}</td>
-                  <td align="right" class="valid">
-                    <div class="icon-slot">
-                      <i
-                        class="fa fa-plus success-icon"
-                        @click="navegarSiguienteNivel(index)">
-                      </i>
-                      <i
-                        class="fa fa-eye info-icon"
-                        @click="onDetail(index)">
-                      </i>
-                      <i
-                        class="fa fa-pencil info-icon"
-                        @click="onEdit(index)">
-                      </i>
-                      <i
-                        class="fa fa-minus error-icon"
-                        @click="onEliminar(index)">
-                      </i>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <p v-else>No hay datos para mostrar</p>
+          <model-table
+          :tableFields="tableFields"
+          :tableData="ocurrencias"
+          @addClicked="onAddClicked"
+          @detailsClicked="onDetailsClicked"
+          @editClicked="onEditClicked"
+          @deleteClicked="onDeleteClicked"
+          ></model-table>
         </vuestic-widget>
       </div>
     </div>
 
     <!-- VENTANAS MODALES -->
     <!-- DETALLES -->
-    <vuestic-modal ref="detail_modal"
-                   :no-buttons="true"
-                   v-bind:small="true">
-      <div slot="title">Detalles</div>
-      <div>
-        <ul class="detail-list">
-          <li><span class="detail-item-title">Id externo:</span> {{ocurrenciaAux.idexterno}}</li>
-          <li><span class="detail-item-title">Hora inicio:</span> {{ocurrenciaAux.starttime}}</li>
-          <li><span class="detail-item-title">Duración:</span> {{ocurrenciaAux.duracion}}</li>
-          <li><span class="detail-item-title">Estado:</span> {{ocurrenciaAux.status}}</li>
-        </ul>
-      </div>
-    </vuestic-modal>
+    <details-modal
+      :entityModel="modeloOcurrencia"
+      :entityData="ocurrenciaAux"
+      @initialized="handleDetailsModalInitialization"
+    ></details-modal>
 
     <!-- EDICIÓN -->
-    <vuestic-modal ref="edit_modal"
-                   v-on:ok="onGuardarCambios"
-                   :ok-class="'btn btn-success btn-micro'"
-                   :cancel-class="'btn btn-pale btn-micro'"
-                   :close-icon-shown="false"
-                   :okText="'Guardar cambios' | translate"
-                   :cancelText="'Cancelar' | translate">
-      <div slot="title">Editar</div>
-      <div>
-        <form>
-          <div class="va-row">
-            <div class="flex md8">
-              <fieldset>
-                <div class="form-group with-icon-left">
-                  <div class="input-group">
-                    <input
-                    v-model="ocurrenciaAux.idexterno"
-                    id="input-icon-left"
-                    name="input-icon-left"
-                    required/>
-                    <i class="fa fa-key icon-left input-icon"></i>
-                    <label class="control-label" for="input-icon-left">
-                      {{'Id externo'}}
-                    </label><i class="bar"></i>
-                  </div>
-                </div>
-                <div class="form-group with-icon-left">
-                  <div class="input-group">
-                    <input
-                    v-model="ocurrenciaAux.starttime"
-                    id="input-icon-left"
-                    name="input-icon-left"
-                    required/>
-                    <i class="fa fa-clock-o icon-left input-icon"></i>
-                    <label class="control-label" for="input-icon-left">
-                      {{'Hora inicio'}}
-                    </label><i class="bar"></i>
-                  </div>
-                </div>
-                <div class="form-group with-icon-left">
-                  <div class="input-group">
-                    <input
-                    v-model="ocurrenciaAux.duracion"
-                    id="input-icon-left"
-                    name="input-icon-left"
-                    required/>
-                    <i class="fa fa-hourglass-3 icon-left input-icon"></i>
-                    <label class="control-label" for="input-icon-left">
-                      {{'Duración'}}
-                    </label><i class="bar"></i>
-                  </div>
-                </div>
-                <div class="form-group with-icon-left">
-                  <div class="input-group">
-                    <input
-                    v-model="ocurrenciaAux.status"
-                    id="input-icon-left"
-                    name="input-icon-left"
-                    required/>
-                    <i class="fa fa-check icon-left input-icon"></i>
-                    <label class="control-label" for="input-icon-left">
-                      {{'Estado'}}
-                    </label><i class="bar"></i>
-                  </div>
-                </div>
-              </fieldset>
-            </div>
-          </div>
-        </form>
-      </div>
-    </vuestic-modal>
+    <edit-modal
+      :entityModel="modeloOcurrencia"
+      :entityData="ocurrenciaAux"
+      @initialized="handleEditModalInitialization"
+      @cambios-guardados="onGuardarCambios"
+    ></edit-modal>
+
     <vuestic-modal ref="confirm_modal"
                    v-on:ok="onEliminarConfirmado"
                    v-on:canceled="onEliminarCanceled"
@@ -276,67 +70,45 @@
 
 <script>
 import Vue from 'vue'
-import BadgeColumn from '../tables/BadgeColumn.vue'
-import FieldsDef
-  from '../../vuestic-theme/vuestic-components/vuestic-datatable/data/fields-definition'
-import ItemsPerPageDef
-  from '../../vuestic-theme/vuestic-components/vuestic-datatable/data/items-per-page-definition'
-import QueryParams from '../../vuestic-theme/vuestic-components/vuestic-datatable/data/query-params'
-import { SpringSpinner } from 'epic-spinners'
 import axios from 'axios'
+import ModelForm from '../self-components/model-form/ModelForm'
+import ModelDetail from '../self-components/model-detail/ModelDetail'
+import ModelTable from '../self-components/model-table/ModelTable'
+import DetailsModal from '../self-components/modals/details/DetailsModal'
+import EditModal from '../self-components/modals/edit/EditModal'
+import apiRoutes from '../../services/apiRoutes'
 
-Vue.component('badge-column', BadgeColumn)
+import DBModels from '../../models/index'
 
 export default {
   name: 'Table',
   components: {
-    SpringSpinner,
+    ModelForm,
+    ModelDetail,
+    ModelTable,
+    DetailsModal,
+    EditModal,
   },
   data () {
     return {
-      apiMode: true,
-      tableFields: FieldsDef.tableFields,
-      itemsPerPage: ItemsPerPageDef.itemsPerPage,
-      sortFunctions: FieldsDef.sortFunctions,
-      paginationPath: '',
-      defaultTablePerPage: 6,
-      queryParams: QueryParams,
+      modeloOcurrencia: DBModels.OcurrenciaModel,
+      modeloReunion: DBModels.ReunionModel,
+      datosReunion: {},
+      tableFields: [],
 
       ocurrencias: {},
-      ocurrencia: {
-        "idexterno": '',
-        "starttime": '',
-        "duracion": '',
-        "status": '',
-      },
-      ocurrenciaAux: {
-        "idexterno": '',
-        "starttime": '',
-        "duracion": '',
-        "status": '',
-      },
+      ocurrenciaAux: {},
       indexDato: '',
       id: this.$route.params.reunionId,
-      reunion: {
-        "uuid": '',
-        "idsistemaexterno": '',
-        "urljoin": '',
-        "urlstart": '',
-        "hostid": '',
-        "createdat": '',
-        "nombre": '',
-      },
+      reunion: {},
     }
   },
   methods: {
-    onAgregar () {
-      this.ocurrencia.duracion = +this.ocurrencia.duracion
-      axios.post('http://localhost:3000/ocurrencias', this.ocurrencia
+    onAgregar (formStatus) {
+      axios.post(apiRoutes.ocurrenciasRoute, formStatus.model
       ).then(res => {
-        this.ocurrencia.idexterno = '',
-        this.ocurrencia.starttime = '',
-        this.ocurrencia.duracion = '',
-        this.ocurrencia.status = '',
+        // LIMPIAR FORMULARIO
+        this.$refs.modelFormComponent.clearForm()
         this.ocurrencias.push(res.data)
         let idGenerado = res.data.id
         this.showAddedToast('',
@@ -346,9 +118,9 @@ export default {
           duration: 5000,
           containerClass: 'toast-added',
           action: {
-            text: 'Agregar Grabación',
+            text: 'Agregar Archivo',
             onClick: (e, toastObject) => {
-              this.navegarSiguienteNivel('', idGenerado)
+              this.navegarSiguienteNivel(idGenerado)
               toastObject.goAway(0)
             },
             class: 'toast-action'
@@ -365,7 +137,7 @@ export default {
     },
     onEliminarConfirmado() {
       let idOcurrencia = this.ocurrencias[this.indexDato].id
-      axios.delete(`http://localhost:3000/ocurrencias/${idOcurrencia}`)
+      axios.delete(apiRoutes.getOcurrenciasFromId(idOcurrencia))
       .then(res => {
         this.ocurrencias.splice(this.indexDato,1)
         this.showDeletedToast()
@@ -378,12 +150,8 @@ export default {
     onEliminarCanceled() {
       this.indexDato = '';
     },
-    navegarSiguienteNivel(index, id) {
-      if (id) {
-        this.$router.push({ name: 'grabacion', params: { ocurrenciaId: id } })
-        return;
-      }
-      this.$router.push({ name: 'grabacion', params: { ocurrenciaId: this.ocurrencias[index].id } })
+    navegarSiguienteNivel(id) {
+      this.$router.push({ name: 'grabacion', params: { ocurrenciaId: id }})
     },
     onDetail(index) {
       this.$refs.detail_modal.open();
@@ -394,9 +162,10 @@ export default {
       this.indexDato = index;
       this.$refs.edit_modal.open();
     },
-    onGuardarCambios(){
+    onGuardarCambios(model){
       let idOcurrencia = this.ocurrencias[this.indexDato].id
-      axios.patch(`http://localhost:3000/ocurrencias/${idOcurrencia}`, this.ocurrenciaAux)
+      this.ocurrenciaAux = model
+      axios.patch(apiRoutes.getOcurrenciasFromId(idOcurrencia), this.ocurrenciaAux)
       .then(res => {
         delete this.ocurrencias[this.indexDato]
         let newOcurrencia = JSON.parse(JSON.stringify(this.ocurrenciaAux))
@@ -408,8 +177,26 @@ export default {
         this.showErrorToast()
       });
     },
-    hayDatos() {
-      return this.ocurrencias.length > 0
+    onAddClicked(data, index) {
+      this.navegarSiguienteNivel(data.id)
+    },
+    onDetailsClicked(data, index) {
+      this.ocurrenciaAux = data
+      this.$data.detailsModalRef.open();
+    },
+    onEditClicked(data, index) {
+      this.ocurrenciaAux = data
+      this.indexDato = index;
+      this.$data.editModalRef.open();
+    },
+    onDeleteClicked(data, index) {
+      this.onEliminar(index)
+    },
+    handleDetailsModalInitialization(detailsModalRef){
+      this.$data.detailsModalRef = detailsModalRef
+    },
+    handleEditModalInitialization(editModalRef){
+      this.$data.editModalRef = editModalRef
     },
   },
 
@@ -421,7 +208,7 @@ export default {
   },
   beforeCreate () {
     axios.all([
-      axios.get(`http://localhost:3000/reunionvideoconferencias/${this.$route.params.reunionId}/ocurrencias`),
+      axios.get(apiRoutes.getOcurrenciasFromIdReunion(this.$route.params.reunionId)),
     ])
       .then(axios.spread(res => {
         this.ocurrencias = res.data
@@ -436,16 +223,22 @@ export default {
   },
   created () {
     axios.all([
-      axios.get(`http://localhost:3000/reunionvideoconferencias/${this.id}`),
+      axios.get(`${apiRoutes.reunionesRoute}/${this.id}`),
     ])
     .then(axios.spread(res => {
-      this.reunion = res.data
-      this.ocurrencia.reunionvideoconferenciaId = +this.id
+      this.datosReunion = res.data
     }))
     .catch(error => {
       console.log(error)
       this.errored = true
     })
+
+    for (let modelAttr in this.modeloOcurrencia) {
+      let valor = this.modeloOcurrencia[modelAttr]
+
+      if(valor.isTableField)
+        this.tableFields.push(modelAttr)
+    }
   }
 }
 
