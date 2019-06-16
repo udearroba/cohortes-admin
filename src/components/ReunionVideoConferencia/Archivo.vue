@@ -4,259 +4,59 @@
     <div class="va-row">
       <!-- FORMULARIO PARA AGREGAR ARCHIVO -->
       <div class="flex md6">
-        <vuestic-widget :headerText="'Agregar Archivo'">
-          <form>
-            <div class="va-row">
-              <div class="flex md8">
-                <fieldset>
-                  <div class="form-group with-icon-left">
-                    <div class="input-group">
-                      <input
-                      v-model="archivo.idexterno"
-                      id="input-icon-left"
-                      name="input-icon-left"
-                      required/>
-                      <i class="fa fa-key icon-left input-icon"></i>
-                      <label class="control-label" for="input-icon-left">
-                        {{'Id externo'}}
-                      </label><i class="bar"></i>
-                    </div>
-                  </div>
-                  <div class="form-group with-icon-left">
-                    <div class="input-group">
-                      <input
-                      v-model="archivo.formato"
-                      id="input-icon-left"
-                      name="input-icon-left"
-                      required/>
-                      <i class="fa fa-file-o icon-left input-icon"></i>
-                      <label class="control-label" for="input-icon-left">
-                        {{'Formato'}}
-                      </label><i class="bar"></i>
-                    </div>
-                  </div>
-                  <div class="form-group with-icon-left">
-                    <div class="input-group">
-                      <input
-                      v-model="archivo.url"
-                      id="input-icon-left"
-                      name="input-icon-left"
-                      required/>
-                      <i class="fa fa-link icon-left input-icon"></i>
-                      <label class="control-label" for="input-icon-left">
-                        {{'Url'}}
-                      </label><i class="bar"></i>
-                    </div>
-                  </div>
-                  <div class="form-group with-icon-left">
-                    <div class="input-group">
-                      <input
-                      v-model="archivo.pesobyte"
-                      id="input-icon-left"
-                      name="input-icon-left"
-                      type="number"
-                      required/>
-                      <i class="fa fa-files-o icon-left input-icon"></i>
-                      <label class="control-label" for="input-icon-left">
-                        {{'Peso'}}
-                      </label><i class="bar"></i>
-                    </div>
-                  </div>
-                  <div class="btn btn-micro btn-primary"
-                  @click="onAgregar">
-                    {{'Agregar'}}
-                  </div>
-                </fieldset>
-              </div>
-            </div>
-          </form>
-        </vuestic-widget>
+        <model-form ref="modelFormComponent"
+        :entityModel="modeloArchivo"
+        :foreignKey="id"
+        @on-agregar="onAgregar">
+        </model-form>
       </div>
-
 
       <div class="detalles flex md6">
         <!-- DETALLES DE LA GRABACIÓN -->
-        <vuestic-widget :headerText="`Detalles grabación ${this.grabacion.id}`">
-          <div class="detalle-item">
-            <i
-              class="fa fa-clock-o info-icon">
-            </i>
-            <span>id externo: {{this.grabacion.idexterno}}</span>
-          </div>
-          <div class="detalle-item">
-            <i
-              class="fa fa-play-circle info-icon">
-            </i>
-            <span>play url: {{this.grabacion.playurl}}</span>
-          </div>
-          <div class="detalle-item">
-            <i
-              class="fa fa-hourglass-3 info-icon">
-            </i>
-            <span>duración: {{this.grabacion.duracion}}</span>
-          </div>
+        <vuestic-widget :headerText="`Detalles Grabación`">
+          <model-detail
+          :entityModel="modeloGrabacion"
+          :entityData="datosGrabacion">
+          </model-detail>
         </vuestic-widget>
         <!-- DETALLES DE LA OCURRENCIA -->
-        <vuestic-widget :headerText="`Detalles Ocurrencia ${this.ocurrenciaId}`">
-          <div class="detalle-item">
-            <i
-              class="fa fa-key info-icon">
-            </i>
-            <span>id externo: {{this.ocurrencia.idexterno}}</span>
-          </div>
-          <div class="detalle-item">
-            <i
-              class="fa fa-clock-o info-icon">
-            </i>
-            <span>start time: {{this.ocurrencia.starttime}}</span>
-          </div>
-          <div class="detalle-item">
-            <i
-              class="fa fa-clock-o info-icon">
-            </i>
-            <span>duración: {{this.ocurrencia.duracion}}</span>
-          </div>
-          <div class="detalle-item">
-            <i
-              class="fa fa-check-square info-icon">
-            </i>
-            <span>estado: {{this.ocurrencia.status}}</span>
-          </div>
-
+        <vuestic-widget :headerText="`Detalles Ocurrencia`">
+          <model-detail
+          :entityModel="modeloOcurrencia"
+          :entityData="datosOcurrencia">
+          </model-detail>
         </vuestic-widget>
       </div>
     </div>
 
     <div class="va-row">
       <div class="flex xs12 md12">
-        <vuestic-widget :headerText="'Archivos'">
-          <div class="table-responsive" v-if="hayDatos()">
-            <table class="table table-striped first-td-padding">
-              <thead>
-              <tr>
-                <td>{{'id externo'}}</td>
-                <td>{{'formato'}}</td>
-                <td>{{'url'}}</td>
-                <td>{{'Peso'}}</td>
-                <td></td>
-              </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(archivo, index) in archivos">
-                  <td>{{archivo.idexterno}}</td>
-                  <td>{{archivo.formato}}</td>
-                  <td>{{archivo.url}}</td>
-                  <td>{{archivo.pesobyte}}</td>
-                  <td align="right" class="valid">
-                    <div class="icon-slot">
-                      <i
-                        class="fa fa-eye info-icon"
-                        @click="onDetail(index)">
-                      </i>
-                      <i
-                        class="fa fa-pencil info-icon"
-                        @click="onEdit(index)">
-                      </i>
-                      <i
-                        class="fa fa-minus error-icon"
-                        @click="onEliminar(index)">
-                      </i>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <p v-else>No hay datos para mostrar</p>
+        <vuestic-widget :headerText="'Ocurrencias'">
+          <model-table
+          :tableFields="tableFields"
+          :tableData="archivos"
+          :noLinkAction="true"
+          @detailsClicked="onDetailsClicked"
+          @editClicked="onEditClicked"
+          @deleteClicked="onDeleteClicked"
+          ></model-table>
         </vuestic-widget>
       </div>
     </div>
 
     <!-- MODAL -->
-    <vuestic-modal ref="detail_modal"
-                   :no-buttons="true"
-                   v-bind:small="true">
-      <div slot="title">Detalles</div>
-      <div>
-        <ul class="detail-list">
-          <li><span class="detail-item-title">Id externo:</span> {{archivoAux.idexterno}}</li>
-          <li><span class="detail-item-title">Formato:</span> {{archivoAux.formato}}</li>
-          <li><span class="detail-item-title">Url:</span> {{archivoAux.url}}</li>
-          <li><span class="detail-item-title">Peso:</span> {{archivoAux.pesobyte}}</li>
-        </ul>
-      </div>
-    </vuestic-modal>
-    <vuestic-modal ref="edit_modal"
-                   v-on:ok="onGuardarCambios"
-                   :ok-class="'btn btn-success btn-micro'"
-                   :cancel-class="'btn btn-pale btn-micro'"
-                   :close-icon-shown="false"
-                   :okText="'Guardar cambios' | translate"
-                   :cancelText="'Cancelar' | translate">
-      <div slot="title">Editar</div>
-      <div>
-        <form>
-          <div class="va-row">
-            <div class="flex md8">
-              <fieldset>
-                <div class="form-group with-icon-left">
-                  <div class="input-group">
-                    <input
-                    v-model="archivoAux.idexterno"
-                    id="input-icon-left"
-                    name="input-icon-left"
-                    required/>
-                    <i class="fa fa-key icon-left input-icon"></i>
-                    <label class="control-label" for="input-icon-left">
-                      {{'Id externo'}}
-                    </label><i class="bar"></i>
-                  </div>
-                </div>
-                <div class="form-group with-icon-left">
-                  <div class="input-group">
-                    <input
-                    v-model="archivoAux.formato"
-                    id="input-icon-left"
-                    name="input-icon-left"
-                    required/>
-                    <i class="fa fa-file-o icon-left input-icon"></i>
-                    <label class="control-label" for="input-icon-left">
-                      {{'Formato'}}
-                    </label><i class="bar"></i>
-                  </div>
-                </div>
-                <div class="form-group with-icon-left">
-                  <div class="input-group">
-                    <input
-                    v-model="archivoAux.url"
-                    id="input-icon-left"
-                    name="input-icon-left"
-                    required/>
-                    <i class="fa fa-link icon-left input-icon"></i>
-                    <label class="control-label" for="input-icon-left">
-                      {{'Url'}}
-                    </label><i class="bar"></i>
-                  </div>
-                </div>
-                <div class="form-group with-icon-left">
-                  <div class="input-group">
-                    <input
-                    v-model="archivoAux.pesobyte"
-                    id="input-icon-left"
-                    name="input-icon-left"
-                    required/>
-                    <i class="fa fa-files-o icon-left input-icon"></i>
-                    <label class="control-label" for="input-icon-left">
-                      {{'Peso'}}
-                    </label><i class="bar"></i>
-                  </div>
-                </div>
-              </fieldset>
-            </div>
-          </div>
-        </form>
-      </div>
-    </vuestic-modal>
+    <!-- DETALLES -->
+    <details-modal
+      :entityModel="modeloArchivo"
+      :entityData="archivoAux"
+      @initialized="handleDetailsModalInitialization"
+    ></details-modal>
+    <edit-modal
+      :entityModel="modeloArchivo"
+      :entityData="archivoAux"
+      @initialized="handleEditModalInitialization"
+      @cambios-guardados="onGuardarCambios"
+    ></edit-modal>
     <vuestic-modal ref="confirm_modal"
                    v-on:ok="onEliminarConfirmado"
                    v-on:canceled="onEliminarCanceled"
@@ -273,79 +73,58 @@
 
 <script>
 import Vue from 'vue'
-import BadgeColumn from '../tables/BadgeColumn.vue'
-import FieldsDef
-  from '../../vuestic-theme/vuestic-components/vuestic-datatable/data/fields-definition'
-import ItemsPerPageDef
-  from '../../vuestic-theme/vuestic-components/vuestic-datatable/data/items-per-page-definition'
-import QueryParams from '../../vuestic-theme/vuestic-components/vuestic-datatable/data/query-params'
-import { SpringSpinner } from 'epic-spinners'
 import axios from 'axios'
-
-Vue.component('badge-column', BadgeColumn)
+import ModelForm from '../self-components/model-form/ModelForm'
+import ModelDetail from '../self-components/model-detail/ModelDetail'
+import ModelTable from '../self-components/model-table/ModelTable'
+import DetailsModal from '../self-components/modals/details/DetailsModal'
+import EditModal from '../self-components/modals/edit/EditModal'
+import DBModels from '../../models/index'
+import apiRoutes from '../../services/apiRoutes'
 
 export default {
-  name: 'Table',
+  name: 'Archivo',
   components: {
-    SpringSpinner,
+    ModelForm,
+    ModelDetail,
+    ModelTable,
+    DetailsModal,
+    EditModal,
   },
   data () {
     return {
-      apiMode: true,
-      tableFields: FieldsDef.tableFields,
-      itemsPerPage: ItemsPerPageDef.itemsPerPage,
-      sortFunctions: FieldsDef.sortFunctions,
-      paginationPath: '',
-      defaultTablePerPage: 6,
-      queryParams: QueryParams,
+      modeloArchivo: DBModels.ArchivoModel,
+      modeloGrabacion: DBModels.GrabacionModel,
+      modeloOcurrencia: DBModels.OcurrenciaModel,
+      datosGrabacion: {},
+      datosOcurrencia: {},
+      tableFields: [],
+
       archivos: {},
-      archivo: {
-        "idexterno": '',
-        "formato": '',
-        "url": '',
-        "grabacionId": '',
-        "pesobyte": '',
-      },
-      archivoAux: {
-        "idexterno": '',
-        "formato": '',
-        "url": '',
-        "grabacionId": '',
-        "pesobyte": '',
-      },
+      archivoAux: {},
       indexDato: '',
       id: this.$route.params.grabacionId,
-      grabacion: {
-        "id": '',
-        "idexterno": '',
-        "ocurrenciaId": '',
-        "playurl": '',
-        "duracion": '',
-      },
+      grabacion: {},
       ocurrenciaId: this.$route.params.ocurrenciaId,
-      ocurrencia: {
-        "id": '',
-        "idexterno": '',
-        "starttime": '',
-        "duracion": '',
-        "status": '',
-        "reunionvideoconferenciaId": '',
-      },
+      ocurrencia: {},
     }
   },
   methods: {
-    onAgregar () {
-      this.archivo.pesobyte = +this.archivo.pesobyte
-      axios.post('http://localhost:3000/archivos', this.archivo
+    onAgregar (formStatus) {
+      axios.post(apiRoutes.archivosRoute, formStatus.model
       ).then(res => {
-        this.archivo.idexterno = ''
-        this.archivo.formato = ''
-        this.archivo.url = ''
-        this.archivo.pesobyte = ''
+        // LIMPIAR FORMULARIO
+        this.$refs.modelFormComponent.clearForm()
         this.archivos.push(res.data)
-        this.showAddedToast()
+        let idGenerado = res.data.id
+        this.showAddedToast('',
+        {
+          icon: 'fa-plus',
+          position: 'bottom-right',
+          duration: 5000,
+          containerClass: 'toast-added',
+        })
       }).catch(error => {
-        console.log(this.archivo);
         console.log(error);
         this.showErrorToast()
       })
@@ -356,7 +135,7 @@ export default {
     },
     onEliminarConfirmado() {
       let idArchivo = this.archivos[this.indexDato].id
-      axios.delete(`http://localhost:3000/archivos/${idArchivo}`)
+      axios.delete(apiRoutes.getArchivosFromId(idArchivo))
       .then(res => {
         this.archivos.splice(this.indexDato,1)
         this.showDeletedToast()
@@ -378,14 +157,13 @@ export default {
       this.indexDato = index;
       this.$refs.edit_modal.open();
     },
-    onGuardarCambios(){
+    onGuardarCambios(model){
       let idArchivo = this.archivos[this.indexDato].id
-      axios.patch(`http://localhost:3000/archivos/${idArchivo}`, this.archivoAux)
+      this.archivoAux = model
+      axios.patch(apiRoutes.getArchivosFromId(idArchivo), this.archivoAux)
       .then(res => {
         delete this.archivos[this.indexDato]
-        console.log(this.archivos)
         let newArchivo = JSON.parse(JSON.stringify(this.archivoAux))
-        console.log(newArchivo)
         Vue.set(this.archivos, this.indexDato, newArchivo);
         this.showSuccessToast('Cambios guardados')
       })
@@ -394,8 +172,23 @@ export default {
         this.showErrorToast()
       });
     },
-    hayDatos() {
-      return this.archivos.length > 0
+    onDetailsClicked(data, index) {
+      this.archivoAux = data
+      this.$data.detailsModalRef.open();
+    },
+    onEditClicked(data, index) {
+      this.archivoAux = data
+      this.indexDato = index;
+      this.$data.editModalRef.open();
+    },
+    onDeleteClicked(data, index) {
+      this.onEliminar(index)
+    },
+    handleDetailsModalInitialization(detailsModalRef){
+      this.$data.detailsModalRef = detailsModalRef
+    },
+    handleEditModalInitialization(editModalRef){
+      this.$data.editModalRef = editModalRef
     },
   },
 
@@ -405,9 +198,8 @@ export default {
     },
   },
   beforeCreate () {
-    //GET PARA OBTENER DETALLES DE GRABACIÓN
     axios.all([
-      axios.get(`http://localhost:3000/grabaciones/${this.$route.params.grabacionId}/archivos`),
+      axios.get(apiRoutes.getArchivosFromIdGrabacion(this.$route.params.grabacionId)),
     ])
       .then(axios.spread(res => {
         this.archivos = res.data
@@ -421,30 +213,37 @@ export default {
       })
   },
   created () {
+    //obtiene detalles de la grabación
     axios.all([
-      axios.get(`http://localhost:3000/grabaciones/${this.id}`),
+      axios.get(apiRoutes.getGrabacionesFromId(this.id)),
     ])
     .then(axios.spread(res => {
-      this.grabacion = res.data
-      this.archivo.grabacionId = +this.id
+      this.datosGrabacion = res.data
     }))
     .catch(error => {
       console.log(error)
       this.errored = true
     })
 
-    //GET PARA OBTENER DETALLES DE OCURRENCIA
+    //obtiene detalles de la ocurrencia
     axios.all([
-      axios.get(`http://localhost:3000/ocurrencias/${this.ocurrenciaId}`),
+      axios.get(apiRoutes.getOcurrenciasFromId(this.ocurrenciaId)),
     ])
     .then(axios.spread(res => {
-      this.ocurrencia = res.data
+      this.datosOcurrencia = res.data
       this.grabacion.ocurrenciaId = +this.id
     }))
     .catch(error => {
       console.log(error)
       this.errored = true
     })
+
+    for (let modelAttr in this.modeloArchivo) {
+      let valor = this.modeloArchivo[modelAttr]
+
+      if(valor.isTableField)
+        this.tableFields.push(modelAttr)
+    }
   }
 }
 

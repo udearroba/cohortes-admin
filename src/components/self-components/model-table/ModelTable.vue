@@ -8,7 +8,7 @@
   >
   <template slot="actions" scope="props">
       <div class="custom-actions">
-        <i
+        <i v-if="!noLinkAction"
           class="fa fa-plus success-icon"
           @click="onAdd(props.rowData, props.rowIndex)">
         </i>
@@ -50,10 +50,10 @@ export default {
       type: [Array, Object],
       required: true,
     },
-    deleteVisible: {
+    noLinkAction: {
       type: Boolean,
       default: function() {
-        return true;
+        return false;
       }
     },
   },
