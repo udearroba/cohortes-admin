@@ -14,7 +14,7 @@ const OcurrenciaModel =  {
   },
   starttime: {
     requiredOnForm: true,
-    type: 'String',
+    type: '_Date',
     icon: 'fa fa-clock-o',
     alias: 'Fecha de inicio',
     isTableField: true,
