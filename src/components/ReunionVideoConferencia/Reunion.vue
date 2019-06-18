@@ -4,297 +4,43 @@
     <div class="va-row">
       <!-- FORMULARIO PARA AGREGAR REUNIÓN -->
       <div class="flex md12">
-        <vuestic-widget :headerText="'Agregar Reunión'">
-          <form>
-            <div class="va-row">
-              <div class="flex md5">
-                <fieldset>
-                  <div class="form-group with-icon-left">
-                    <div class="input-group">
-                      <input
-                      v-model="reunion.uuid"
-                      id="input-icon-left"
-                      name="input-icon-left"
-                      required/>
-                      <i class="fa fa-key icon-left input-icon"></i>
-                      <label class="control-label" for="input-icon-left">
-                        {{'Uuid'}}
-                      </label><i class="bar"></i>
-                    </div>
-                  </div>
-                  <div class="form-group with-icon-left">
-                    <div class="input-group">
-                      <input
-                      v-model="reunion.idsistemaexterno"
-                      id="input-icon-left"
-                      name="input-icon-left"
-                      required/>
-                      <i class="fa fa-key icon-left input-icon"></i>
-                      <label class="control-label" for="input-icon-left">
-                        {{'Id externo'}}
-                      </label><i class="bar"></i>
-                    </div>
-                  </div>
-                  <div class="form-group with-icon-left">
-                    <div class="input-group">
-                      <input
-                      v-model="reunion.urljoin"
-                      id="input-icon-left"
-                      name="input-icon-left"
-                      required/>
-                      <i class="fa fa-link icon-left input-icon"></i>
-                      <label class="control-label" for="input-icon-left">
-                        {{'Url join'}}
-                      </label><i class="bar"></i>
-                    </div>
-                  </div>
-                  <div class="form-group with-icon-left">
-                    <div class="input-group">
-                      <input
-                      v-model="reunion.urlstart"
-                      id="input-icon-left"
-                      name="input-icon-left"
-                      required/>
-                      <i class="fa fa-link icon-left input-icon"></i>
-                      <label class="control-label" for="input-icon-left">
-                        {{'Url start'}}
-                      </label><i class="bar"></i>
-                    </div>
-                  </div>
-                  <div class="btn btn-micro btn-primary"
-                  @click="onAgregar">
-                    {{'Agregar'}}
-                  </div>
-                </fieldset>
-              </div>
-              <div class="flex md5">
-                <fieldset>
-                  <div class="form-group with-icon-left">
-                    <div class="input-group">
-                      <input
-                      v-model="reunion.hostid"
-                      id="input-icon-left"
-                      name="input-icon-left"
-                      required/>
-                      <i class="fa fa-id-card icon-left input-icon"></i>
-                      <label class="control-label" for="input-icon-left">
-                        {{'Host id'}}
-                      </label><i class="bar"></i>
-                    </div>
-                  </div>
-                  <div class="form-group with-icon-left">
-                    <div class="input-group">
-                      <input
-                      v-model="reunion.createdat"
-                      id="input-icon-left"
-                      name="input-icon-left"
-                      required/>
-                      <i class="fa fa-calendar-o icon-left input-icon"></i>
-                      <label class="control-label" for="input-icon-left">
-                        {{'Fecha creación'}}
-                      </label><i class="bar"></i>
-                    </div>
-                  </div>
-                  <div class="form-group with-icon-left">
-                    <div class="input-group">
-                      <input
-                      v-model="reunion.nombre"
-                      id="input-icon-left"
-                      name="input-icon-left"
-                      required/>
-                      <i class="fa fa-paperclip icon-left input-icon"></i>
-                      <label class="control-label" for="input-icon-left">
-                        {{'Nombre'}}
-                      </label><i class="bar"></i>
-                    </div>
-                  </div>
-                </fieldset>
-              </div>
-            </div>
-          </form>
-        </vuestic-widget>
+        <model-form ref="modelFormComponent"
+        :entityModel="modeloReunion"
+        @on-agregar="onAgregar">
+        </model-form>
       </div>
     </div>
 
     <div class="va-row">
       <div class="flex xs12 md12">
         <vuestic-widget :headerText="'Reuniones'">
-          <div class="table-responsive" v-if="hayDatos()">
-            <table class="table table-striped first-td-padding">
-              <thead>
-              <tr>
-                <td>{{'Nombre'}}</td>
-                <td>{{'Fecha creación'}}</td>
-                <td>{{'Id externo'}}</td>
-                <td>{{'URL join'}}</td>
-                <td></td>
-              </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(reunion, index) in reuniones">
-                  <td>{{reunion.nombre}}</td>
-                  <td>{{reunion.createdat}}</td>
-                  <td>{{reunion.idsistemaexterno}}</td>
-                  <td>{{reunion.urljoin}}</td>
-                  <td align="right" class="valid">
-                    <div class="icon-slot">
-                      <i
-                        class="fa fa-plus success-icon"
-                        @click="navegarSiguienteNivel(index)">
-                      </i>
-                      <i
-                        class="fa fa-eye info-icon"
-                        @click="onDetail(index)">
-                      </i>
-                      <i
-                        class="fa fa-pencil info-icon"
-                        @click="onEdit(index)">
-                      </i>
-                      <i
-                        class="fa fa-minus error-icon"
-                        @click="onEliminar(index)">
-                      </i>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <p v-else>No hay datos para mostrar</p>
+          <model-table
+          :tableFields="tableFields"
+          :tableData="reuniones"
+          @addClicked="onAddClicked"
+          @detailsClicked="onDetailsClicked"
+          @editClicked="onEditClicked"
+          @deleteClicked="onDeleteClicked"
+          ></model-table>
         </vuestic-widget>
       </div>
     </div>
 
-    <!-- MODAL -->
+    <!-- VENTANAS MODALES -->
+    <!-- DETALLES -->
+    <details-modal
+      :entityModel="modeloReunion"
+      :entityData="reunionAux"
+      @initialized="handleDetailsModalInitialization"
+    ></details-modal>
 
-    <vuestic-modal ref="detail_modal"
-                   :no-buttons="true"
-                   v-bind:small="true">
-      <div slot="title">Detalles</div>
-      <div>
-        <ul class="detail-list">
-          <li><span class="detail-item-title">Uuid:</span> {{reunionAux.uuid}}</li>
-          <li><span class="detail-item-title">Id externo:</span> {{reunionAux.idsistemaexterno}}</li>
-          <li><span class="detail-item-title">URL join:</span> {{reunionAux.urljoin}}</li>
-          <li><span class="detail-item-title">URL start:</span> {{reunionAux.urlstart}}</li>
-          <li><span class="detail-item-title">Host id:</span> {{reunionAux.hostid}}</li>
-          <li><span class="detail-item-title">Fecha creación:</span> {{reunionAux.createdat}}</li>
-          <li><span class="detail-item-title">Nombre:</span> {{reunionAux.nombre}}</li>
-        </ul>
-      </div>
-    </vuestic-modal>
-
-
-    <vuestic-modal ref="edit_modal"
-                   v-on:ok="onGuardarCambios"
-                   :ok-class="'btn btn-success btn-micro'"
-                   :cancel-class="'btn btn-pale btn-micro'"
-                   :close-icon-shown="false"
-                   :okText="'Guardar cambios' | translate"
-                   :cancelText="'Cancelar' | translate">
-      <div slot="title">Editar</div>
-      <div>
-        <form>
-          <div class="va-row">
-            <div class="flex md8">
-              <fieldset>
-                <div class="form-group with-icon-left">
-                  <div class="input-group">
-                    <input
-                    v-model="reunionAux.uuid"
-                    id="input-icon-left"
-                    name="input-icon-left"
-                    required/>
-                    <i class="fa fa-key icon-left input-icon"></i>
-                    <label class="control-label" for="input-icon-left">
-                      {{'Uuid'}}
-                    </label><i class="bar"></i>
-                  </div>
-                </div>
-                <div class="form-group with-icon-left">
-                  <div class="input-group">
-                    <input
-                    v-model="reunionAux.idsistemaexterno"
-                    id="input-icon-left"
-                    name="input-icon-left"
-                    required/>
-                    <i class="fa fa-key icon-left input-icon"></i>
-                    <label class="control-label" for="input-icon-left">
-                      {{'Id externo'}}
-                    </label><i class="bar"></i>
-                  </div>
-                </div>
-                <div class="form-group with-icon-left">
-                  <div class="input-group">
-                    <input
-                    v-model="reunionAux.urljoin"
-                    id="input-icon-left"
-                    name="input-icon-left"
-                    required/>
-                    <i class="fa fa-key icon-left input-icon"></i>
-                    <label class="control-label" for="input-icon-left">
-                      {{'URL join'}}
-                    </label><i class="bar"></i>
-                  </div>
-                </div>
-                <div class="form-group with-icon-left">
-                  <div class="input-group">
-                    <input
-                    v-model="reunionAux.urlstart"
-                    id="input-icon-left"
-                    name="input-icon-left"
-                    required/>
-                    <i class="fa fa-key icon-left input-icon"></i>
-                    <label class="control-label" for="input-icon-left">
-                      {{'URL start'}}
-                    </label><i class="bar"></i>
-                  </div>
-                </div>
-                <div class="form-group with-icon-left">
-                  <div class="input-group">
-                    <input
-                    v-model="reunionAux.hostid"
-                    id="input-icon-left"
-                    name="input-icon-left"
-                    required/>
-                    <i class="fa fa-key icon-left input-icon"></i>
-                    <label class="control-label" for="input-icon-left">
-                      {{'Host id'}}
-                    </label><i class="bar"></i>
-                  </div>
-                </div>
-                <div class="form-group with-icon-left">
-                  <div class="input-group">
-                    <input
-                    v-model="reunionAux.createdat"
-                    id="input-icon-left"
-                    name="input-icon-left"
-                    required/>
-                    <i class="fa fa-key icon-left input-icon"></i>
-                    <label class="control-label" for="input-icon-left">
-                      {{'Fecha creación'}}
-                    </label><i class="bar"></i>
-                  </div>
-                </div>
-                <div class="form-group with-icon-left">
-                  <div class="input-group">
-                    <input
-                    v-model="reunionAux.nombre"
-                    id="input-icon-left"
-                    name="input-icon-left"
-                    required/>
-                    <i class="fa fa-key icon-left input-icon"></i>
-                    <label class="control-label" for="input-icon-left">
-                      {{'Nombre'}}
-                    </label><i class="bar"></i>
-                  </div>
-                </div>
-              </fieldset>
-            </div>
-          </div>
-        </form>
-      </div>
-    </vuestic-modal>
+    <!-- EDICIÓN -->
+    <edit-modal
+      :entityModel="modeloReunion"
+      :entityData="reunionAux"
+      @initialized="handleEditModalInitialization"
+      @cambios-guardados="onGuardarCambios"
+    ></edit-modal>
     <vuestic-modal ref="confirm_modal"
                    v-on:ok="onEliminarConfirmado"
                    v-on:canceled="onEliminarCanceled"
@@ -311,65 +57,41 @@
 
 <script>
 import Vue from 'vue'
-import BadgeColumn from '../tables/BadgeColumn.vue'
-import FieldsDef
-  from '../../vuestic-theme/vuestic-components/vuestic-datatable/data/fields-definition'
-import ItemsPerPageDef
-  from '../../vuestic-theme/vuestic-components/vuestic-datatable/data/items-per-page-definition'
-import QueryParams from '../../vuestic-theme/vuestic-components/vuestic-datatable/data/query-params'
-import { SpringSpinner } from 'epic-spinners'
 import axios from 'axios'
 
-Vue.component('badge-column', BadgeColumn)
+import ModelForm from '../self-components/model-form/ModelForm'
+import ModelTable from '../self-components/model-table/ModelTable'
+import DetailsModal from '../self-components/modals/details/DetailsModal'
+import EditModal from '../self-components/modals/edit/EditModal'
+import apiRoutes from '../../services/apiRoutes'
+
+import DBModels from '../../models/index'
+
 
 export default {
   name: 'Table',
   components: {
-    SpringSpinner,
+    ModelForm,
+    ModelTable,
+    DetailsModal,
+    EditModal,
   },
   data () {
     return {
-      apiMode: true,
-      tableFields: FieldsDef.tableFields,
-      itemsPerPage: ItemsPerPageDef.itemsPerPage,
-      sortFunctions: FieldsDef.sortFunctions,
-      paginationPath: '',
-      defaultTablePerPage: 6,
-      queryParams: QueryParams,
+      modeloReunion: DBModels.ReunionModel,
+      tableFields: [],
+
       reuniones: {},
-      reunion: {
-        "uuid": '',
-        "idsistemaexterno": '',
-        "urljoin": '',
-        "urlstart": '',
-        "hostid": '',
-        "createdat": '',
-        "nombre": '',
-      },
-      reunionAux: {
-        "id": '',
-        "uuid": '',
-        "idsistemaexterno": '',
-        "urljoin": '',
-        "urlstart": '',
-        "hostid": '',
-        "createdat": '',
-        "nombre": '',
-      },
+      reunion: {},
+      reunionAux: {},
       indexDato: '',
     }
   },
   methods: {
-    onAgregar () {
-      axios.post('http://localhost:3000/reunionvideoconferencias', this.reunion
+    onAgregar (formStatus) {
+      axios.post(apiRoutes.reunionesRoute, formStatus.model
       ).then(res => {
-        this.reunion.uuid = '',
-        this.reunion.idsistemaexterno = '',
-        this.reunion.urljoin = '',
-        this.reunion.urlstart = '',
-        this.reunion.hostid = '',
-        this.reunion.createdat = '',
-        this.reunion.nombre = '',
+        this.$refs.modelFormComponent.clearForm()
         this.reuniones.push(res.data)
         let idGenerado = res.data.id
         this.showAddedToast('',
@@ -381,7 +103,7 @@ export default {
           action: {
             text: 'Agregar Ocurrencia',
             onClick: (e, toastObject) => {
-              this.navegarSiguienteNivel('', idGenerado)
+              this.navegarSiguienteNivel(idGenerado)
               toastObject.goAway(0)
             },
             class: 'toast-action'
@@ -411,30 +133,37 @@ export default {
     onEliminarCanceled() {
       this.indexDato = '';
     },
-    navegarSiguienteNivel(index, id) {
-      if (id) {
-        this.$router.push({ name: 'ocurrencia', params: { reunionId: id } })
-        return;
-      }
-      this.$router.push({ name: 'ocurrencia', params: { reunionId: this.reuniones[index].id } })
+    navegarSiguienteNivel(id) {
+      this.$router.push({ name: 'ocurrencia', params: { reunionId: id }})
     },
-    onDetail(index) {
-      this.$refs.detail_modal.open();
-      this.reunionAux = this.reuniones[index]
+    onAddClicked(data, index) {
+      this.navegarSiguienteNivel(data.id)
     },
-    onEdit(index) {
-      this.reunionAux = JSON.parse(JSON.stringify(this.reuniones[index]));
+    onDetailsClicked(data, index) {
+      this.reunionAux = data
+      this.$data.detailsModalRef.open();
+    },
+    onEditClicked(data, index) {
+      this.reunionAux = data
       this.indexDato = index;
-      this.$refs.edit_modal.open();
+      this.$data.editModalRef.open();
     },
-    onGuardarCambios(){
+    onDeleteClicked(data, index) {
+      this.onEliminar(index)
+    },
+    handleDetailsModalInitialization(detailsModalRef){
+      this.$data.detailsModalRef = detailsModalRef
+    },
+    handleEditModalInitialization(editModalRef){
+      this.$data.editModalRef = editModalRef
+    },
+    onGuardarCambios(model){
       let idReunion = this.reuniones[this.indexDato].id
-      axios.patch(`http://localhost:3000/reunionvideoconferencias/${idReunion}`, this.reunionAux)
+      this.reunionAux = model
+      axios.patch(apiRoutes.getReunionesFromId(idReunion), this.reunionAux)
       .then(res => {
         delete this.reuniones[this.indexDato]
-        console.log(this.reuniones)
         let newReunion = JSON.parse(JSON.stringify(this.reunionAux))
-        console.log(newReunion)
         Vue.set(this.reuniones, this.indexDato, newReunion);
         this.showSuccessToast('Cambios guardados')
       })
@@ -442,9 +171,6 @@ export default {
         console.log(error)
         this.showErrorToast()
       });
-    },
-    hayDatos() {
-      return this.reuniones.length > 0
     },
   },
 
@@ -467,6 +193,14 @@ export default {
       .finally(() => {
         this.loading = false
       })
+  },
+  created () {
+    for (let modelAttr in this.modeloReunion) {
+      let valor = this.modeloReunion[modelAttr]
+
+      if(valor.isTableField)
+        this.tableFields.push(modelAttr)
+    }
   },
 }
 
