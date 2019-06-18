@@ -113,7 +113,6 @@ export default {
       }
     },
     dateChanged(date, name) {
-      // let date = new Date(dat);
       let month = date.toLocaleString(undefined, {
         day: 'numeric',
         month: 'numeric',
@@ -153,12 +152,8 @@ export default {
   display: none !important;
 }
 .wrapper-calendar {
-  width: 10%;
   span i {
     color: $text-gray;
   }
-}
-.input-group.date-input {
-  width: 90%;
 }
 </style>
