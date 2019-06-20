@@ -80,31 +80,7 @@ import ModelTable from '../self-components/model-table/ModelTable'
 import DetailsModal from '../self-components/modals/details/DetailsModal'
 import EditModal from '../self-components/modals/edit/EditModal'
 import DBModels from '../../models/index'
-
-
-let API_route = "http://localhost:3000";
-let reunionesTableName = "reunionvideoconferencias"
-let grabacionesTableName = "grabaciones"
-let ocurrenciasTableName = "ocurrencias"
-let reunionesRoute = `${API_route}/${reunionesTableName}`;
-let grabacionesRoute = `${API_route}/${grabacionesTableName}`;
-let ocurrenciasRoute = `${API_route}/${ocurrenciasTableName}`;
-let getGrabacionesFromId = function(idGrabacion) {
-  return `${grabacionesRoute}/${idGrabacion}`
-}
-let getGrabacionesFromIdOcurrencia = function(idOcurrencia) {
-  return `${ocurrenciasRoute}/${idOcurrencia}/${grabacionesTableName}`
-}
-let getOcurrenciasFromId = function(idOcurrencia) {
-  return `${ocurrenciasRoute}/${idOcurrencia}`
-}
-let getReunionesFromId = function(idReunion) {
-  return `${reunionesRoute}/${idReunion}`
-}
-
-
-let siguienteNivel = 'archivo'
-
+import apiRoutes from '../../services/apiRoutes'
 
 export default {
   name: 'Table',
@@ -118,27 +94,12 @@ export default {
   data () {
     return {
       grabaciones: [],
-      grabacionAux: { },
+      grabacionAux: {},
       datoEliminar: '',
       id: this.$route.params.ocurrenciaId,
-      ocurrencia: {
-        "id": '',
-        "idexterno": '',
-        "starttime": '',
-        "duracion": '',
-        "status": '',
-        "reunionvideoconferenciaId": '',
-      },
+      ocurrencia: {},
       reunionId: this.$route.params.reunionId,
-      reunion: {
-        "uuid": '',
-        "idsistemaexterno": '',
-        "urljoin": '',
-        "urlstart": '',
-        "hostid": '',
-        "createdat": '',
-        "nombre": '',
-      },
+      reunion: {},
       modeloGrabacion: DBModels.GrabacionModel,
       modeloOcurrencia: DBModels.OcurrenciaModel,
       modeloReunion: DBModels.ReunionModel,
@@ -149,7 +110,7 @@ export default {
   },
   methods: {
     onAgregar (formStatus) {
-      axios.post(grabacionesRoute, formStatus.model
+      axios.post(apiRoutes.grabacionesRoute, formStatus.model
       ).then(res => {
         // LIMPIAR FORMULARIO
         this.$refs.modelFormComponent.clearForm()
@@ -181,7 +142,7 @@ export default {
     },
     onEliminarConfirmado() {
       let idGrabacion = this.grabaciones[this.datoEliminar].id
-      axios.delete(getGrabacionesFromId(idGrabacion))
+      axios.delete(apiRoutes.getGrabacionesFromId(idGrabacion))
       .then(res => {
         this.grabaciones.splice(this.datoEliminar,1)
         this.showDeletedToast()
@@ -196,7 +157,7 @@ export default {
     },
     //este método permite navegar al siguiente nivel basado en el id del elemento.
     navegarSiguienteNivel(id) {
-        this.$router.push({ name: siguienteNivel, params: { grabacionId: id }})
+        this.$router.push({ name: 'archivo', params: { grabacionId: id }})
     },
     onEdit(index) {
       this.grabacionAux = JSON.parse(JSON.stringify(this.grabaciones[index]));
@@ -206,7 +167,7 @@ export default {
     onGuardarCambios(model){
       let idGrabacion = this.grabaciones[this.indexDato].id
       this.grabacionAux = model
-      axios.patch(getGrabacionesFromId(idGrabacion), this.grabacionAux)
+      axios.patch(apiRoutes.getGrabacionesFromId(idGrabacion), this.grabacionAux)
       .then(res => {
         delete this.grabaciones[this.indexDato]
         let newGrabacion = JSON.parse(JSON.stringify(this.grabacionAux))
@@ -248,7 +209,7 @@ export default {
   },
   beforeCreate () {
     axios.all([
-      axios.get(getGrabacionesFromIdOcurrencia(this.$route.params.ocurrenciaId))
+      axios.get(apiRoutes.getGrabacionesFromIdOcurrencia(this.$route.params.ocurrenciaId))
     ])
       .then(axios.spread(res => {
         this.grabaciones = res.data
@@ -264,7 +225,7 @@ export default {
   created () {
     //GET PARA OBTENER DETALLES DE OCURRENCIA
     axios.all([
-      axios.get(getOcurrenciasFromId(this.id)),
+      axios.get(apiRoutes.getOcurrenciasFromId(this.id)),
     ])
     .then(axios.spread(res => {
       this.ocurrencia = res.data
@@ -277,7 +238,7 @@ export default {
 
     //GET PARA OBTENER DETALLES DE REUNIÓN
     axios.all([
-      axios.get(getReunionesFromId(this.reunionId)),
+      axios.get(apiRoutes.getReunionesFromId(this.reunionId)),
     ])
     .then(axios.spread(res => {
       this.reunion = res.data

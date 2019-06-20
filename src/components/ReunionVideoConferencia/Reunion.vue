@@ -120,7 +120,7 @@ export default {
     },
     onEliminarConfirmado() {
       let idReunion = this.reuniones[this.indexDato].id
-      axios.delete(`http://localhost:3000/reunionvideoconferencias/${idReunion}`)
+      axios.delete(apiRoutes.getReunionesFromId(idReunion))
       .then(res => {
         this.reuniones.splice(this.indexDato,1)
         this.showDeletedToast()
@@ -181,7 +181,7 @@ export default {
   },
   beforeCreate () {
     axios.all([
-      axios.get(`http://localhost:3000/reunionvideoconferencias`),
+      axios.get(apiRoutes.reunionesRoute),
     ])
       .then(axios.spread(res => {
         this.reuniones = res.data

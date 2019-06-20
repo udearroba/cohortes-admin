@@ -8,8 +8,6 @@ let ocurrenciasRoute=`${API_route}/${ocurrenciasTableName}`
 let grabacionesRoute=`${API_route}/${grabacionesTableName}`
 let archivosRoute=`${API_route}/${archivosTableName}`
 
-// function getEntityFromId(idEntity) { }
-
 let apiRoutes =  {
   reunionesRoute: reunionesRoute,
   grabacionesRoute: grabacionesRoute,

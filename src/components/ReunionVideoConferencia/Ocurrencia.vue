@@ -118,7 +118,7 @@ export default {
           duration: 5000,
           containerClass: 'toast-added',
           action: {
-            text: 'Agregar Archivo',
+            text: 'Agregar Grabación',
             onClick: (e, toastObject) => {
               this.navegarSiguienteNivel(idGenerado)
               toastObject.goAway(0)
