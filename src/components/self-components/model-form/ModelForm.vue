@@ -59,6 +59,7 @@
 
 <script>
 import Vue from 'vue'
+import _ from 'lodash'
 import Datepicker from 'vuejs-datepicker';
 
 export default {
@@ -89,23 +90,51 @@ export default {
   },
   methods: {
     onAgregar() {
+      let finalModel = _.clone(this.model)
+
       for (let modelAttr in this.formModel) {
         //los datos tipo Number deben ser casteados. Por defecto se agregan al modelo datos tipo String
         if(this.entityModel[modelAttr].type === "Number") {
-          this.model[modelAttr] = +this.model[modelAttr]
+          finalModel[modelAttr] = +finalModel[modelAttr]
+        }
+        else if(this.entityModel[modelAttr].type === "Duration") {
+          let duration = finalModel[modelAttr]
+          duration = this.durationToSeconds(duration)
+          if (duration)
+            finalModel[modelAttr] = duration
         }
       }
 
       // se agregan las llaves primarias al modelo
       for (let foreignKeyElement in this.foreignKeys) {
-        this.model[foreignKeyElement] = this.foreignKeys[foreignKeyElement]
+        finalModel[foreignKeyElement] = this.foreignKeys[foreignKeyElement]
       }
 
       let formStatus = {
         isValid: true, //este campo debe ser verificado para cada formulario
-        model: this.model
+        model: finalModel
       }
+
       this.$emit('on-agregar', formStatus)
+    },
+    durationToSeconds(duration) {
+      // RegEx extraído de stackoverflow.com
+          // con título Regex pattern for HH:MM:SS time string
+          // El RegEx fue modificado
+          let pattern =
+            /^(?:(?:(\d+):)?([0-5]?\d):)?([0-5]?\d)$/
+
+          var patternGroups = duration.match(pattern)
+          if(!patternGroups)
+            return null
+          let hours = patternGroups[1]
+          let minutes = patternGroups[2]
+          let seconds = patternGroups[3]
+          hours = hours ? +hours : 0
+          minutes = minutes ? +minutes : 0
+          seconds = +seconds
+
+          return hours*60*60 + minutes*60 + seconds
     },
     clearForm() {
       for (let key in this.model) {

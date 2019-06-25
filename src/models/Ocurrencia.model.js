@@ -21,7 +21,7 @@ const OcurrenciaModel =  {
   },
   duracion: {
     requiredOnForm: true,
-    type: 'Number',
+    type: 'Duration',
     icon: 'fa fa-hourglass-3',
     alias: 'Duración',
     isTableField: true,
