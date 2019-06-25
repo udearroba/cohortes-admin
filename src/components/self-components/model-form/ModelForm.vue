@@ -7,28 +7,7 @@
           <template
           v-for="(value, name) in formModel">
             <div class="form-group with-icon-left" v-bind:key="name">
-              <template v-if="value.type == '_Date'">
-                <div class="input-group date-input">
-                  <input
-                  :name = "name"
-                  v-model = "model[name]"
-                  :type = "value.type"
-                  required/>
-                  <i v-bind:class="value.icon"
-                  class="icon-left input-icon"></i>
-                  <label class="control-label" :for="name">
-                    {{ value.alias }}
-                  </label><i class="bar"></i>
-                </div>
-                  <datepicker
-                    :calendar-button="true"
-                    :calendar-button-icon="'fa fa-calendar'"
-                    :input-class="'input-calendar'"
-                    :wrapper-class="'wrapper-calendar'"
-                    @selected="dateChanged($event, name)">
-                  </datepicker>
-              </template>
-              <template v-else>
+              <template>
                 <div class="input-group">
                   <input
                   :name = "name"
@@ -42,7 +21,6 @@
                   </label><i class="bar"></i>
                 </div>
               </template>
-
             </div>
           </template>
 
@@ -60,13 +38,9 @@
 <script>
 import Vue from 'vue'
 import _ from 'lodash'
-import Datepicker from 'vuejs-datepicker';
 
 export default {
   name: 'model-form',
-  components: {
-    Datepicker
-  },
   props: {
     entityModel: {
       type: Object,
