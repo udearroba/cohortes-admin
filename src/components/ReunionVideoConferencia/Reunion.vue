@@ -88,9 +88,13 @@ export default {
     }
   },
   methods: {
-    onAgregar (formStatus) {
-      axios.post(apiRoutes.reunionesRoute, formStatus.model
-      ).then(res => {
+    onAgregar (validatedModel) {
+      if (!validatedModel.isValid) {
+        this.showErrorToast(validatedModel.message, null, true)
+        return false;
+      }
+      axios.post(apiRoutes.reunionesRoute, validatedModel.model)
+      .then(res => {
         this.$refs.modelFormComponent.clearForm()
         this.reuniones.push(res.data)
         let idGenerado = res.data.id

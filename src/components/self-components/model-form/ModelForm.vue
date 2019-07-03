@@ -39,6 +39,8 @@
 import Vue from 'vue'
 import _ from 'lodash'
 
+import validatorService from '../../../services/validator'
+
 export default {
   name: 'model-form',
   props: {
@@ -64,32 +66,24 @@ export default {
   },
   methods: {
     onAgregar() {
-      let finalModel = _.clone(this.model)
 
-      for (let modelAttr in this.formModel) {
-        //los datos tipo Number deben ser casteados. Por defecto se agregan al modelo datos tipo String
-        if(this.entityModel[modelAttr].type === "Number") {
-          finalModel[modelAttr] = +finalModel[modelAttr]
-        }
-        else if(this.entityModel[modelAttr].type === "Duration") {
-          let duration = finalModel[modelAttr]
-          duration = this.durationToSeconds(duration)
-          if (duration)
-            finalModel[modelAttr] = duration
-        }
+      let validatedModel = validatorService.checkValid(this.model, this.entityModel)
+
+      // si el modelo no es válido, entonces no se sigue con el proceso
+      if (!validatedModel.isValid) {
+        this.$emit('on-agregar', validatedModel)
+        return false;
       }
+
+      let finalModel = validatedModel.model
 
       // se agregan las llaves primarias al modelo
       for (let foreignKeyElement in this.foreignKeys) {
         finalModel[foreignKeyElement] = this.foreignKeys[foreignKeyElement]
       }
 
-      let formStatus = {
-        isValid: true, //este campo debe ser verificado para cada formulario
-        model: finalModel
-      }
-
-      this.$emit('on-agregar', formStatus)
+      validatedModel.model = finalModel
+      this.$emit('on-agregar', validatedModel)
     },
     durationToSeconds(duration) {
       // RegEx extraído de stackoverflow.com
@@ -114,14 +108,6 @@ export default {
       for (let key in this.model) {
         this.model[key] = ''
       }
-    },
-    dateChanged(date, name) {
-      let month = date.toLocaleString(undefined, {
-        day: 'numeric',
-        month: 'numeric',
-        year: 'numeric',
-      })
-      this.model[name] = month
     },
   },
   computed: {

@@ -15,13 +15,14 @@ const ReunionModel =  {
   urljoin: {
     requiredOnForm: true,
     type: 'String',
+    charLimit: 100,
     icon: 'fa fa-link',
     alias: 'URL join',
-    isTableField: true,
   },
   urlstart: {
     requiredOnForm: true,
     type: 'String',
+    charLimit: 100,
     icon: 'fa fa-link',
     alias: 'URL start',
     isTableField: true,
@@ -37,6 +38,7 @@ const ReunionModel =  {
     type: '_Date',
     icon: 'fa fa-calendar-o',
     alias: 'Fecha de creación',
+    isTableField: true,
   },
   nombre: {
     requiredOnForm: true,

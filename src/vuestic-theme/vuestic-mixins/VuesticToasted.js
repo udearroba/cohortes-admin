@@ -50,7 +50,10 @@ export default {
     showAddedToast (msg, options) {
       this.$toasted.show(msg || `Datos agregados`, options || addedToast)
     },
-    showErrorToast (msg, options) {
+    showErrorToast (msg, options, long) {
+      if(long) {
+        errorToast.duration = 5500
+      }
       this.$toasted.show(msg || `Fallo en la operación`, options || errorToast)
     },
     showSuccessToast (msg, icon, options) {
