@@ -104,10 +104,13 @@ export default {
     }
   },
   methods: {
-    onAgregar (formStatus) {
-      axios.post(apiRoutes.ocurrenciasRoute, formStatus.model
-      ).then(res => {
-        // LIMPIAR FORMULARIO
+    onAgregar (validatedModel) {
+      if (!validatedModel.isValid) {
+        this.showErrorToast(validatedModel.message, null, true)
+        return false;
+      }
+      axios.post(apiRoutes.ocurrenciasRoute, validatedModel.model)
+      .then(res => {
         this.$refs.modelFormComponent.clearForm()
         this.ocurrencias.push(res.data)
         let idGenerado = res.data.id

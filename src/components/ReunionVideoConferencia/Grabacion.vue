@@ -109,9 +109,13 @@ export default {
     }
   },
   methods: {
-    onAgregar (formStatus) {
-      axios.post(apiRoutes.grabacionesRoute, formStatus.model
-      ).then(res => {
+    onAgregar (validatedModel) {
+      if (!validatedModel.isValid) {
+        this.showErrorToast(validatedModel.message, null, true)
+        return false;
+      }
+      axios.post(apiRoutes.grabacionesRoute, validatedModel.model)
+      .then(res => {
         // LIMPIAR FORMULARIO
         this.$refs.modelFormComponent.clearForm()
         this.grabaciones.push(res.data)

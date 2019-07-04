@@ -42,16 +42,23 @@ let validatorService = {
           validatedModel.message = `El número máximo de caracteres permitidos en '${entityModel[modelAttr].alias}' es ${charLimit}`
           return validatedModel
         }
+
+        let finalConditions = entityEl.finalCondition
+        if (_.indexOf(finalConditions, 'no-dash') != -1) {
+          value = value.split('-').join('')
+        }
+
         finalValue = value
       }
       else if (entityEl.type === "Number") {
 
-        // AQUÍ HACE FALTA LA VALIDACIÓN DE QUE EN EFECTO SEA UN NÚMERO ----------------------
+        // por el momento los únicos campos que son tipo number son las claves foráneas
+        // no es necesario validarlas
         finalValue = +value
       }
       else if (entityEl.type === "_Date") {
         let pattern =
-          /^(([a-zA-Z]{3})\s(\d{1,2}),\s?(\d+))\s((\d{1,2}):(\d{2})\s([AaPp][Mm]))$/
+          /^(([a-zA-Z]{3})\s(\d{1,2}),\s?(\d+))\s((\d{1,2}):(\d{2})\s?([AaPp][Mm]))$/
 
         var patternMatch = value.match(pattern)
 
@@ -130,8 +137,64 @@ let validatorService = {
         finalValue = finalDate
       }
       else if (entityEl.type === "Duration") {
-        // AQUÍ HACE FALTA LA VALIDACIÓN DE QUE EN EFECTO SEA UN NÚMERO Y RETORNAR EL VALOR CORRECTO DE SEGUNDOS ----------------------
-        finalValue = 3000
+        // RegEx extraído de stackoverflow.com
+          // con título Regex pattern for HH:MM:SS time string
+          // El RegEx fue modificado
+          let pattern =
+            /^(?:(?:(\d+):)?([0-5]?\d):)?([0-5]?\d)$/
+
+          var patternMatch = value.match(pattern)
+
+          if(!patternMatch) {
+            validatedModel.attrFailed = modelAttr
+            validatedModel.message = `La duración ingresada en '${entityModel[modelAttr].alias}' no tiene el formato correcto`
+            validatedModel.details = 'Formato correcto: hh:mm:ss'
+            return validatedModel
+          }
+
+          let hours = patternMatch[1]
+          let minutes = patternMatch[2]
+          let seconds = patternMatch[3]
+          hours = hours ? +hours : 0
+          minutes = minutes ? +minutes : 0
+          seconds = +seconds
+
+          finalValue = hours*60*60 + minutes*60 + seconds
+      }
+      else if (entityEl.type === "ByteWeight") {
+        //uno o más dígitos, con o sin espacios, y uno o dos caracteres
+          let pattern =
+            /^(\d+)\s*([a-zA-Z]{1,2})$/
+
+          var patternMatch = value.match(pattern)
+
+          if(!patternMatch) {
+            validatedModel.attrFailed = modelAttr
+            validatedModel.message = `El peso ingresado '${entityModel[modelAttr].alias}' no tiene el formato correcto`
+            validatedModel.details = 'Formato correcto: dd [B|kB|MB|GB]'
+            return validatedModel
+          }
+
+          let _number = patternMatch[1]
+          let _unit = patternMatch[2]
+          let number = +_number
+          let unit = _.toUpper(_unit)
+
+          if (unit === 'B') {
+            // :)
+          } else if (unit === 'KB') {
+            number = number*1024
+          } else if (unit === 'MB') {
+            number = number*1024*1024
+          } else if (unit === 'GB') {
+            number = number*1024*1024*1024
+          } else {
+            validatedModel.attrFailed = modelAttr
+            validatedModel.message = `Ingrese una unidad correcta (B, kB, MB o GB) en '${entityModel[modelAttr].alias}'`
+            return validatedModel
+          }
+
+          finalValue = number
       }
 
       finalModel[modelAttr] = finalValue

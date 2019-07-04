@@ -8,6 +8,8 @@ const GrabacionModel =  {
   idexterno: {
     requiredOnForm: true,
     type: 'String',
+    charLimit: 100,
+    finalCondition: ['no-dash'],
     icon: 'fa fa-key',
     alias: 'Id externo',
     isTableField:true,
@@ -15,13 +17,14 @@ const GrabacionModel =  {
   playurl: {
     requiredOnForm: true,
     type: 'String',
+    charLimit: 512,
     icon: 'fa fa-play-circle',
     alias: 'Play URL',
     isTableField:true,
   },
   duracion: {
     requiredOnForm: true,
-    type: 'Number',
+    type: 'Duration',
     icon: 'fa fa-hourglass-3',
     alias: 'Duración',
     isTableField:true,

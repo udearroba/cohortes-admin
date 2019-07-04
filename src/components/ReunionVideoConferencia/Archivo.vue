@@ -110,9 +110,13 @@ export default {
     }
   },
   methods: {
-    onAgregar (formStatus) {
-      axios.post(apiRoutes.archivosRoute, formStatus.model
-      ).then(res => {
+    onAgregar (validatedModel) {
+      if (!validatedModel.isValid) {
+        this.showErrorToast(validatedModel.message, null, true)
+        return false;
+      }
+      axios.post(apiRoutes.archivosRoute, validatedModel.model)
+      .then(res => {
         // LIMPIAR FORMULARIO
         this.$refs.modelFormComponent.clearForm()
         this.archivos.push(res.data)

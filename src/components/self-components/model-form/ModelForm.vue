@@ -85,25 +85,6 @@ export default {
       validatedModel.model = finalModel
       this.$emit('on-agregar', validatedModel)
     },
-    durationToSeconds(duration) {
-      // RegEx extraído de stackoverflow.com
-          // con título Regex pattern for HH:MM:SS time string
-          // El RegEx fue modificado
-          let pattern =
-            /^(?:(?:(\d+):)?([0-5]?\d):)?([0-5]?\d)$/
-
-          var patternGroups = duration.match(pattern)
-          if(!patternGroups)
-            return null
-          let hours = patternGroups[1]
-          let minutes = patternGroups[2]
-          let seconds = patternGroups[3]
-          hours = hours ? +hours : 0
-          minutes = minutes ? +minutes : 0
-          seconds = +seconds
-
-          return hours*60*60 + minutes*60 + seconds
-    },
     clearForm() {
       for (let key in this.model) {
         this.model[key] = ''

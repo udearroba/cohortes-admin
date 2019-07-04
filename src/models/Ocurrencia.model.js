@@ -8,6 +8,8 @@ const OcurrenciaModel =  {
   idexterno: {
     requiredOnForm: true,
     type: 'String',
+    charLimit: 100,
+    finalCondition: ['no-dash'],
     icon: 'fa fa-key',
     alias: 'Id externo',
     isTableField: true,
