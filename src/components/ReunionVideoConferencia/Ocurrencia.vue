@@ -165,13 +165,18 @@ export default {
       this.indexDato = index;
       this.$refs.edit_modal.open();
     },
-    onGuardarCambios(model){
+    onGuardarCambios(validatedModel){
+      if (!validatedModel.isValid) {
+        this.showErrorToast(validatedModel.message, null, true)
+        return false;
+      }
       let idOcurrencia = this.ocurrencias[this.indexDato].id
-      this.ocurrenciaAux = model
-      axios.patch(apiRoutes.getOcurrenciasFromId(idOcurrencia), this.ocurrenciaAux)
+      this.ocurrenciaAux = validatedModel
+      axios.patch(apiRoutes.getOcurrenciasFromId(idOcurrencia), validatedModel.model)
       .then(res => {
         delete this.ocurrencias[this.indexDato]
         let newOcurrencia = JSON.parse(JSON.stringify(this.ocurrenciaAux))
+        newOcurrencia = newOcurrencia.model
         Vue.set(this.ocurrencias, this.indexDato, newOcurrencia);
         this.showSuccessToast('Cambios guardados')
       })

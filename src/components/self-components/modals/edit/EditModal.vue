@@ -43,6 +43,8 @@
 import Vue from 'vue'
 import _ from 'lodash'
 
+import validatorService from '../../../../services/validator'
+
 export default {
   name: 'edit-modal',
   props: {
@@ -63,14 +65,38 @@ export default {
   methods: {
     onGuardarCambios() {
       let returnedModel = _.clone(this.entityData)
+
       for (let modelItem in this.model) {
         returnedModel[modelItem] = this.model[modelItem]
-        //los datos tipo Number deben ser casteados. Por defecto se agregan al modelo datos tipo String
-        if(this.entityModel[modelItem].type === "Number") {
-          returnedModel[modelItem] = +returnedModel[modelItem]
+      }
+
+      // Se guardan temporalmente los campos que no hacen parte del modelo
+      // Así se evitan errores a la hora de hacer la validación
+      let tempFields = {}
+      for (let item in returnedModel) {
+        let modelItem = this.entityModel[item]
+        if(!modelItem){
+          tempFields[item] =returnedModel[item]
+          delete returnedModel[item]
         }
-    }
-      this.$emit('cambios-guardados', returnedModel)
+        else if (!modelItem.requiredOnForm) {
+          tempFields[item] =returnedModel[item]
+          delete returnedModel[item]
+        }
+      }
+
+      // Se realiza la validación
+      let validatedModel = validatorService.checkValid(returnedModel, this.entityModel)
+
+
+      // Si el modelo es válido, se agregan de nuevo los campos que fueron eliminados para hacer la validación
+      if (validatedModel.isValid) {
+        for (let item in tempFields) {
+          validatedModel.model[item] = tempFields[item]
+        }
+      }
+
+      this.$emit('cambios-guardados', validatedModel)
     },
   },
   watch: {

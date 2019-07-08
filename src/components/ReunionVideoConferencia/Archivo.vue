@@ -161,13 +161,18 @@ export default {
       this.indexDato = index;
       this.$refs.edit_modal.open();
     },
-    onGuardarCambios(model){
+    onGuardarCambios(validatedModel){
+      if (!validatedModel.isValid) {
+        this.showErrorToast(validatedModel.message, null, true)
+        return false;
+      }
       let idArchivo = this.archivos[this.indexDato].id
-      this.archivoAux = model
-      axios.patch(apiRoutes.getArchivosFromId(idArchivo), this.archivoAux)
+      this.archivoAux = validatedModel
+      axios.patch(apiRoutes.getArchivosFromId(idArchivo), validatedModel.model)
       .then(res => {
         delete this.archivos[this.indexDato]
         let newArchivo = JSON.parse(JSON.stringify(this.archivoAux))
+        newArchivo = newArchivo.model
         Vue.set(this.archivos, this.indexDato, newArchivo);
         this.showSuccessToast('Cambios guardados')
       })

@@ -93,6 +93,8 @@ export default {
         this.showErrorToast(validatedModel.message, null, true)
         return false;
       }
+      console.log(validatedModel.model);
+
       axios.post(apiRoutes.reunionesRoute, validatedModel.model)
       .then(res => {
         this.$refs.modelFormComponent.clearForm()
@@ -161,13 +163,18 @@ export default {
     handleEditModalInitialization(editModalRef){
       this.$data.editModalRef = editModalRef
     },
-    onGuardarCambios(model){
+    onGuardarCambios(validatedModel){
+      if (!validatedModel.isValid) {
+        this.showErrorToast(validatedModel.message, null, true)
+        return false;
+      }
       let idReunion = this.reuniones[this.indexDato].id
-      this.reunionAux = model
-      axios.patch(apiRoutes.getReunionesFromId(idReunion), this.reunionAux)
+      this.reunionAux = validatedModel
+      axios.patch(apiRoutes.getReunionesFromId(idReunion), validatedModel.model)
       .then(res => {
         delete this.reuniones[this.indexDato]
         let newReunion = JSON.parse(JSON.stringify(this.reunionAux))
+        newReunion = newReunion.model
         Vue.set(this.reuniones, this.indexDato, newReunion);
         this.showSuccessToast('Cambios guardados')
       })

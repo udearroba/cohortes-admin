@@ -168,13 +168,18 @@ export default {
       this.indexDato = index;
       this.$refs.edit_modal.open();
     },
-    onGuardarCambios(model){
+    onGuardarCambios(validatedModel){
+      if (!validatedModel.isValid) {
+        this.showErrorToast(validatedModel.message, null, true)
+        return false;
+      }
       let idGrabacion = this.grabaciones[this.indexDato].id
-      this.grabacionAux = model
-      axios.patch(apiRoutes.getGrabacionesFromId(idGrabacion), this.grabacionAux)
+      this.grabacionAux = validatedModel
+      axios.patch(apiRoutes.getGrabacionesFromId(idGrabacion), validatedModel.model)
       .then(res => {
         delete this.grabaciones[this.indexDato]
         let newGrabacion = JSON.parse(JSON.stringify(this.grabacionAux))
+        newGrabacion = newGrabacion.model
         Vue.set(this.grabaciones, this.indexDato, newGrabacion);
         this.showSuccessToast('Cambios guardados')
       })

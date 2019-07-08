@@ -28,6 +28,7 @@ let validatorService = {
       }
 
       //trim elimina los espacios al comienzo y final de la cadena de caracteres
+      value = String(value)
       value = value.trim()
 
       if (entityEl.type === "String") {
