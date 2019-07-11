@@ -1,4 +1,4 @@
-let API_route="http://localhost:3000"
+let API_route="process.env.VUE_APP_ROOT_API"
 let reunionesTableName="reunionvideoconferencias"
 let ocurrenciasTableName="ocurrencias"
 let grabacionesTableName="grabaciones"
