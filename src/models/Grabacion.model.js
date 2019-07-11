@@ -9,7 +9,7 @@ const GrabacionModel =  {
     requiredOnForm: true,
     type: 'String',
     charLimit: 100,
-    finalCondition: ['no-dash'],
+    finalState: ['no-dash'],
     icon: 'fa fa-key',
     alias: 'Id externo',
     isTableField:true,
@@ -24,6 +24,7 @@ const GrabacionModel =  {
   },
   duracion: {
     requiredOnForm: true,
+    isNullable: true,
     type: 'Duration',
     icon: 'fa fa-hourglass-3',
     alias: 'Duración',

@@ -44,8 +44,8 @@ let validatorService = {
           return validatedModel
         }
 
-        let finalConditions = entityEl.finalCondition
-        if (_.indexOf(finalConditions, 'no-dash') != -1) {
+        let finalStates = entityEl.finalState
+        if (_.indexOf(finalStates, 'no-dash') != -1) {
           value = value.split('-').join('')
         }
 
@@ -58,21 +58,24 @@ let validatorService = {
         finalValue = +value
       }
       else if (entityEl.type === "_Date") {
+        //formato dd MMM aaaa hh:mm am|pm
         let pattern =
-          /^(([a-zA-Z]{3})\s(\d{1,2}),\s?(\d+))\s((\d{1,2}):(\d{2})\s?([AaPp][Mm]))$/
+        /^((\d{1,2})\s([a-zA-Z]{3})\s(\d+))\s((\d{1,2}):(\d{2})\s?([AaPp][Mm]))$/
+          //formato MMM dd, aaaa hh:mm am|pm
+          //  /^(([a-zA-Z]{3})\s(\d{1,2}),\s?(\d+))\s((\d{1,2}):(\d{2})\s?([AaPp][Mm]))$/
 
         var patternMatch = value.match(pattern)
 
         if(!patternMatch) {
           validatedModel.attrFailed = modelAttr
           validatedModel.message = `La fecha ingresada en '${entityModel[modelAttr].alias}' no tiene el formato correcto`
-          validatedModel.details = 'Formato correcto: MMM dd, aa hh:mm am|pm'
+          validatedModel.details = 'Formato correcto: dd MMM aaaa hh:mm am|pm'
           return validatedModel
         }
 
         //date
-        let _month = patternMatch[2]
-        let _day = patternMatch[3]
+        let _month = patternMatch[3]
+        let _day = patternMatch[2]
         let _year = patternMatch[4]
         //time
         let _hours = patternMatch[6]

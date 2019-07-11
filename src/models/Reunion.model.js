@@ -2,7 +2,7 @@ const ReunionModel =  {
   uuid: {
     requiredOnForm: true,
     type: 'String',
-    finalCondition: ['no-dash'],
+    finalState: ['no-dash'],
     icon: 'fa fa-key',
     alias: 'Uuid',
   },
@@ -10,7 +10,7 @@ const ReunionModel =  {
     requiredOnForm: true,
     type: 'String',
     charLimit: 100,
-    finalCondition: ['no-dash'],
+    finalState: ['no-dash'],
     icon: 'fa fa-key',
     alias: 'Id sistema externo',
     isTableField: true,
@@ -38,6 +38,7 @@ const ReunionModel =  {
   },
   createdat: {
     requiredOnForm: true,
+    isNullable: true,
     type: '_Date',
     icon: 'fa fa-calendar-o',
     alias: 'Fecha de creación',
@@ -46,6 +47,7 @@ const ReunionModel =  {
   nombre: {
     requiredOnForm: true,
     type: 'String',
+    charLimit: 128,
     icon: 'fa fa-paperclip',
     alias: 'Nombre',
     isTableField: true,

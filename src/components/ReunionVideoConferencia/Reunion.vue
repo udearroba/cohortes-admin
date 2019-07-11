@@ -93,8 +93,6 @@ export default {
         this.showErrorToast(validatedModel.message, null, true)
         return false;
       }
-      console.log(validatedModel.model);
-
       axios.post(apiRoutes.reunionesRoute, validatedModel.model)
       .then(res => {
         this.$refs.modelFormComponent.clearForm()
