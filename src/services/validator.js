@@ -61,8 +61,6 @@ let validatorService = {
         //formato dd MMM aaaa hh:mm am|pm
         let pattern =
         /^((\d{1,2})\s([a-zA-Z]{3})\s(\d+))\s((\d{1,2}):(\d{2})\s?([AaPp][Mm]))$/
-          //formato MMM dd, aaaa hh:mm am|pm
-          //  /^(([a-zA-Z]{3})\s(\d{1,2}),\s?(\d+))\s((\d{1,2}):(\d{2})\s?([AaPp][Mm]))$/
 
         var patternMatch = value.match(pattern)
 
