@@ -189,6 +189,21 @@
                       <i class="bar"></i>
                     </div>
                   </div>
+                  <!---------------------------- TEST DATEPICKER -->
+                  <div class="form-group">
+                    <div class="input-group">
+                      <vuestic-date-picker
+                        id="date-picker-test"
+                        :config="{locale: 'es', allowInput:true, altInput: true, altFormat: 'd M Y h:i K', enableTime: true}"
+                        v-model="datepicker.time"
+                      />
+                      <label class="control-label" for="date-picker-test">
+                        TEST DATEPICKER
+                      </label>
+                      <i class="bar"></i>
+                    </div>
+                  </div>
+
                 </fieldset>
               </div>
               <div class="flex md4">

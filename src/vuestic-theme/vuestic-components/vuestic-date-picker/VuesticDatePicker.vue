@@ -9,6 +9,10 @@
 </template>
 
 <script>
+import flatpickr from "flatpickr";
+import { Espanish } from "flatpickr/dist/l10n/es.js"
+flatpickr.localize(Espanish); // default locale is now Espanish
+// import VueflatPickr from 'vue-flatpickr-component'
 import VueFlatpickrComponent from 'vue-flatpickr-component'
 
 export default {

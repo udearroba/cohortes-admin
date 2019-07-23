@@ -89,6 +89,7 @@ export default {
   },
   methods: {
     onAgregar (validatedModel) {
+      //el componente formulario es quien se encarga de validarlo
       if (!validatedModel.isValid) {
         this.showErrorToast(validatedModel.message, null, true)
         return false;

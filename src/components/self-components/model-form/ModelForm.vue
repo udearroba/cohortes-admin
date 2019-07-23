@@ -7,7 +7,22 @@
           <template
           v-for="(value, name) in formModel">
             <div class="form-group with-icon-left" v-bind:key="name">
-              <template>
+              <template v-if="value.type == '_Date'">
+                <div class="form-group input-group date-input">
+                    <div class="input-group">
+                      <vuestic-date-picker
+                        id=model[name]
+                        :config="{dateFormat: 'd M Y h:i K', locale: 'es', allowInput:true, altInput: true, altFormat: 'd M Y h:i K', enableTime: true}"
+                        v-model="model[name]"
+                      />
+                      <label class="control-label" for=model[name]>
+                        {{ value.alias }}
+                      </label>
+                      <i class="bar"></i>
+                    </div>
+                  </div>
+              </template>
+              <template v-else>
                 <div class="input-group">
                   <input
                   :name = "name"
@@ -66,8 +81,8 @@ export default {
   },
   methods: {
     onAgregar() {
-
-      let validatedModel = validatorService.checkValid(this.model, this.entityModel)
+      let rawModel = this.model
+      let validatedModel = validatorService.checkValid(rawModel, this.entityModel)
 
       // si el modelo no es válido, entonces no se sigue con el proceso
       if (!validatedModel.isValid) {
