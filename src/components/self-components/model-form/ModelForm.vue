@@ -8,13 +8,15 @@
           v-for="(value, name) in formModel">
             <div class="form-group with-icon-left" v-bind:key="name">
               <template v-if="value.type == '_Date'">
-                <div class="form-group input-group date-input">
+                <div class="input-group date-input">
                     <div class="input-group">
                       <vuestic-date-picker
                         id=model[name]
-                        :config="{dateFormat: 'd M Y h:i K', locale: 'es', allowInput:true, altInput: true, altFormat: 'd M Y h:i K', enableTime: true}"
+                        :config="configPicker"
                         v-model="model[name]"
                       />
+                      <i v-bind:class="value.icon"
+                      class="icon-left input-icon"></i>
                       <label class="control-label" for=model[name]>
                         {{ value.alias }}
                       </label>
@@ -77,6 +79,13 @@ export default {
       model: {},
       formModel: {},
       foreignKeys: {},
+      configPicker: {
+        altInput: true,
+        altFormat: 'd M Y h:i K',
+        dateFormat: 'd M Y h:i K',
+        allowInput: true,
+        enableTime: true,
+        },
     }
   },
   methods: {
@@ -122,6 +131,11 @@ export default {
       if(this.entityModel[modelAttr].requiredOnForm) {
         this.formModel[modelAttr] = this.entityModel[modelAttr]
         Vue.set(this.model, modelAttr, null);
+
+        //a los campos tipo fecha se les asigna automáticamente la fecha actual
+        if (this.entityModel[modelAttr].type == "_Date") {
+          Vue.set(this.model, modelAttr, new Date());
+        }
       }
       //los campos que son llaves foráneas tienen un campo foreignKey = true
       if(this.entityModel[modelAttr].foreignKey) {
