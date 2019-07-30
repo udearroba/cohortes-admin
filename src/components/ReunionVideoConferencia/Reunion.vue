@@ -17,6 +17,7 @@
           <model-table
           :tableFields="tableFields"
           :tableData="reuniones"
+          :entityModel="modeloReunion"
           @addClicked="onAddClicked"
           @detailsClicked="onDetailsClicked"
           @editClicked="onEditClicked"

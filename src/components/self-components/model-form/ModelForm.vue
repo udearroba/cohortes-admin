@@ -134,7 +134,9 @@ export default {
 
         //a los campos tipo fecha se les asigna automáticamente la fecha actual
         if (this.entityModel[modelAttr].type == "_Date") {
-          Vue.set(this.model, modelAttr, new Date());
+          let dateFilter = this.$options.filters.date
+          let initialDate = dateFilter(new Date())
+          Vue.set(this.model, modelAttr, initialDate);
         }
       }
       //los campos que son llaves foráneas tienen un campo foreignKey = true

@@ -29,6 +29,7 @@
           <model-table
           :tableFields="tableFields"
           :tableData="ocurrencias"
+          :entityModel="modeloOcurrencia"
           @addClicked="onAddClicked"
           @detailsClicked="onDetailsClicked"
           @editClicked="onEditClicked"

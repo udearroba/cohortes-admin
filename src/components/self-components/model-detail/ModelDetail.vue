@@ -7,7 +7,7 @@
           v-bind:class="value.icon"
           class="info-icon">
         </i>
-        <span>{{value.alias}}: {{entityData[name]}}</span>
+        <span><span class="value">{{value.alias}}:</span> {{entityData[name]}}</span>
       </div>
     </template>
   </div>
@@ -53,4 +53,8 @@ export default {
 </script>
 
 <style lang="scss">
+  span.value {
+    font-weight: bold;
+    color: $darkest-gray;
+  }
 </style>
