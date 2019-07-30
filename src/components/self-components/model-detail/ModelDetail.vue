@@ -7,7 +7,8 @@
           v-bind:class="value.icon"
           class="info-icon">
         </i>
-        <span><span class="value">{{value.alias}}:</span> {{entityData[name]}}</span>
+        <span class="value">{{value.alias}}:</span>
+         <span>{{dataComputed[name]}}</span>
       </div>
     </template>
   </div>
@@ -49,6 +50,28 @@ export default {
       // }
     }
   },
+  computed: {
+    dataComputed(){
+      let _dataComputed = _.clone(this.entityData)
+
+      //Aquí se hacen los filtros o procesos necesarios a los datos antes de mostrarlos
+      for (let [key, value] of Object.entries(_dataComputed)) {
+          let modelAttr = this.model[key]
+          if(!modelAttr){
+            continue
+          }
+          let modelAttr_type = this.model[key].type
+          let filters = this.$options.filters
+          if(modelAttr_type === "_Date") {
+            let dateFilter = filters.date
+            _dataComputed[key] = dateFilter(value)
+          } else {
+            _dataComputed[key] = value
+          }
+      }
+      return _dataComputed
+    }
+  }
 }
 </script>
 

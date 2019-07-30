@@ -103,7 +103,6 @@ export default {
           if (value.type === '_Date')
             arrayDates.push(key)
       }
-      // console.log(arrayDates)
       let dateFilter = this.$options.filters.date
       for (let i = 0; i < tableDataComputed.length; i++) {
         for (let j = 0; j < arrayDates.length; j++) {

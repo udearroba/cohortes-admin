@@ -1,6 +1,5 @@
 export default (value) => {
   const date = new Date(value)
-  // console.log(value);
 
   let months = [
     'Ene','Feb','Mar','Abr','May','Jun',
@@ -35,12 +34,7 @@ export default (value) => {
     minutes = `0${_minutes}`
   }
   // ---
-
-
   let formattedDate = `${day} ${month} ${year} ${hours}:${minutes} ${acronym}`
-  // console.log('formattedDate');
-  // console.log(formattedDate);
-
 
   return formattedDate
 }
