@@ -80,6 +80,7 @@ export default {
       formModel: {},
       foreignKeys: {},
       configPicker: {
+        locale: 'es',
         altInput: true,
         altFormat: 'd M Y h:i K',
         dateFormat: 'd M Y h:i K',

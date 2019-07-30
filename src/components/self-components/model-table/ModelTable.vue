@@ -97,6 +97,10 @@ export default {
       return this.tableFields
     },
     tableDataComputed() {
+      if(!this.entityModel){
+        //si un modelo no es pasado al componente, entonces no se hace ningún tipo de filtro a los datos
+        return this.tableData
+      }
       let tableDataComputed = _.cloneDeep(this.tableData)
       let arrayDates = []
       for (let [key, value] of Object.entries(this.entityModel)) {
