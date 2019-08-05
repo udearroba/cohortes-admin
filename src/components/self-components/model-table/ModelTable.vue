@@ -107,12 +107,23 @@ export default {
           if (value.type === '_Date')
             arrayDates.push(key)
       }
+      let arrayDurations = []
+      for (let [key, value] of Object.entries(this.entityModel)) {
+          if (value.type === 'Duration')
+            arrayDurations.push(key)
+      }
       let dateFilter = this.$options.filters.date
+      let durationFilter = this.$options.filters.duration
       for (let i = 0; i < tableDataComputed.length; i++) {
         for (let j = 0; j < arrayDates.length; j++) {
           let dateOld = tableDataComputed[i][arrayDates[j]]
           let formattedDate = dateFilter(dateOld)
           tableDataComputed[i][arrayDates[j]] = formattedDate
+        }
+        for (let k = 0; k < arrayDurations.length; k++) {
+          let durationOld = tableDataComputed[i][arrayDurations[k]]
+          let formattedDuration = durationFilter(durationOld)
+          tableDataComputed[i][arrayDurations[k]] = formattedDuration
         }
       }
       return tableDataComputed

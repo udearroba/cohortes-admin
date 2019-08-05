@@ -65,7 +65,10 @@ export default {
           if(modelAttr_type === "_Date") {
             let dateFilter = filters.date
             _dataComputed[key] = dateFilter(value)
-          } else {
+          } else if(modelAttr_type === "Duration") {
+            let filter = filters.duration
+            _dataComputed[key] = filter(value)
+          }else {
             _dataComputed[key] = value
           }
       }

@@ -13,11 +13,13 @@ import VuesticPlugin from '@/vuestic-theme/vuestic-plugin'
 import './i18n'
 import YmapPlugin from 'vue-yandex-maps'
 import DateFilter from './filters/date.filter'
+import DurationFilter from './filters/duration.filter'
 
 Vue.use(VuesticPlugin)
 Vue.use(YmapPlugin)
 
 Vue.filter('date', DateFilter)
+Vue.filter('duration', DurationFilter)
 
 // NOTE: workaround for VeeValidate + vuetable-2
 Vue.use(VeeValidate, { fieldsBagName: 'formFields' })
