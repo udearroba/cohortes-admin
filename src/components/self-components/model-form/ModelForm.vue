@@ -24,6 +24,23 @@
                     </div>
                   </div>
               </template>
+              <template v-else-if="value.type == 'Duration'">
+                <div class="input-group date-input">
+                    <div class="input-group">
+                      <vuestic-date-picker
+                        id=model[name]
+                        :config="configDurationPicker"
+                        v-model="model[name]"
+                      />
+                      <i v-bind:class="value.icon"
+                      class="icon-left input-icon"></i>
+                      <label class="control-label" for=model[name]>
+                        {{ value.alias }}
+                      </label>
+                      <i class="bar"></i>
+                    </div>
+                  </div>
+              </template>
               <template v-else>
                 <div class="input-group">
                   <input
@@ -87,6 +104,18 @@ export default {
         allowInput: true,
         enableTime: true,
         },
+      configDurationPicker: {
+        noCalendar: true,
+        time_24hr: true,
+        altInput: true,
+        altFormat: 'H:i:S',
+        dateFormat: 'H:i:S',
+        maxTime: '10:00',
+        defaultHour: '1',
+        enableSeconds: true,
+        allowInput: true,
+        enableTime: true,
+        },
     }
   },
   methods: {
@@ -112,7 +141,19 @@ export default {
     },
     clearForm() {
       for (let key in this.model) {
-        this.model[key] = ''
+        let type = this.entityModel[key].type
+        if (type == "_Date") {
+          let dateFilter = this.$options.filters.date
+          let initialValue = dateFilter(new Date())
+          this.model[key] = initialValue
+        }
+        else if (type == "Duration") {
+          let dateFilter = this.$options.filters.date
+          let initialValue = dateFilter(new Date())
+          this.model[key] = '1:30:00'
+        } else {
+          this.model[key] = ''
+        }
       }
     },
   },
@@ -133,11 +174,17 @@ export default {
         this.formModel[modelAttr] = this.entityModel[modelAttr]
         Vue.set(this.model, modelAttr, null);
 
-        //a los campos tipo fecha se les asigna automáticamente la fecha actual
+        //a los campos tipo '_Date' se les asigna automáticamente la fecha actual
         if (this.entityModel[modelAttr].type == "_Date") {
           let dateFilter = this.$options.filters.date
           let initialDate = dateFilter(new Date())
           Vue.set(this.model, modelAttr, initialDate);
+        }
+        //a los campos tipo 'Duration' se les asigna automáticamente un valor inicial de una hora y media
+        else if (this.entityModel[modelAttr].type == "Duration") {
+          let dateFilter = this.$options.filters.date
+          let initialDate = dateFilter(new Date())
+          Vue.set(this.model, modelAttr, "1:30:00");
         }
       }
       //los campos que son llaves foráneas tienen un campo foreignKey = true
