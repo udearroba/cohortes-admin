@@ -8,22 +8,30 @@
   >
   <template slot="actions" scope="props">
       <div class="custom-actions">
-        <i v-if="!noLinkAction"
+        <udea-tooltip :message="'Agregar registro'">
+          <i v-if="!noLinkAction"
           class="fa fa-plus success-icon"
           @click="onAdd(props.rowData, props.rowIndex)">
-        </i>
-        <i
-          class="fa fa-eye info-icon"
-          @click="onDetails(props.rowData, props.rowIndex)">
-        </i>
-        <i
-          class="fa fa-pencil info-icon"
-          @click="onEdit(props.rowData, props.rowIndex)">
-        </i>
-        <i
-          class="fa fa-minus error-icon"
-          @click="onDelete(props.rowData, props.rowIndex)">
-        </i>
+          </i>
+        </udea-tooltip>
+        <udea-tooltip :message="'Ver detalles'">
+          <i
+            class="fa fa-eye info-icon"
+            @click="onDetails(props.rowData, props.rowIndex)">
+          </i>
+        </udea-tooltip>
+        <udea-tooltip :message="'Editar registro'">
+          <i
+            class="fa fa-pencil info-icon"
+            @click="onEdit(props.rowData, props.rowIndex)">
+          </i>
+        </udea-tooltip>
+        <udea-tooltip :message="'Eliminar registro'">
+          <i
+            class="fa fa-minus error-icon"
+            @click="onDelete(props.rowData, props.rowIndex)">
+          </i>
+        </udea-tooltip>
       </div>
     </template>
   </vuetable>
@@ -36,12 +44,15 @@ import DefaultPerPageDefinition from
 import DataTableStyles from
 '../../../vuestic-theme/vuestic-components/vuestic-datatable/data/data-table-styles'
 
+import UdeaTooltip from '../ui/udea-tooltip/UdeaTooltip'
+
 import _ from 'lodash'
 
 export default {
   name: 'model-table',
   components: {
     Vuetable,
+    UdeaTooltip,
   },
   props: {
     tableFields: {
@@ -70,6 +81,11 @@ export default {
       css: DataTableStyles,
       loading: false,
       noDataTemplate: '',
+      tooltipOptions: {
+        content: 'Agregar registro',
+        placement: 'top',
+        delay: { show: 500, hide: 100 },
+      },
     }
   },
   methods: {
