@@ -2,15 +2,15 @@
   <vuestic-navbar>
     <header-selector slot="selector" :isOpen.sync="valueProxy"/>
     <span slot="logo">
-      <vuestic-icon-vuestic/>
+      <cohortes-icon/>
     </span>
   </vuestic-navbar>
 
 </template>
 
 <script>
-import VuesticIconVuestic
-  from '../../../vuestic-theme/vuestic-components/vuestic-icon/VuesticIconVuestic'
+import CohortesIcon
+  from '../../self-components/ui/cohortes-icon/CohortesIcon'
 import VuesticNavbar
   from '../../../vuestic-theme/vuestic-components/vuestic-navbar/VuesticNavbar'
 import HeaderSelector from './components/HeaderSelector'
@@ -24,7 +24,7 @@ export default {
   name: 'app-navbar',
 
   components: {
-    VuesticIconVuestic,
+    CohortesIcon,
     VuesticNavbar,
     HeaderSelector,
     MessageDropdown,
