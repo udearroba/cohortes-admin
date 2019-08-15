@@ -2,7 +2,7 @@
   <svg
       class="cohortes-logo"
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 450 50"
+      viewBox="0 0 450 70"
       width="150"
     >
       <path

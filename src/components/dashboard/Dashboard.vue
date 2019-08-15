@@ -2,7 +2,6 @@
   <div class="dashboard">
 
     <dashboard-info-widgets></dashboard-info-widgets>
-    <p @click="launchEpicmaxToast()">launch toast</p>
     <vuestic-widget class="no-padding no-v-padding">
       <vuestic-tabs
         :names="[$t('dashboard.dataVisualization'), $t('dashboard.usersAndMembers'), $t('dashboard.setupProfile'), $t('dashboard.features')]"
@@ -45,21 +44,6 @@ export default {
     SetupProfileTab,
     FeaturesTab,
     DashboardBottomWidgets,
-  },
-
-  methods: {
-    launchEpicmaxToast () {
-      this.showToast(`Let's work together!`, {
-        icon: 'fa-star-o',
-        position: 'top-right',
-        duration: Infinity,
-        action: {
-          text: 'Hire us',
-          href: 'http://epicmax.co/#/contact',
-          class: 'vuestic-toasted-link',
-        },
-      })
-    },
   },
 }
 

@@ -33,7 +33,7 @@ export default new Router({
     ...demoRoutes,
     {
       path: '*',
-      redirect: { name: 'dashboard' },
+      redirect: { name: 'home' },
     },
     {
       path: '/auth',
@@ -87,9 +87,9 @@ export default new Router({
       component: AppLayout,
       children: [
         {
-          name: 'dashboard',
-          path: 'dashboard',
-          component: lazyLoading('dashboard/Dashboard'),
+          name: 'home',
+          path: 'home',
+          component: lazyLoading('self-components/home/Home'),
           default: true,
         },
         {

@@ -2,7 +2,7 @@
   <vuestic-sidebar :hidden="isOpen">
     <template slot="menu">
       <sidebar-link
-        :to="{ name: 'dashboard' }">
+        :to="{ name: 'home' }">
         <span slot="title">
           <span
             class="sidebar-menu-item-icon vuestic-icon vuestic-icon-dashboard"></span>
