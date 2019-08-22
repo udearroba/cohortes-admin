@@ -1,4 +1,4 @@
-const OcurrenciaModel =  {
+const OcurrenciaModel = {
   reunionvideoconferenciaId: {
     requiredOnForm: false,
     type: 'Number',
@@ -9,7 +9,7 @@ const OcurrenciaModel =  {
     requiredOnForm: true,
     type: 'String',
     charLimit: 100,
-    finalCondition: ['no-dash'],
+    finalState: ['no-dash'],
     icon: 'fa fa-key',
     alias: 'Id externo',
     isTableField: true,
@@ -31,6 +31,7 @@ const OcurrenciaModel =  {
   status: {
     requiredOnForm: true,
     type: 'String',
+    charLimit: 45,
     icon: 'fa fa-check-square',
     alias: 'Estado',
     isTableField: true,
