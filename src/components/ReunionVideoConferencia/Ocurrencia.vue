@@ -7,6 +7,7 @@
         <model-form ref="modelFormComponent"
         :entityModel="modeloOcurrencia"
         :foreignKey="id"
+        :parentData="datosReunion"
         @on-agregar="onAgregar">
         </model-form>
       </div>

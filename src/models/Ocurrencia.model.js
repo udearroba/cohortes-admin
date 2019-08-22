@@ -9,6 +9,10 @@ const OcurrenciaModel = {
     requiredOnForm: true,
     type: 'String',
     charLimit: 100,
+    initialState:
+      {
+        'prev': 'idsistemaexterno'
+      },
     finalState: ['no-dash'],
     icon: 'fa fa-key',
     alias: 'Id externo',
