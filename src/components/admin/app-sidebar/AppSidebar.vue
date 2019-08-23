@@ -17,6 +17,21 @@
           <span>{{ $t('Reuniones') }}</span>
         </span>
       </sidebar-link>
+      <sidebar-link-group>
+        <span slot="title">
+          <span
+            class="sidebar-menu-item-icon vuestic-icon vuestic-icon-forms"></span>
+          <span>{{ $t('menu.forms') }}</span>
+        </span>
+      <sidebar-link
+		:to="{ name: 'curaduria' }">
+		<span slot="title">
+			<span
+			class="sidebar-menu-item-icon vuestic-icon vuestic-icon-forms"></span>
+			<span>{{ $t('Formularios de Curadurias') }}</span>
+		</span>
+	</sidebar-link>
+      </sidebar-link-group>
     </template>
   </vuestic-sidebar>
 </template>
