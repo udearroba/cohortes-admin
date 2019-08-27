@@ -14,6 +14,7 @@
                         id=model[name]
                         :config="configPicker"
                         v-model="model[name]"
+                        @blur="blurDatePickerMethod(name, $event)"
                       />
                       <i v-bind:class="value.icon"
                       class="icon-left input-icon"></i>
@@ -31,6 +32,7 @@
                         id=model[name]
                         :config="configDurationPicker"
                         v-model="model[name]"
+                        @blur="blurDurationPickerMethod(name, $event)"
                       />
                       <i v-bind:class="value.icon"
                       class="icon-left input-icon"></i>
@@ -119,6 +121,35 @@ export default {
     }
   },
   methods: {
+    blurDatePickerMethod(name, value) {
+      let pattern =
+        /^((\d{1,2})\s([a-zA-Z]{3})\s(\d+))\s((\d{1,2}):(\d{2})\s?([AaPp][Mm]))$/
+
+      let patternMatch = value.match(pattern)
+
+      if (!patternMatch) {
+        this.model[name] = new Date()
+        return
+      }
+
+      let month = patternMatch[3]
+      let newMonth = _.capitalize(month)
+      let newDate = value.replace(month, newMonth)
+      this.model[name] = newDate
+    },
+    blurDurationPickerMethod(name, value) {
+      let pattern =
+        /^(?:(?:(\d+):)?([0-5]?\d):)?([0-5]?\d)$/
+
+      let patternMatch = value.match(pattern)
+      let newValue = value
+
+      if (!patternMatch) {
+        newValue = '01:30'
+      }
+
+      this.model[name] = newValue
+    },
     onAgregar() {
       let rawModel = this.model
       let validatedModel = validatorService.checkValid(rawModel, this.entityModel)
