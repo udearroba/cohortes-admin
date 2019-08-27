@@ -14,6 +14,7 @@
                         id=model[name]
                         :config="configPicker"
                         v-model="model[name]"
+                        @blur="blurDatePickerMethod(name, $event)"
                       />
                       <i v-bind:class="value.icon"
                       class="icon-left input-icon"></i>
@@ -31,6 +32,7 @@
                         id=model[name]
                         :config="configDurationPicker"
                         v-model="model[name]"
+                        @blur="blurDurationPickerMethod(name, $event)"
                       />
                       <i v-bind:class="value.icon"
                       class="icon-left input-icon"></i>
@@ -89,7 +91,11 @@ export default {
     headerText: {
       type: String,
       required: false,
-    }
+    },
+    parentData: {
+      type: Object,
+      required: false,
+    },
   },
   data () {
     return {
@@ -119,6 +125,35 @@ export default {
     }
   },
   methods: {
+    blurDatePickerMethod(name, value) {
+      let pattern =
+        /^((\d{1,2})\s([a-zA-Z]{3})\s(\d+))\s((\d{1,2}):(\d{2})\s?([AaPp][Mm]))$/
+
+      let patternMatch = value.match(pattern)
+
+      if (!patternMatch) {
+        this.model[name] = new Date()
+        return
+      }
+
+      let month = patternMatch[3]
+      let newMonth = _.capitalize(month)
+      let newDate = value.replace(month, newMonth)
+      this.model[name] = newDate
+    },
+    blurDurationPickerMethod(name, value) {
+      let pattern =
+        /^(?:(?:(\d+):)?([0-5]?\d):)?([0-5]?\d)$/
+
+      let patternMatch = value.match(pattern)
+      let newValue = value
+
+      if (!patternMatch) {
+        newValue = '01:30'
+      }
+
+      this.model[name] = newValue
+    },
     onAgregar() {
       let rawModel = this.model
       let validatedModel = validatorService.checkValid(rawModel, this.entityModel)
@@ -165,10 +200,56 @@ export default {
       return 'Agregar ' + this.entityModel._metadata.alias
     }
   },
+  watch: {
+    parentData() {
+      // aquí solo se asignan los valores iniciales DINÁMICOS basados en los datos del modelo anterior
+      for (let modelAttr in this.entityModel) {
+        if(this.entityModel[modelAttr].initialState){
+          let initialStateObject = this.entityModel[modelAttr].initialState
+          let initialValue = '';
+          if (Object.keys(initialStateObject)[0] === "prev") {
+            let prevValue = initialStateObject['prev']
+            initialValue = this.parentData[prevValue]
+          }
+          Vue.set(this.model, modelAttr, initialValue);
+        }
+      }
+    },
+  },
   created() {
     // Aquí se procesa el modelo para transformalo.
     // Se separan los campos necesarios para el formulario final y las llaves foráneas
     for (let modelAttr in this.entityModel) {
+
+      // Se mira si hay datos que inician con un valor solicitado...
+      // este valor puede ser estático o dinámico...
+      // aquí solo se asignan los valores iniciales ESTÁTICOS
+
+
+      /*
+      if(this.entityModel[modelAttr].initialState){
+        let initialValue = '';
+        for (let [key, value] of Object.entries(this.entityModel[modelAttr].initialState)) {
+          if(typeof value === "object") {
+            let initialStateObject = value
+            if (Object.keys(initialStateObject)[0] === "auto") {
+              let autoValue = initialStateObject['auto'];
+              if (Object.keys(autoValue)[0] != "prev") {
+                // si 'autoValue' NO es 'prev' quiere decir que el valor automático de este campo es estático...
+                // puesto que no requiere de valores previos. Puede ser asignado aquí.
+              }
+            }
+          }
+          if(typeof value === "string") {
+
+          }
+          Vue.set(this.model, modelAttr, initialValue);
+        }
+      }
+      */
+
+
+
       //los campos necesarios en el formulario tienen un campo requiredOnForm = true
       if(this.entityModel[modelAttr].requiredOnForm) {
         this.formModel[modelAttr] = this.entityModel[modelAttr]
