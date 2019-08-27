@@ -3,16 +3,24 @@ let reunionesTableName="reunionvideoconferencias"
 let ocurrenciasTableName="ocurrencias"
 let grabacionesTableName="grabaciones"
 let archivosTableName="archivos"
+let formulariosTableName="formularios"
+let respuestasTableName="respuestas"
+
 let reunionesRoute=`${API_route}/${reunionesTableName}`
 let ocurrenciasRoute=`${API_route}/${ocurrenciasTableName}`
 let grabacionesRoute=`${API_route}/${grabacionesTableName}`
 let archivosRoute=`${API_route}/${archivosTableName}`
+let formulariosRoute=`${API_route}/${formulariosTableName}`
+let respuestasRoute=`${API_route}/${respuestasTableName}`
 
 let apiRoutes =  {
   reunionesRoute: reunionesRoute,
   grabacionesRoute: grabacionesRoute,
   ocurrenciasRoute: ocurrenciasRoute,
   archivosRoute: archivosRoute,
+  formulariosRoute: formulariosRoute,
+  respuestasRoute: respuestasRoute,
+
   getReunionesFromId: function(idReunion) {
     return `${reunionesRoute}/${idReunion}`
   },
@@ -33,6 +41,13 @@ let apiRoutes =  {
   },
   getArchivosFromIdGrabacion: function(idGrabacion) {
     return `${grabacionesRoute}/${idGrabacion}/${archivosTableName}`
+  },getFormulariosFromId: function(idFormulario) {
+    return `${formulariosRoute}/${idFormulario}`
+  },
+  getRespuestasFromId: function(idRespuestas) {
+    return `${respuestasRoute}/${idRespuestas}`
+  },getRespuestasFromIdFormulario: function(idFormulario) {
+    return `${formulariosRoute}/${idFormulario}/${respuestasTableName}`
   },
 }
 

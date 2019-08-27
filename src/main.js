@@ -15,8 +15,23 @@ import YmapPlugin from 'vue-yandex-maps'
 import DateFilter from './filters/date.filter'
 import DurationFilter from './filters/duration.filter'
 
+//Vue form-generator
+import VueFormGenerator from 'vue-form-generator'
+import 'vue-form-generator/dist/vfg.css'
+
+//Vue field matrix import
+import VfgFieldMatrix from 'vfg-field-matrix'
+Vue.component("field-matrix", VfgFieldMatrix);
+
+
 Vue.use(VuesticPlugin)
 Vue.use(YmapPlugin)
+
+//use Vue form-geenrator
+Vue.use(VueFormGenerator)
+
+//Vue field matrix use
+Vue.use(VfgFieldMatrix)
 
 Vue.filter('date', DateFilter)
 Vue.filter('duration', DurationFilter)

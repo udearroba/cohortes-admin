@@ -26,6 +26,19 @@ export const breadcrumbs = {
         },
 
       ],
+    },{
+      name: 'curaduria',
+      displayName: 'curaduria',
+      children: [
+        {
+          name: 'respuestas',
+          displayName: 'Formulario',
+        },{
+          name: 'table_respuestas',
+          displayName: 'Respuestas Diligenciadas',
+        },
+
+      ],
     },
     {
       name: 'statistics',

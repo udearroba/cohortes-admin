@@ -111,6 +111,18 @@ export default new Router({
           name: 'archivo',
           path: 'reuniones/:reunionId/ocurrencias/:ocurrenciaId/grabaciones/:grabacionId/archivos',
           component: lazyLoading('ReunionVideoConferencia/Archivo'),
+        },{
+          name: 'curaduria',
+          path: 'form-generator',
+          component: lazyLoading('FormGenerator/Formulario'),
+        },{
+          name: 'respuestas',
+          path: 'respuestas',
+          component: lazyLoading('FormGenerator/Respuestas'),
+        },{
+          name: 'table_respuestas',
+          path: 'table_respuestas',
+          component: lazyLoading('FormGenerator/TableRespuestas'),
         },
       ],
     },
