@@ -1,4 +1,4 @@
-const ArchivoModel =  {
+const ArchivoModel = {
   grabacionId: {
     requiredOnForm: false,
     type: 'Number',
@@ -9,6 +9,10 @@ const ArchivoModel =  {
     requiredOnForm: true,
     type: 'String',
     charLimit: 100,
+    initialState:
+      {
+        'prev': 'idexterno'
+      },
     finalState: ['no-dash'],
     icon: 'fa fa-key',
     alias: 'Id externo',

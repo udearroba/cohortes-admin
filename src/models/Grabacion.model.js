@@ -1,4 +1,4 @@
-const GrabacionModel =  {
+const GrabacionModel = {
   ocurrenciaId: {
     requiredOnForm: false,
     type: 'Number',
@@ -9,10 +9,14 @@ const GrabacionModel =  {
     requiredOnForm: true,
     type: 'String',
     charLimit: 100,
+    initialState:
+      {
+        'prev': 'idexterno'
+      },
     finalState: ['no-dash'],
     icon: 'fa fa-key',
     alias: 'Id externo',
-    isTableField:true,
+    isTableField: true,
   },
   playurl: {
     requiredOnForm: true,
@@ -20,7 +24,7 @@ const GrabacionModel =  {
     charLimit: 512,
     icon: 'fa fa-play-circle',
     alias: 'Play URL',
-    isTableField:true,
+    isTableField: true,
   },
   duracion: {
     requiredOnForm: true,
@@ -28,7 +32,7 @@ const GrabacionModel =  {
     type: 'Duration',
     icon: 'fa fa-hourglass-3',
     alias: 'Duración',
-    isTableField:true,
+    isTableField: true,
   },
   _metadata: {
     requiredOnForm: false,
