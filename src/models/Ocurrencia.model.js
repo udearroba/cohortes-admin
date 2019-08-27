@@ -36,6 +36,10 @@ const OcurrenciaModel = {
     requiredOnForm: true,
     type: 'String',
     charLimit: 45,
+    initialState:
+    {
+      'static': 'FINALIZADO'
+    },
     icon: 'fa fa-check-square',
     alias: 'Estado',
     isTableField: true,
