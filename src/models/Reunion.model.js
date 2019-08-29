@@ -19,6 +19,13 @@ const ReunionModel =  {
     requiredOnForm: true,
     type: 'String',
     charLimit: 512,
+    initialState:
+    {
+      'static-plus': {
+        static: 'https://udearroba.zoom.us/j/',
+        plus: 'uuid',
+      }
+    },
     icon: 'fa fa-link',
     alias: 'URL join',
   },
