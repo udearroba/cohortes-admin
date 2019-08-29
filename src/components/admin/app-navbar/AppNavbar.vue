@@ -4,6 +4,7 @@
     <span slot="logo">
       <cohortes-icon/>
     </span>
+    <span id="version-view">v 1.3</span>
   </vuestic-navbar>
 
 </template>
@@ -50,3 +51,14 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+  #version-view {
+    font-size: 0.85em;
+    color: $gray-light;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    margin-right: -12px;
+  }
+</style>
