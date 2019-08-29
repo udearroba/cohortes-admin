@@ -21,7 +21,7 @@
         <span slot="title">
           <span
             class="sidebar-menu-item-icon vuestic-icon vuestic-icon-forms"></span>
-          <span>{{ $t('menu.forms') }}</span>
+          <span>{{ $t('Curaduria') }}</span>
         </span>
       <sidebar-link
 		:to="{ name: 'curaduria' }">

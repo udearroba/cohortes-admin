@@ -62,7 +62,7 @@
 					body: {
 						id: 0,
 						formularioId: this.$route.params.formularioId,					 
-						fechaHora: new Date()
+						//fechaHora: new Date()
 					},
 
 					schema: {},
@@ -167,6 +167,17 @@ new_fields = JSON.parse(JSON.stringify(new_section.fields));
 for(var i=0; i< new_fields.length; i++){
 	new_fields[i].model = new_fields[i].model + "_" + new_section.id;
 	new_fields[i].label = new_fields[i].label + " (" + new_section.id + ")";
+
+if(new_fields[i].questions){
+
+for(var j=0; j< new_fields[i].questions.length; j++){
+
+	new_fields[i].questions[j].name = new_fields[i].questions[j].name + " (" + new_section.id + ")";
+	new_fields[i].questions[j].id = new_fields[i].questions[j].id + "_" + new_section.id;
+}
+
+}
+
 
 }
 
