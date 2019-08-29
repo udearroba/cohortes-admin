@@ -49,6 +49,15 @@ let validatorService = {
           value = value.split('-').join('')
         }
 
+        let initialStates = entityEl.initialState
+        if (typeof initialStates !== 'undefined') {
+          let staticValue = initialStates['static-plus'].static
+          let plusAttr = initialStates['static-plus'].plus
+          let plusValue = dataModel[plusAttr]
+          plusValue = plusValue.split('-').join('')
+          value = staticValue + plusValue
+        }
+
         finalValue = value
       }
       else if (entityEl.type === "Number") {
