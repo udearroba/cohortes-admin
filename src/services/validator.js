@@ -50,7 +50,8 @@ let validatorService = {
         }
 
         let initialStates = entityEl.initialState
-        if (typeof initialStates !== 'undefined') {
+        if (typeof initialStates !== 'undefined'
+        && typeof initialStates['static-plus'] !== 'undefined') {
           let staticValue = initialStates['static-plus'].static
           let plusAttr = initialStates['static-plus'].plus
           let plusValue = dataModel[plusAttr]

@@ -4,7 +4,7 @@
     <span slot="logo">
       <cohortes-icon/>
     </span>
-    <span id="version-view">v 1.3</span>
+    <span id="version-view">v 1.3.1</span>
   </vuestic-navbar>
 
 </template>
