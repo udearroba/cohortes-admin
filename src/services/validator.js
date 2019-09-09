@@ -174,39 +174,40 @@ let validatorService = {
           finalValue = hours*60*60 + minutes*60 + seconds
       }
       else if (entityEl.type === "ByteWeight") {
-        //uno o más dígitos, con o sin espacios, y uno o dos caracteres
+        //numero entero o con decimales, con o sin espacios, y uno o dos caracteres
           let pattern =
-            /^(\d+)\s*([a-zA-Z]{1,2})$/
+            /^(\d+)(?:\.(\d{1,2}))?\s*([a-zA-Z]{1,2})$/
 
           var patternMatch = value.match(pattern)
 
           if(!patternMatch) {
             validatedModel.attrFailed = modelAttr
             validatedModel.message = `El peso ingresado '${entityModel[modelAttr].alias}' no tiene el formato correcto`
-            validatedModel.details = 'Formato correcto: dd [B|kB|MB|GB]'
+            validatedModel.details = 'Formato correcto: number [B|kB|MB|GB]'
             return validatedModel
           }
 
           let _number = patternMatch[1]
-          let _unit = patternMatch[2]
-          let number = +_number
+          let _decimal = patternMatch[2]
+          let _unit = patternMatch[3]
           let unit = _.toUpper(_unit)
+          let weight = +(_number+'.'+_decimal)
 
           if (unit === 'B') {
             // :)
           } else if (unit === 'KB') {
-            number = number*1024
+            weight = weight*1000
           } else if (unit === 'MB') {
-            number = number*1024*1024
+            weight = weight*1000*1000
           } else if (unit === 'GB') {
-            number = number*1024*1024*1024
+            weight = weight*1000*1000*1000
           } else {
             validatedModel.attrFailed = modelAttr
             validatedModel.message = `Ingrese una unidad correcta (B, kB, MB o GB) en '${entityModel[modelAttr].alias}'`
             return validatedModel
           }
 
-          finalValue = number
+          finalValue = weight
       }
 
       finalModel[modelAttr] = finalValue
