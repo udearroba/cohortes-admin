@@ -83,4 +83,8 @@ export default {
     font-weight: bold;
     color: $darkest-gray;
   }
+  .detalle-item {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 </style>
