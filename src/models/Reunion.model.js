@@ -43,10 +43,10 @@ const ReunionModel =  {
     icon: 'fa fa-id-card',
     alias: 'Host id',
   },
-  createdat: {
+  createdate: {
     requiredOnForm: true,
     isNullable: true,
-    type: '_Date',
+    type: 'UnixTime',
     icon: 'fa fa-calendar-o',
     alias: 'Fecha de creación',
     isTableField: true,

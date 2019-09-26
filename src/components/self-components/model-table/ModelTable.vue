@@ -118,28 +118,27 @@ export default {
         return this.tableData
       }
       let tableDataComputed = _.cloneDeep(this.tableData)
-      let arrayDates = []
-      for (let [key, value] of Object.entries(this.entityModel)) {
-          if (value.type === '_Date')
-            arrayDates.push(key)
-      }
       let arrayDurations = []
+      let arrayUnix = []
       for (let [key, value] of Object.entries(this.entityModel)) {
           if (value.type === 'Duration')
             arrayDurations.push(key)
+          else if (value.type === 'UnixTime')
+            arrayUnix.push(key)
       }
       let dateFilter = this.$options.filters.date
       let durationFilter = this.$options.filters.duration
       for (let i = 0; i < tableDataComputed.length; i++) {
-        for (let j = 0; j < arrayDates.length; j++) {
-          let dateOld = tableDataComputed[i][arrayDates[j]]
-          let formattedDate = dateFilter(dateOld)
-          tableDataComputed[i][arrayDates[j]] = formattedDate
-        }
-        for (let k = 0; k < arrayDurations.length; k++) {
-          let durationOld = tableDataComputed[i][arrayDurations[k]]
+        for (let j = 0; j < arrayDurations.length; j++) {
+          let durationOld = tableDataComputed[i][arrayDurations[j]]
           let formattedDuration = durationFilter(durationOld)
-          tableDataComputed[i][arrayDurations[k]] = formattedDuration
+          tableDataComputed[i][arrayDurations[j]] = formattedDuration
+        }
+        for (let j = 0; j < arrayUnix.length; j++) {
+          let durationOld = tableDataComputed[i][arrayUnix[j]]
+          let formattedDuration = new Date(durationOld)
+          formattedDuration = dateFilter(formattedDuration)
+          tableDataComputed[i][arrayUnix[j]] = formattedDuration
         }
       }
       return tableDataComputed

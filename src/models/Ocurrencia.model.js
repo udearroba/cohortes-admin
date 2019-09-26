@@ -20,7 +20,7 @@ const OcurrenciaModel = {
   },
   starttime: {
     requiredOnForm: true,
-    type: '_Date',
+    type: 'UnixTime',
     icon: 'fa fa-clock-o',
     alias: 'Fecha de inicio',
     isTableField: true,

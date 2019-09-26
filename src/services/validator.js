@@ -67,86 +67,9 @@ let validatorService = {
         // no es necesario validarlas
         finalValue = +value
       }
-      else if (entityEl.type === "_Date") {
-        //formato dd MMM aaaa hh:mm am|pm
-        let pattern =
-        /^((\d{1,2})\s([a-zA-Z]{3})\s(\d+))\s((\d{1,2}):(\d{2})\s?([AaPp][Mm]))$/
-
-        var patternMatch = value.match(pattern)
-
-        if(!patternMatch) {
-          validatedModel.attrFailed = modelAttr
-          validatedModel.message = `La fecha ingresada en '${entityModel[modelAttr].alias}' no tiene el formato correcto`
-          validatedModel.details = 'Formato correcto: dd MMM aaaa hh:mm am|pm'
-          return validatedModel
-        }
-
-        //date
-        let _month = patternMatch[3]
-        let _day = patternMatch[2]
-        let _year = patternMatch[4]
-        //time
-        let _hours = patternMatch[6]
-        let _minutes = patternMatch[7]
-        let _acronym = patternMatch[8]
-
-        let months = [
-          'Ene','Feb','Mar','Abr','May','Jun',
-          'Jul','Ago','Sep','Oct','Nov','Dic',]
-
-        // VALIDACIÓN DE MES
-        let month = _.capitalize(_month)
-        let monthNumber = _.indexOf(months, month)
-        if (monthNumber == -1) {
-          validatedModel.attrFailed = modelAttr
-          validatedModel.message = `El mes ingresado en '${entityModel[modelAttr].alias}' (${_month}) no existe`
-          return validatedModel
-        }
-
-        // VALIDACIÓN DEL DÍA
-        let day = +_day
-        if (day < 1 || day > 31) {
-          validatedModel.attrFailed = modelAttr
-          validatedModel.message = `Ingrese un día entre 1 y 31 en '${entityModel[modelAttr].alias}'`
-          return validatedModel
-        }
-
-        // VALIDACIÓN DEL AÑO
-        let year = +_year
-        if (year < 1950 || year > 2200) {
-          validatedModel.attrFailed = modelAttr
-          validatedModel.message = `Ingrese un año entre 1950 y 2200 en '${entityModel[modelAttr].alias}'`
-          return validatedModel
-        }
-
-        // VALIDACIÓN DEL LAS HORAS
-        let hours = +_hours
-        if (hours < 1 || hours > 12) {
-          validatedModel.attrFailed = modelAttr
-          validatedModel.message = `Ingrese una hora entre 1 y 12 en '${entityModel[modelAttr].alias}'`
-          return validatedModel
-        }
-        // VALIDACIÓN DEL LOS MINUTOS
-        let minutes = +_minutes
-        if (minutes > 59) {
-          validatedModel.attrFailed = modelAttr
-          validatedModel.message = `Ingrese minutos entre 0 y 59 en '${entityModel[modelAttr].alias}'`
-          return validatedModel
-        }
-        // LAS SIGLAS AM O PM SON VALIDADAS POR LA MISMA EXPRESIÓN REGULAR
-        let acronym = _.toUpper(_acronym)
-
-        //12 am == 00:00
-        //12 pm == 12:00
-        if(acronym == 'PM' && hours<12) {
-          hours += 12
-        }
-        else if(acronym == 'AM' && hours==12) {
-          hours = 0
-        }
-
-        let finalDate = `${year}-${monthNumber+1}-${day} ${hours}:${minutes}:00`
-        finalValue = finalDate
+      else if (entityEl.type === "UnixTime") {
+        //no hay necesidad de validar debido al picker
+        finalValue = new Date(value).getTime()/1000
       }
       else if (entityEl.type === "Duration") {
         // RegEx extraído de stackoverflow.com

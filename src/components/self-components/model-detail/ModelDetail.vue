@@ -62,7 +62,7 @@ export default {
           }
           let modelAttr_type = this.model[key].type
           let filters = this.$options.filters
-          if(modelAttr_type === "_Date") {
+          if(modelAttr_type === "UnixTime") {
             let dateFilter = filters.date
             _dataComputed[key] = dateFilter(value)
           } else if(modelAttr_type === "Duration") {

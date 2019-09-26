@@ -1,5 +1,5 @@
 export default (value) => {
-  const date = new Date(value)
+  const date = new Date(value*1000)
 
   let months = [
     'Ene','Feb','Mar','Abr','May','Jun',

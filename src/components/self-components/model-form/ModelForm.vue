@@ -7,7 +7,7 @@
           <template
           v-for="(value, name) in formModel">
             <div class="form-group with-icon-left" v-bind:key="name">
-              <template v-if="value.type == '_Date'">
+              <template v-if="value.type == 'UnixTime'">
                 <div class="input-group date-input">
                     <div class="input-group">
                       <vuestic-date-picker
@@ -178,9 +178,9 @@ export default {
     clearForm() {
       for (let key in this.model) {
         let type = this.entityModel[key].type
-        if (type == "_Date") {
+        if (type == "UnixTime") {
           let dateFilter = this.$options.filters.date
-          let initialValue = dateFilter(new Date())
+          let initialValue = new Date()
           this.model[key] = initialValue
         }
         else if (type == "Duration") {
@@ -257,10 +257,10 @@ export default {
         this.formModel[modelAttr] = this.entityModel[modelAttr]
         Vue.set(this.model, modelAttr, null);
 
-        //a los campos tipo '_Date' se les asigna automáticamente la fecha actual
-        if (this.entityModel[modelAttr].type == "_Date") {
+        //a los campos tipo 'UnixTime' se les asigna automáticamente la fecha actual
+        if (this.entityModel[modelAttr].type == "UnixTime") {
           let dateFilter = this.$options.filters.date
-          let initialDate = dateFilter(new Date())
+          let initialDate = new Date()
           Vue.set(this.model, modelAttr, initialDate);
         }
         //a los campos tipo 'Duration' se les asigna automáticamente un valor inicial de una hora y media
