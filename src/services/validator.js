@@ -111,7 +111,7 @@ let validatorService = {
           }
 
           let _number = patternMatch[1]
-          let _decimal = patternMatch[2]
+          let _decimal = patternMatch[2] ? patternMatch[2] : 0
           let _unit = patternMatch[3]
           let unit = _.toUpper(_unit)
           let weight = +(_number+'.'+_decimal)
