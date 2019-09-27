@@ -33,7 +33,7 @@
     <!-- TABLA DE DATOS -->
     <div class="va-row">
       <div class="flex xs12 md12">
-        <vuestic-widget :headerText="'Ocurrencias'">
+        <vuestic-widget :headerText="'Archivos'">
           <model-table
           :tableFields="tableFields"
           :tableData="archivos"
