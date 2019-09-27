@@ -14,6 +14,8 @@ import './i18n'
 import YmapPlugin from 'vue-yandex-maps'
 import DateFilter from './filters/date.filter'
 import DurationFilter from './filters/duration.filter'
+import WeightFilter from './filters/fileWeight.filter'
+
 
 //Vue form-generator
 import VueFormGenerator from 'vue-form-generator'
@@ -35,6 +37,7 @@ Vue.use(VfgFieldMatrix)
 
 Vue.filter('date', DateFilter)
 Vue.filter('duration', DurationFilter)
+Vue.filter('weight', WeightFilter)
 
 // NOTE: workaround for VeeValidate + vuetable-2
 Vue.use(VeeValidate, { fieldsBagName: 'formFields' })

@@ -30,6 +30,7 @@
       </div>
     </div>
 
+    <!-- TABLA DE DATOS -->
     <div class="va-row">
       <div class="flex xs12 md12">
         <vuestic-widget :headerText="'Ocurrencias'">
@@ -37,6 +38,7 @@
           :tableFields="tableFields"
           :tableData="archivos"
           :noLinkAction="true"
+          :entityModel="modeloArchivo"
           @detailsClicked="onDetailsClicked"
           @editClicked="onEditClicked"
           @deleteClicked="onDeleteClicked"

@@ -29,12 +29,14 @@
       </div>
     </div>
 
+    <!-- TABLA DE DATOS -->
     <div class="va-row">
       <div class="flex xs12 md12">
         <vuestic-widget :headerText="'Grabaciones'">
           <model-table
           :tableFields="tableFields"
           :tableData="grabaciones"
+          :entityModel="modeloGrabacion"
           @addClicked="onAddClicked"
           @detailsClicked="onDetailsClicked"
           @editClicked="onEditClicked"

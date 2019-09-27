@@ -120,14 +120,18 @@ export default {
       let tableDataComputed = _.cloneDeep(this.tableData)
       let arrayDurations = []
       let arrayUnix = []
+      let arrayWeight = []
       for (let [key, value] of Object.entries(this.entityModel)) {
           if (value.type === 'Duration')
             arrayDurations.push(key)
           else if (value.type === 'UnixTime')
             arrayUnix.push(key)
+          else if (value.type === 'ByteWeight')
+            arrayWeight.push(key)
       }
       let dateFilter = this.$options.filters.date
       let durationFilter = this.$options.filters.duration
+      let weightFilter = this.$options.filters.weight
       for (let i = 0; i < tableDataComputed.length; i++) {
         for (let j = 0; j < arrayDurations.length; j++) {
           let durationOld = tableDataComputed[i][arrayDurations[j]]
@@ -139,6 +143,11 @@ export default {
           let formattedDuration = new Date(durationOld)
           formattedDuration = dateFilter(formattedDuration)
           tableDataComputed[i][arrayUnix[j]] = formattedDuration
+        }
+        for (let j = 0; j < arrayWeight.length; j++) {
+          let oldValue = tableDataComputed[i][arrayWeight[j]]
+          let formattedValue = weightFilter(oldValue)
+          tableDataComputed[i][arrayWeight[j]] = formattedValue
         }
       }
       return tableDataComputed
