@@ -68,7 +68,21 @@ let validatorService = {
         finalValue = +value
       }
       else if (entityEl.type === "UnixTime") {
-        //no hay necesidad de validar debido al picker
+        let months = {
+          'Ene': 'Jan',
+          'Abr': 'Apr',
+          'Ago': 'Aug',
+          'Dic': 'Dec',
+        }
+        Object.keys(months).forEach(month => {
+          if (value.includes(month)) {
+            console.log(value)
+            value = value.replace(month, months[month])
+            console.log(value)
+            //sería bueno hacer un break aquí, pero la sintaxis para hacerlo en un
+            // ciclo forEach es muy fea
+          }
+        })
         finalValue = new Date(value).getTime()/1000
       }
       else if (entityEl.type === "Duration") {
