@@ -76,9 +76,7 @@ let validatorService = {
         }
         Object.keys(months).forEach(month => {
           if (value.includes(month)) {
-            console.log(value)
             value = value.replace(month, months[month])
-            console.log(value)
             //sería bueno hacer un break aquí, pero la sintaxis para hacerlo en un
             // ciclo forEach es muy fea
           }

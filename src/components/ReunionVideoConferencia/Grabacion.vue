@@ -7,7 +7,8 @@
         :entityModel="modeloGrabacion"
         :foreignKey="id"
         :parentData="datosOcurrencia"
-        @on-agregar="onAgregar">
+        @on-agregar="onAgregar"
+        @on-agregar-and-continue="onAgregarAndContinue">
         </model-form>
       </div>
 
@@ -143,6 +144,22 @@ export default {
         this.showErrorToast()
       })
     },
+    onAgregarAndContinue (validatedModel) {
+      if (!validatedModel.isValid) {
+        this.showErrorToast(validatedModel.message, null, true)
+        return false;
+      }
+      axios.post(apiRoutes.grabacionesRoute, validatedModel.model)
+      .then(res => {
+        this.$refs.modelFormComponent.clearForm()
+        this.grabaciones.push(res.data)
+        let idGenerado = res.data.id
+        this.navegarSiguienteNivel(idGenerado)
+      }).catch(error => {
+        console.log(error);
+        this.showErrorToast()
+      })
+    },
     onEliminar(index) {
       this.$refs.confirm_modal.open();
       this.datoEliminar = index;
@@ -211,6 +228,23 @@ export default {
     },
     handleEditModalInitialization(editModalRef){
       this.$data.editModalRef = editModalRef
+    },
+    _showAddedToast(idGenerado) {
+      this.showAddedToast('',
+        {
+          icon: 'fa-plus',
+          position: 'bottom-right',
+          duration: 5000,
+          containerClass: 'toast-added',
+          action: {
+            text: 'Agregar Ocurrencia',
+            onClick: (e, toastObject) => {
+              this.navegarSiguienteNivel(idGenerado)
+              toastObject.goAway(0)
+            },
+            class: 'toast-action'
+          },
+        })
     },
   },
 

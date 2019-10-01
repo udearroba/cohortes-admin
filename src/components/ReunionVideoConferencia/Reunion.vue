@@ -6,7 +6,8 @@
       <div class="flex md12">
         <model-form ref="modelFormComponent"
         :entityModel="modeloReunion"
-        @on-agregar="onAgregar">
+        @on-agregar="onAgregar"
+        @on-agregar-and-continue="onAgregarAndContinue">
         </model-form>
       </div>
     </div>
@@ -100,21 +101,23 @@ export default {
         this.$refs.modelFormComponent.clearForm()
         this.reuniones.push(res.data)
         let idGenerado = res.data.id
-        this.showAddedToast('',
-        {
-          icon: 'fa-plus',
-          position: 'bottom-right',
-          duration: 5000,
-          containerClass: 'toast-added',
-          action: {
-            text: 'Agregar Ocurrencia',
-            onClick: (e, toastObject) => {
-              this.navegarSiguienteNivel(idGenerado)
-              toastObject.goAway(0)
-            },
-            class: 'toast-action'
-          },
-        })
+        this._showAddedToast(idGenerado)
+      }).catch(error => {
+        console.log(error)
+        this.showErrorToast()
+      })
+    },
+    onAgregarAndContinue (validatedModel) {
+      if (!validatedModel.isValid) {
+        this.showErrorToast(validatedModel.message, null, true)
+        return false;
+      }
+      let insert = axios.post(apiRoutes.reunionesRoute, validatedModel.model)
+      .then(res => {
+        this.$refs.modelFormComponent.clearForm()
+        this.reuniones.push(res.data)
+        let idGenerado = res.data.id
+        this.navegarSiguienteNivel(idGenerado)
       }).catch(error => {
         console.log(error);
         this.showErrorToast()
@@ -183,6 +186,23 @@ export default {
         this.showErrorToast()
       });
     },
+    _showAddedToast(idGenerado) {
+      this.showAddedToast('',
+        {
+          icon: 'fa-plus',
+          position: 'bottom-right',
+          duration: 5000,
+          containerClass: 'toast-added',
+          action: {
+            text: 'Agregar Ocurrencia',
+            onClick: (e, toastObject) => {
+              this.navegarSiguienteNivel(idGenerado)
+              toastObject.goAway(0)
+            },
+            class: 'toast-action'
+          },
+        })
+    }
   },
 
   computed: {

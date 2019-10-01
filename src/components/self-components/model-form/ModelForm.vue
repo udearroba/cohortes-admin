@@ -60,9 +60,16 @@
             </div>
           </template>
 
-          <div class="btn btn-micro btn-primary"
-          @click="onAgregar">
-            {{'Agregar'}}
+          <div class="action-buttons">
+            <div class="btn btn-micro btn-primary"
+            @click="onAgregar">
+              {{'Agregar'}}
+            </div>
+            <div class="btn btn-micro btn-primary"
+            v-if="!noLinkAction"
+            @click="onAgregarAndContinue">
+              {{'Agregar y continuar'}}
+            </div>
           </div>
         </fieldset>
       </div>
@@ -95,6 +102,12 @@ export default {
     parentData: {
       type: Object,
       required: false,
+    },
+    noLinkAction: {
+      type: Boolean,
+      default: function() {
+        return false;
+      }
     },
   },
   data () {
@@ -156,24 +169,12 @@ export default {
       this.model[name] = newValue
     },
     onAgregar() {
-      let rawModel = this.model
-      let validatedModel = validatorService.checkValid(rawModel, this.entityModel)
-
-      // si el modelo no es válido, entonces no se sigue con el proceso
-      if (!validatedModel.isValid) {
-        this.$emit('on-agregar', validatedModel)
-        return false;
-      }
-
-      let finalModel = validatedModel.model
-
-      // se agregan las llaves primarias al modelo
-      for (let foreignKeyElement in this.foreignKeys) {
-        finalModel[foreignKeyElement] = this.foreignKeys[foreignKeyElement]
-      }
-
-      validatedModel.model = finalModel
-      this.$emit('on-agregar', validatedModel)
+      let finalModel = this.addData()
+      this.$emit('on-agregar', finalModel)
+    },
+    onAgregarAndContinue() {
+      let finalModel = this.addData()
+      this.$emit('on-agregar-and-continue', finalModel)
     },
     clearForm() {
       for (let key in this.model) {
@@ -219,7 +220,27 @@ export default {
           }
         }
       }
-    }
+    },
+    addData() {
+      let rawModel = this.model
+      let validatedModel = validatorService.checkValid(rawModel, this.entityModel)
+
+      // si el modelo no es válido, entonces no se sigue con el proceso
+      if (!validatedModel.isValid) {
+        // this.$emit('on-agregar', validatedModel)
+        return validatedModel;
+      }
+
+      let finalModel = validatedModel.model
+
+      // se agregan las llaves primarias al modelo
+      for (let foreignKeyElement in this.foreignKeys) {
+        finalModel[foreignKeyElement] = this.foreignKeys[foreignKeyElement]
+      }
+
+      validatedModel.model = finalModel
+      return validatedModel
+    },
   },
   computed: {
     headerTextComputed(){
@@ -287,6 +308,15 @@ export default {
 .wrapper-calendar {
   span i {
     color: $text-gray;
+  }
+}
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  div:nth-child(2) {
+    margin-top: 5px;
+    white-space: nowrap;
   }
 }
 </style>

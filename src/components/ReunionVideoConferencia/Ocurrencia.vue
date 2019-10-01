@@ -8,7 +8,8 @@
         :entityModel="modeloOcurrencia"
         :foreignKey="id"
         :parentData="datosReunion"
-        @on-agregar="onAgregar">
+        @on-agregar="onAgregar"
+        @on-agregar-and-continue="onAgregarAndContinue">
         </model-form>
       </div>
 
@@ -116,21 +117,23 @@ export default {
         this.$refs.modelFormComponent.clearForm()
         this.ocurrencias.push(res.data)
         let idGenerado = res.data.id
-        this.showAddedToast('',
-        {
-          icon: 'fa-plus',
-          position: 'bottom-right',
-          duration: 5000,
-          containerClass: 'toast-added',
-          action: {
-            text: 'Agregar Grabación',
-            onClick: (e, toastObject) => {
-              this.navegarSiguienteNivel(idGenerado)
-              toastObject.goAway(0)
-            },
-            class: 'toast-action'
-          },
-        })
+        this._showAddedToast(idGenerado)
+      }).catch(error => {
+        console.log(error);
+        this.showErrorToast()
+      })
+    },
+    onAgregarAndContinue (validatedModel) {
+      if (!validatedModel.isValid) {
+        this.showErrorToast(validatedModel.message, null, true)
+        return false;
+      }
+      axios.post(apiRoutes.ocurrenciasRoute, validatedModel.model)
+      .then(res => {
+        this.$refs.modelFormComponent.clearForm()
+        this.ocurrencias.push(res.data)
+        let idGenerado = res.data.id
+        this.navegarSiguienteNivel(idGenerado)
       }).catch(error => {
         console.log(error);
         this.showErrorToast()
@@ -207,6 +210,23 @@ export default {
     },
     handleEditModalInitialization(editModalRef){
       this.$data.editModalRef = editModalRef
+    },
+    _showAddedToast(idGenerado) {
+      this.showAddedToast('',
+        {
+          icon: 'fa-plus',
+          position: 'bottom-right',
+          duration: 5000,
+          containerClass: 'toast-added',
+          action: {
+            text: 'Agregar Ocurrencia',
+            onClick: (e, toastObject) => {
+              this.navegarSiguienteNivel(idGenerado)
+              toastObject.goAway(0)
+            },
+            class: 'toast-action'
+          },
+        })
     },
   },
 
