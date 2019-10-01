@@ -10,6 +10,9 @@ const ReunionModel =  {
     requiredOnForm: true,
     type: 'String',
     charLimit: 100,
+    initialState: {
+      'dynamic': 'uuid'
+    },
     finalState: ['no-dash'],
     icon: 'fa fa-key',
     alias: 'Id sistema externo',

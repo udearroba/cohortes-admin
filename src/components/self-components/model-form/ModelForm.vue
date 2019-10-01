@@ -203,7 +203,14 @@ export default {
             initialValue = initialStateObject['static']
             Vue.set(this.model, modelAttr, initialValue)
           }
-          if (Object.keys(initialStateObject)[0] === "static-plus") {
+          else if (Object.keys(initialStateObject)[0] === "dynamic") {
+            initialValue = initialStateObject['dynamic']
+            //se asigna un 'watcher' a la propiedad necesaria
+            this.$watch('model.' + initialValue, function(newValue) {
+              this.model[modelAttr] = newValue
+            });
+          }
+          else if (Object.keys(initialStateObject)[0] === "static-plus") {
             let static_plus = initialStateObject['static-plus']
 
             //se asigna un 'watcher' a la propiedad necesaria
