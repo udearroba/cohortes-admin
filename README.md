@@ -1,3 +1,7 @@
+# Cohortes compatibilidad con API de cohortes-api
+La versión 1.5.1 compatible con cohortes-api 1.3.1
+
+
 # Vuestic Admin Dashboard
 
 Responsive admin dashboard template built with [Vue.js](https://vuejs.org) and [Bootstrap 4](https://v4-alpha.getbootstrap.com). Developed by [Epicmax](https://epicmax.co/). Designed by [Vasili Savitski](https://xxsavitski.myportfolio.com/)
