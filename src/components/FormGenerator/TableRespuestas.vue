@@ -1,3 +1,10 @@
+<!--
+
+  @version 1.4.1 - Octubre de 2019
+  @author Mario Alberto Sanchez Castro - Analista de desarrollo - Ude@ Educacion Virtual <desarrollo2ude@udea.edu.co>
+ 
+-->
+
 <template>
 	<div class="va-row">
 		<div class="flex xs12 md12">

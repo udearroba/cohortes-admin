@@ -1,16 +1,12 @@
+<!--
+
+  @version 1.4.1 - Octubre de 2019
+  @author Mario Alberto Sanchez Castro - Analista de desarrollo - Ude@ Educacion Virtual <desarrollo2ude@udea.edu.co>
+ 
+-->
+
 <template>
 	<div>
-
-<!--
-	<div class="va-row">
-
-      <div class="flex md12">
-        <model-form ref="modelFormComponent"
-        :entityModel="modeloFormulario"
-        @on-agregar="onAgregar">
-        </model-form>
-      </div>
-  </div>-->
   
   <div class="va-row">
   	<div class="flex xs12 md12">
