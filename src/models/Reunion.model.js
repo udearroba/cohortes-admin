@@ -13,7 +13,6 @@ const ReunionModel =  {
     initialState: {
       'dynamic': 'uuid'
     },
-    finalState: ['no-dash'],
     icon: 'fa fa-key',
     alias: 'Id sistema externo',
     isTableField: true,
@@ -36,6 +35,9 @@ const ReunionModel =  {
     requiredOnForm: true,
     type: 'String',
     charLimit: 512,
+    initialState: {
+      'dynamic': 'urljoin'
+    },
     icon: 'fa fa-link',
     alias: 'URL start',
     isTableField: true,

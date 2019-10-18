@@ -46,6 +46,7 @@
               <template v-else>
                 <div class="input-group">
                   <input
+                  @blur="blurInput(name)"
                   :name = "name"
                   v-model = "model[name]"
                   :type = "value.type"
@@ -82,7 +83,10 @@
 import Vue from 'vue'
 import _ from 'lodash'
 
-import validatorService from '../../../services/validator'
+import Validator from '../../../services/validator.class'
+import FormValidator from '../../../services/formValidator.class'
+import Transformer from '../../../services/transformer.class'
+import UserExceptionHandler from '../../../services/userExceptionHandler.class'
 
 export default {
   name: 'model-form',
@@ -154,6 +158,7 @@ export default {
       let newMonth = _.capitalize(month)
       let newDate = value.replace(month, newMonth)
       this.model[name] = newDate
+      this.blurInput(name)
     },
     blurDurationPickerMethod(name, value) {
       let pattern =
@@ -167,6 +172,12 @@ export default {
       }
 
       this.model[name] = newValue
+      this.blurInput(name)
+    },
+    blurInput(name) {
+      let value = this.model[name]
+      let model = this.entityModel[name]
+      this.model[name] = Transformer.validateByModel(value, model)
     },
     onAgregar() {
       let finalModel = this.addData()
@@ -230,11 +241,17 @@ export default {
     },
     addData() {
       let rawModel = this.model
-      let validatedModel = validatorService.checkValid(rawModel, this.entityModel)
+      let fValidator = new FormValidator(rawModel, this.entityModel)
+      let validatedModel = {}
+      try {
+        validatedModel = fValidator.validateForm()
+      } catch (error) {
+        validatedModel.isValid = false
+        validatedModel.message = UserExceptionHandler.getUserError(error)
+      }
 
       // si el modelo no es válido, entonces no se sigue con el proceso
       if (!validatedModel.isValid) {
-        // this.$emit('on-agregar', validatedModel)
         return validatedModel;
       }
 
