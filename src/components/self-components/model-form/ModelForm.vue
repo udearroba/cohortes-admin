@@ -46,6 +46,7 @@
               <template v-else>
                 <div class="input-group">
                   <input
+                  @blur="blurInput(name)"
                   :name = "name"
                   v-model = "model[name]"
                   :type = "value.type"
@@ -60,9 +61,16 @@
             </div>
           </template>
 
-          <div class="btn btn-micro btn-primary"
-          @click="onAgregar">
-            {{'Agregar'}}
+          <div class="action-buttons">
+            <div class="btn btn-micro btn-primary"
+            @click="onAgregar">
+              {{'Agregar'}}
+            </div>
+            <div class="btn btn-micro btn-primary"
+            v-if="!noLinkAction"
+            @click="onAgregarAndContinue">
+              {{'Agregar y continuar'}}
+            </div>
           </div>
         </fieldset>
       </div>
@@ -75,7 +83,10 @@
 import Vue from 'vue'
 import _ from 'lodash'
 
-import validatorService from '../../../services/validator'
+import Validator from '../../../services/validator.class'
+import FormValidator from '../../../services/formValidator.class'
+import Transformer from '../../../services/transformer.class'
+import UserExceptionHandler from '../../../services/userExceptionHandler.class'
 
 export default {
   name: 'model-form',
@@ -95,6 +106,12 @@ export default {
     parentData: {
       type: Object,
       required: false,
+    },
+    noLinkAction: {
+      type: Boolean,
+      default: function() {
+        return false;
+      }
     },
   },
   data () {
@@ -142,6 +159,7 @@ export default {
       let newMonth = _.capitalize(month)
       let newDate = value.replace(month, newMonth)
       this.model[name] = newDate
+      this.blurInput(name)
     },
     blurDurationPickerMethod(name, value) {
       let pattern =
@@ -155,26 +173,20 @@ export default {
       }
 
       this.model[name] = newValue
+      this.blurInput(name)
+    },
+    blurInput(name) {
+      let value = this.model[name]
+      let model = this.entityModel[name]
+      this.model[name] = Transformer.validateByModel(value, model)
     },
     onAgregar() {
-      let rawModel = this.model
-      let validatedModel = validatorService.checkValid(rawModel, this.entityModel)
-
-      // si el modelo no es válido, entonces no se sigue con el proceso
-      if (!validatedModel.isValid) {
-        this.$emit('on-agregar', validatedModel)
-        return false;
-      }
-
-      let finalModel = validatedModel.model
-
-      // se agregan las llaves primarias al modelo
-      for (let foreignKeyElement in this.foreignKeys) {
-        finalModel[foreignKeyElement] = this.foreignKeys[foreignKeyElement]
-      }
-
-      validatedModel.model = finalModel
-      this.$emit('on-agregar', validatedModel)
+      let finalModel = this.addData()
+      this.$emit('on-agregar', finalModel)
+    },
+    onAgregarAndContinue() {
+      let finalModel = this.addData()
+      this.$emit('on-agregar-and-continue', finalModel)
     },
     clearForm() {
       for (let key in this.model) {
@@ -203,7 +215,14 @@ export default {
             initialValue = initialStateObject['static']
             Vue.set(this.model, modelAttr, initialValue)
           }
-          if (Object.keys(initialStateObject)[0] === "static-plus") {
+          else if (Object.keys(initialStateObject)[0] === "dynamic") {
+            initialValue = initialStateObject['dynamic']
+            //se asigna un 'watcher' a la propiedad necesaria
+            this.$watch('model.' + initialValue, function(newValue) {
+              this.model[modelAttr] = newValue
+            });
+          }
+          else if (Object.keys(initialStateObject)[0] === "static-plus") {
             let static_plus = initialStateObject['static-plus']
 
             //se asigna un 'watcher' a la propiedad necesaria
@@ -220,7 +239,33 @@ export default {
           }
         }
       }
-    }
+    },
+    addData() {
+      let rawModel = this.model
+      let fValidator = new FormValidator(rawModel, this.entityModel)
+      let validatedModel = {}
+      try {
+        validatedModel = fValidator.validateForm()
+      } catch (error) {
+        validatedModel.isValid = false
+        validatedModel.message = UserExceptionHandler.getUserError(error)
+      }
+
+      // si el modelo no es válido, entonces no se sigue con el proceso
+      if (!validatedModel.isValid) {
+        return validatedModel;
+      }
+
+      let finalModel = validatedModel.model
+
+      // se agregan las llaves primarias al modelo
+      for (let foreignKeyElement in this.foreignKeys) {
+        finalModel[foreignKeyElement] = this.foreignKeys[foreignKeyElement]
+      }
+
+      validatedModel.model = finalModel
+      return validatedModel
+    },
   },
   computed: {
     headerTextComputed(){
@@ -288,6 +333,15 @@ export default {
 .wrapper-calendar {
   span i {
     color: $text-gray;
+  }
+}
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  div:nth-child(2) {
+    margin-top: 5px;
+    white-space: nowrap;
   }
 }
 </style>
