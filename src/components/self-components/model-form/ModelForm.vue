@@ -110,6 +110,7 @@ export default {
         dateFormat: 'd M Y h:i K',
         allowInput: true,
         enableTime: true,
+        monthSelectorType: 'static'
         },
       configDurationPicker: {
         noCalendar: true,

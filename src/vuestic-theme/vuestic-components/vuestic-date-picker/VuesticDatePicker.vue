@@ -288,11 +288,15 @@ $daySize: 1.75rem;
 }
 
 .form-group {
-  .flatpickr-input {
+  .vuestic-date-picker {
     width: 100%;
     background: none;
     outline: none;
     box-shadow: none;
   }
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months .flatpickr-monthDropdown-month {
+  background-color: $datepickerBackground;
 }
 </style>
