@@ -18,7 +18,7 @@ class Validator {
 
   static getValidByteWeight(value) {
     let pattern =
-          /^(\d+)(?:\.(\d{1,2}))?\s*([a-zA-Z]{1,2})$/
+          /^(\d+)(?:\.(\d+))?\s*([a-zA-Z]{1,2})$/
 
     var patternMatch = value.match(pattern)
 

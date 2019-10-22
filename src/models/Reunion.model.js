@@ -2,7 +2,7 @@ const ReunionModel =  {
   uuid: {
     requiredOnForm: true,
     type: 'String',
-    finalState: ['no-dash'],
+    // finalState: ['no-dash'],
     icon: 'fa fa-key',
     alias: 'Uuid',
   },
