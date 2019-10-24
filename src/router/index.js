@@ -93,6 +93,12 @@ export default new Router({
           default: true,
         },
         {
+          name: 'rich-table',
+          path: 'rich-table',
+          component: lazyLoading('app-sidebar-entries/rich-table/RichTable'),
+          default: true,
+        },
+        {
           name: 'reuniones',
           path: 'reuniones',
           component: lazyLoading('ReunionVideoConferencia/Reunion'),

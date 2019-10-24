@@ -13,8 +13,16 @@
         :to="{ name: 'reuniones' }">
         <span slot="title">
           <span
-            class="sidebar-menu-item-icon vuestic-icon vuestic-icon-tables"></span>
+            class="sidebar-menu-item-icon va-icon fa fa-group "></span>
           <span>{{ $t('Reuniones') }}</span>
+        </span>
+      </sidebar-link>
+      <sidebar-link
+        :to="{ name: 'rich-table' }">
+        <span slot="title">
+          <span
+            class="sidebar-menu-item-icon vuestic-icon vuestic-icon-tables"></span>
+          <span>{{ $t('Rich table') }}</span>
         </span>
       </sidebar-link>
       <sidebar-link-group>
