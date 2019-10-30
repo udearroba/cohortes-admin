@@ -95,7 +95,7 @@ export default new Router({
         {
           name: 'rich-table',
           path: 'rich-table',
-          component: lazyLoading('app-sidebar-entries/rich-table/RichTable'),
+          component: lazyLoading('app-sidebar-entries/rich-table/ViewRichTable'),
           default: true,
         },
         {

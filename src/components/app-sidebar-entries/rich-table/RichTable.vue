@@ -27,19 +27,6 @@ export default {
   },
   computed: {
     tableRowIterable (){
-      // let rtrnArr = []
-      // for (let index = 0; index < this.numberItems; index++) {
-      //   let element = {}
-      //   if (index%2 == 0) {
-      //     element.title = 'Perro'
-      //     element.info = 'El perro es el mejor amigo del hombre'
-      //   } else {
-      //     element.title = 'Gato'
-      //     element.info = 'La compañía felina perfecta'
-      //   }
-      //   rtrnArr.push(element)
-      // }
-      // return rtrnArr
       return [...Array(this.numberRows).keys()]
     }
   },
