@@ -2,11 +2,11 @@
   <div class="table-grid-container">
     <div
     class="table-element"
-    v-for="(item, index) in itemsIterable"
+    v-for="(data, index) in rowData"
     :key="index">
       <table-element-content
-      :title="item.title"
-      :info="item.info"
+      :title="data.title"
+      :info="data.info"
       />
     </div>
   </div>
@@ -21,6 +21,14 @@ export default {
   components: {
     TableElementContent,
   },
+  props: {
+    rowData: {
+      type: Array,
+      default: () => {
+        return []
+      }
+    },
+  },
   data () {
     return {
       numberItems: 10
@@ -30,28 +38,10 @@ export default {
 
   },
   computed: {
-    itemsIterable (){
-      let rtrnArr = []
-      for (let index = 0; index < this.numberItems; index++) {
-        let element = {}
-        if (index%2 == 0) {
-          element.title = 'Perro'
-          element.info = 'El perro es el mejor amigo del hombre'
-        } else {
-          element.title = 'Gato'
-          element.info = 'La compañía felina perfecta'
-        }
-        rtrnArr.push(element)
-      }
-      return rtrnArr
-      // return [...Array(this.numberItems).keys()]
-    }
   },
   beforeCreate () {
-
   },
   created () {
-
   },
 }
 

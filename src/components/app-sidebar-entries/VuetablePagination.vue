@@ -11,16 +11,18 @@
         <span v-else>&nbsp;&lsaquo;</span>
     </a>
     <template v-if="notEnoughPages">
-      <template v-for="n in totalPage">
+      <template v-for="(n, index) in totalPage">
         <a @click="loadPage(n)"
+          :key="index"
           :class="[css.pageClass, isCurrentPage(n) ? css.activeClass : '']"
           v-html="n">
         </a>
       </template>
     </template>
     <template v-else>
-      <template v-for="n in windowSize">
+      <template v-for="(n, index) in windowSize">
         <a @click="loadPage(windowStart+n-1)"
+          :key="index"
           :class="[css.pageClass, css.activeClass]"
           v-html="windowStart+n-1">
         </a>
@@ -46,12 +48,20 @@ import DataTableStyles from '../../vuestic-theme/vuestic-components/vuestic-data
 
 export default {
   mixins: [PaginationMixin],
+  props: {
+    numberOfPages: {
+      type: Number,
+      default: () => {
+        return null
+      }
+    },
+  },
   data() {
     return {
       css: DataTableStyles.pagination,
       tablePagination: {
         current_page: 1,
-        last_page: 4,
+        last_page: this.numberOfPages,
       }
     }
   },
@@ -64,12 +74,19 @@ export default {
       } else {
         this.tablePagination.current_page = page
       }
+    },
+    logNumberOfPages () {
+      console.log(this.numberOfPages)
+      console.log(this.tablePagination)
     }
   },
-  computed: {
+  watch: {
+    numberOfPages() {
+      this.tablePagination.last_page = this.numberOfPages
+    }
   },
   created () {
-    this.setPaginationData(this.tablePagination)
+    // this.setPaginationData(this.tablePagination)
   },
 }
 </script>

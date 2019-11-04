@@ -47,5 +47,6 @@ $content-info-color: $lighter-gray;
     height: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-height: 94px;
   }
 </style>
