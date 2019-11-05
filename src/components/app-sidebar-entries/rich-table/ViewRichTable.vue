@@ -6,11 +6,8 @@
   <vuetable-pagination
   ref="pagination"
   :numberOfPages="numberOfPages"
+  @pageChanged="onPageChanged"
   />
-  <button
-    @click="onClick()">
-    Click me :)
-  </button>
 </div>
 </template>
 
@@ -51,7 +48,7 @@ export default {
         rtrnArr.push(element)
       }
       let finalArr = []
-      for (let index = 0; index < 14; index++) {
+      for (let index = 0; index < 7; index++) {
         let copy = _.map(rtrnArr, _.clone)
         finalArr.push(copy)
       }
@@ -69,14 +66,17 @@ export default {
     },
     onClick() {
       this.$refs.pagination.logNumberOfPages()
+    },
+    onPageChanged(page) {
+      this.data = this.rtController.getDataPerPage(page)
     }
   },
   created() {
     this.getData()
     .then(res => {
-      this.data = res
       this.rtController = new RichTableController(res, 2)
       this.numberOfPages = this.rtController.getNumberOfPages()
+      this.data = this.rtController.getDataPerPage(1)
     })
   }
 }

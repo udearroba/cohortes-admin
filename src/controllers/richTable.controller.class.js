@@ -1,5 +1,3 @@
-import axios from 'axios'
-import apiRoutes from '../services/apiRoutes'
 import _ from 'lodash'
 
 class RichTableController {
@@ -18,12 +16,19 @@ class RichTableController {
   }
 
   paginateData() {
-    this.paginatedData = _.chunk(this.rawData, this.numberOfPages);
-    // console.log(this.paginatedData)
+    this.paginatedData = _.chunk(this.rawData, this.registerPerPage);
   }
 
   getNumberOfPages() {
     return this.numberOfPages
+  }
+
+  getPaginatedData() {
+    return this.paginatedData
+  }
+
+  getDataPerPage(page) {
+    return this.paginatedData[page-1]
   }
 }
 

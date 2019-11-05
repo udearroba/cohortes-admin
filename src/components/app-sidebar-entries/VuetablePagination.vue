@@ -23,7 +23,7 @@
       <template v-for="(n, index) in windowSize">
         <a @click="loadPage(windowStart+n-1)"
           :key="index"
-          :class="[css.pageClass, css.activeClass]"
+          :class="[css.pageClass, isCurrentPage(windowStart+n-1) ? css.activeClass : '']"
           v-html="windowStart+n-1">
         </a>
       </template>
@@ -74,11 +74,8 @@ export default {
       } else {
         this.tablePagination.current_page = page
       }
+      this.$emit('pageChanged', page)
     },
-    logNumberOfPages () {
-      console.log(this.numberOfPages)
-      console.log(this.tablePagination)
-    }
   },
   watch: {
     numberOfPages() {
