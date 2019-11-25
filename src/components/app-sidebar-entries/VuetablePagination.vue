@@ -74,7 +74,7 @@ export default {
       } else {
         this.tablePagination.current_page = page
       }
-      this.$emit('pageChanged', page)
+      this.$emit('pageChanged', this.tablePagination.current_page)
     },
   },
   watch: {
