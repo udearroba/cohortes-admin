@@ -12,9 +12,11 @@ import router from './router'
 import VuesticPlugin from '@/vuestic-theme/vuestic-plugin'
 import './i18n'
 import YmapPlugin from 'vue-yandex-maps'
+
 import DateFilter from './filters/date.filter'
 import DurationFilter from './filters/duration.filter'
 import WeightFilter from './filters/fileWeight.filter'
+import NumberToMonth from './filters/numberToMonth.filter'
 
 
 //Vue form-generator
@@ -38,6 +40,7 @@ Vue.use(VfgFieldMatrix)
 Vue.filter('date', DateFilter)
 Vue.filter('duration', DurationFilter)
 Vue.filter('weight', WeightFilter)
+Vue.filter('numberToMonth', NumberToMonth)
 
 // NOTE: workaround for VeeValidate + vuetable-2
 Vue.use(VeeValidate, { fieldsBagName: 'formFields' })

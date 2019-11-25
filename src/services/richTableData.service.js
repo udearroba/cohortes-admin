@@ -3,6 +3,7 @@ import apiRoutes from './apiRoutes'
 import _ from 'lodash'
 
 import richTableModel from '../models/richTable.model'
+import fieldsGenerator from '../services/richTableMissingFieldsGenerator.utils'
 
 let funcs = {
   async getReuniones() {
@@ -87,16 +88,25 @@ let funcs = {
 
       for (let j = 0; j < registerFields.length; j++) {
         const field = registerFields[j]
+        //normalmente 'field' es una tabla en la BD, pero no necesariamente debe ser así
         const fieldRegister = register[field]
         const model = richTableModel.fields[field]
         const modelKeys = Object.keys(richTableModel.fields[field])
         let processedRegister = _.pick(fieldRegister, modelKeys)
+        //processedRegister: registo de una ÚNICA TABLA procesado sólo con los campos necesarios (según richTable.model)
 
         const processedKeys = Object.keys(processedRegister)
         const missingKeys = _.difference(modelKeys, processedKeys)
-        //ES NECESARIO PROCESSAR LAS MISSING KEYS
+        //missingKeys: son las llaves que no pueden extraerse directemente desde la BD
+
+        if (missingKeys.length != 0) {
+          const missingInfo = fieldsGenerator.getMissingInfo(field, fieldRegister, missingKeys)
+          _.merge(processedRegister, missingInfo)
+        }
+
 
         let finalField = {}
+        //los datos se organizan de forma que la tabla pueda leerlos correctamente
         Object.entries(processedRegister).forEach(([key,value])=>{
           finalField.title = model[key].title ? model[key].title : key
           finalField.info = value.toString()
@@ -113,7 +123,6 @@ let funcs = {
   async getData() {
     let data = await this._getHttpData()
     let concatenatedData = this._concatenateData(data.reuniones, data.ocurrencias, data.grabaciones, data.archivos)
-    // console.log(concatenatedData)
     return this.processData(concatenatedData)
   }
 }

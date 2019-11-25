@@ -13,14 +13,14 @@ const richTable =  {
         title: 'Play URL',
         format: 'link',
       },
-      mesOcurrencia: {
-        title: 'Mes de ocurrencia',
-      },
       estadoDescarga: true,
     },
     ocurrencia: {
       starttime: {
         title: 'Fecha de inicio',
+      },
+      mesOcurrencia: {
+        title: 'Mes de ocurrencia',
       },
     },
     archivo: {
