@@ -1,10 +1,15 @@
 <template>
   <div class="element-content">
     <div class="content-title">
-      {{title}}
+      {{data.title}}
     </div>
     <div class="content-info">
-      {{info}}
+      <template v-if="dataType == 'link'">
+        <a :href="data.info" target="_blank">{{data.info}}</a>
+      </template>
+      <template v-else>
+        {{data.info}}
+      </template>
     </div>
   </div>
 </template>
@@ -13,12 +18,17 @@
 export default {
   name: 'table-element-content',
   props: {
-    title: {
-      type: String,
+    data: {
+      type: Object,
     },
-    info: {
-      type: String,
-    },
+  },
+  computed: {
+    dataType() {
+      if (!this.data.extra) {
+        return null
+      }
+      return this.data.extra.format
+    }
   },
 }
 </script>

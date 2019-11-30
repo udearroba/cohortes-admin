@@ -2,18 +2,22 @@ const richTable =  {
   fields: {
     reunion: {
       idsistemaexterno: {
-        title: 'Id sistema externo'
+        title: 'Id sistema externo',
       },
     },
     grabacion: {
       id: {
-        title: 'Id'
+        title: 'Id',
       },
       playurl: {
         title: 'Play URL',
         format: 'link',
       },
-      estadoDescarga: true,
+      estadoDescarga: {
+        title: 'Lugar grabación',
+        format: 'status',
+        status: ['Zoom', 'Drive'],
+      },
     },
     ocurrencia: {
       starttime: {
@@ -34,7 +38,11 @@ const richTable =  {
         title: 'Url',
         format: 'link',
       },
-      estadoDescarga: true,
+      estadoDescarga: {
+        title: 'Estado descarga de archivo',
+        format: 'status',
+        status: ['Descargado', 'Sin descargar'],
+      },
     },
   },
 }

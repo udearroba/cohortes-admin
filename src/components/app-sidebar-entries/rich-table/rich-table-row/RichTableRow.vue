@@ -5,8 +5,7 @@
     v-for="(data, index) in rowData"
     :key="index">
       <table-element-content
-      :title="data.title"
-      :info="data.info"
+      :data="data"
       />
     </div>
   </div>
@@ -33,15 +32,6 @@ export default {
     return {
       numberItems: 10
     }
-  },
-  methods: {
-
-  },
-  computed: {
-  },
-  beforeCreate () {
-  },
-  created () {
   },
 }
 

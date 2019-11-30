@@ -1,12 +1,12 @@
 <template>
 <div>
-  <rich-table
-  :tableData="this.data"
-  />
   <vuetable-pagination
   ref="pagination"
   :numberOfPages="numberOfPages"
   @pageChanged="onPageChanged"
+  />
+  <rich-table
+  :tableData="this.data"
   />
 </div>
 </template>

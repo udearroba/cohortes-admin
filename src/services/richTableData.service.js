@@ -93,7 +93,7 @@ let funcs = {
         const model = richTableModel.fields[field]
         const modelKeys = Object.keys(richTableModel.fields[field])
         let processedRegister = _.pick(fieldRegister, modelKeys)
-        //processedRegister: registo de una ÚNICA TABLA procesado sólo con los campos necesarios (según richTable.model)
+        //processedRegister: registo procesado de una ÚNICA TABLA sólo con los campos necesarios (según richTable.model)
 
         const processedKeys = Object.keys(processedRegister)
         const missingKeys = _.difference(modelKeys, processedKeys)
@@ -104,12 +104,20 @@ let funcs = {
           _.merge(processedRegister, missingInfo)
         }
 
-
         let finalField = {}
         //los datos se organizan de forma que la tabla pueda leerlos correctamente
         Object.entries(processedRegister).forEach(([key,value])=>{
           finalField.title = model[key].title ? model[key].title : key
           finalField.info = value.toString()
+
+          const _extra = _.cloneDeep(model[key])
+          delete _extra["title"]
+
+          //se añaden los campos adicionales que hay en el modelo necesarios en la UI para, por ejemplo, el renderizado según el tipo de campo (e.g link)
+          if(Object.keys(_extra).length > 0) {
+            finalField.extra = _extra
+          }
+
           finalRegister.push(_.cloneDeep(finalField))
         })
 
