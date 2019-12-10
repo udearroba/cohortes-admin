@@ -79,8 +79,24 @@ let funcs = {
     }
     return allData
   },
+  _thereAreNeededFields() {
+    let bool = false
+    _.forIn(richTableModel.fields, (value) => {
+      _.forIn(value, (value2) => {
+        if(value2.needed) {
+          bool = true
+          return true
+        }
+        if (bool)
+          return true
+      })
+    })
+    return bool
+  },
   processData(data) {
     let finalData = []
+
+    const areNeededFields = this._thereAreNeededFields()
     for (let index = 0; index < data.length; index++) {
       const register = data[index]
       const registerFields = Object.keys(register)
@@ -91,6 +107,7 @@ let funcs = {
         //normalmente 'field' es una tabla en la BD, pero no necesariamente debe ser así
         const fieldRegister = register[field]
         const model = richTableModel.fields[field]
+        // ❌❌❌ SI ELIMINO LOS CAMPOS DE LA TABLA REUNIÓN EN EL MODELO SE GENERA UN ERROR EN LA SIGUIENTE LINEA. REVISAR. ❌❌❌
         const modelKeys = Object.keys(richTableModel.fields[field])
         let processedRegister = _.pick(fieldRegister, modelKeys)
         //processedRegister: registo procesado de una ÚNICA TABLA sólo con los campos necesarios (según richTable.model)
@@ -105,25 +122,31 @@ let funcs = {
         }
 
         let finalField = {}
+        let findAnyNeededField = false
         //los datos se organizan de forma que la tabla pueda leerlos correctamente
         Object.entries(processedRegister).forEach(([key,value])=>{
-          finalField.title = model[key].title ? model[key].title : key
+          finalField.title = key
           finalField.info = value.toString()
 
-          const _extra = _.cloneDeep(model[key])
-          delete _extra["title"]
+          const _extra = _.cloneDeep(model[key]) // ⚠️⚠️ En caso de que no se elimine ninguna llave del modelo, no es necesaria esta linea. Revisar ⚠️⚠️
+          // delete _extra["title"]
 
           //se añaden los campos adicionales que hay en el modelo necesarios en la UI para, por ejemplo, el renderizado según el tipo de campo (e.g link)
           if(Object.keys(_extra).length > 0) {
             finalField.extra = _extra
           }
-
+          if (finalField.extra)
+            if (finalField.extra.needed)
+              findAnyNeededField = true
           finalRegister.push(_.cloneDeep(finalField))
         })
 
-        finalData.push(_.cloneDeep(finalRegister))
+        if (!areNeededFields || findAnyNeededField) {
+          finalData.push(_.cloneDeep(finalRegister))
+        }
         // COMPARAR LAS LLAVES DEL OBJETO Y LAS LLAVES DEL MODELO (puede usarse Object.keys())
       }
+
       // QUITAR DEL REGISTO CAMPOS QUE NO APAREZCAN EN EL MODELO
     }
     return finalData

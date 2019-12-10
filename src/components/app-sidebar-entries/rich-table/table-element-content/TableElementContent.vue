@@ -1,7 +1,7 @@
 <template>
   <div class="element-content">
     <div class="content-title">
-      {{data.title}}
+      {{title}}
     </div>
     <div class="content-info">
       <template v-if="dataType == 'link'">
@@ -28,6 +28,12 @@ export default {
         return null
       }
       return this.data.extra.format
+    },
+    title() {
+      if (this.data.extra) {
+        return this.data.extra.alias ? this.data.extra.alias : this.data.title
+      }
+      return this.data.title
     }
   },
 }
