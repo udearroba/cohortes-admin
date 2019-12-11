@@ -13,11 +13,11 @@ const richTable =  {
         alias: 'Play URL',
         format: 'link',
       },
-      estadoDescarga: {
+      estadodescarga: {
         alias: 'Almacenado en',
         needed: true,
         format: 'status',
-        status: ['Zoom', 'Drive'],
+        status: ['ZOOM', 'DRIVE'],
       },
     },
     ocurrencia: {
@@ -39,11 +39,11 @@ const richTable =  {
         alias: 'Url',
         format: 'link',
       },
-      estadoDescarga: {
+      estadodescarga: {
         alias: 'Estado descarga de archivo',
         needed: true,
         format: 'status',
-        status: ['Descargado', 'Sin descargar'],
+        status: ['DESCARGADO', 'SIN DESCARGAR'],
       },
     },
   },

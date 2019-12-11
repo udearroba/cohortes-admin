@@ -1,43 +1,41 @@
 <template>
   <div class="element-content">
-
-    <template v-if="dataType == 'link'">
-      <div class="content-title">
-        {{title}}
-      </div>
-      <div class="content-info">
-        <a :href="data.info" target="_blank">{{data.info}}</a>
-      </div>
-    </template>
-
-    <template v-else-if="dataType == 'status'">
-      <status-element
-      :data="this.data"/>
-    </template>
-
-    <template v-else>
-      <div class="content-title">
-        {{title}}
-      </div>
-      <div class="content-info">
-        {{data.info}}
-      </div>
-    </template>
+    <div class="content-title" @click="onClick()">
+      {{title}}
+      <i class="fa fa-exchange"></i>
+    </div>
+    <div class="content-info">
+      {{contentInfo}}
+    </div>
   </div>
 </template>
 
 <script>
-import StatusElement from '../table-element-content/status-element/StatusElement'
+// import _ from 'lodash'
 
 export default {
   name: 'table-element-content',
-  components: {
-    StatusElement,
-  },
   props: {
     data: {
       type: Object,
     },
+  },
+  data() {
+    return {
+      contentInfo: this.data.info
+    }
+  },
+  methods: {
+    onClick() {
+      const actualIndex = _.indexOf(this.data.extra.status, this.contentInfo)
+      this.contentInfo = this.getNextElement(this.data.extra.status, actualIndex)
+    },
+    getNextElement(arr, actualIndex) {
+      const len = arr.length
+      if (actualIndex+1 >= len)
+        return arr[0]
+      return arr[actualIndex+1]
+    }
   },
   computed: {
     dataType() {
@@ -64,6 +62,7 @@ $content-info-color: $lighter-gray;
 .element-content {
     display: flex;
     flex-direction: column;
+    // align-items: center;
     padding: 5px;
   }
 
@@ -72,6 +71,17 @@ $content-info-color: $lighter-gray;
     justify-content: flex-start;
     color: $content-title-color;
     font-weight: bold;
+    i {
+      display: none;
+      margin-left: auto;
+      align-self: center;
+    }
+    &:hover {
+      cursor: pointer;
+      & i {
+      display: initial;
+      }
+    }
   }
 
   .content-info {
