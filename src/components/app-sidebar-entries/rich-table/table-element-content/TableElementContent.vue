@@ -2,12 +2,14 @@
   <div class="element-content">
 
     <template v-if="dataType == 'link'">
-      <div class="content-title">
+      <link-element
+      :data="this.data"/>
+      <!-- <div class="content-title">
         {{title}}
       </div>
       <div class="content-info">
         <a :href="data.info" target="_blank">{{data.info}}</a>
-      </div>
+      </div> -->
     </template>
 
     <template v-else-if="dataType == 'status'">
@@ -28,11 +30,13 @@
 
 <script>
 import StatusElement from '../table-element-content/status-element/StatusElement'
+import LinkElement from '../table-element-content/link-element/LinkElement'
 
 export default {
   name: 'table-element-content',
   components: {
     StatusElement,
+    LinkElement,
   },
   props: {
     data: {

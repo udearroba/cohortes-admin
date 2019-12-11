@@ -1,20 +1,25 @@
 <template>
-  <div class="status-element-content">
-    <div class="content-title" @click="onClick()">
+  <div class="link-element-content">
+    <div class="content-title" @click="focusField()">
       {{title}}
-      <i class="fa fa-exchange"></i>
+      <i class="fa fa-edit"></i>
     </div>
     <div class="content-info">
+      <a
+        :href="contentInfo"
+        target="_blank"
+        v-show="!inputActive"
+        >
       {{contentInfo}}
+      </a>
+      <input v-model="editField" v-show="inputActive" @blur="blurField" ref="input">
     </div>
   </div>
 </template>
 
 <script>
-// import _ from 'lodash'
-
 export default {
-  name: 'status-element-content',
+  name: 'link-element-content',
   props: {
     data: {
       type: Object,
@@ -22,20 +27,23 @@ export default {
   },
   data() {
     return {
-      contentInfo: this.data.info
+      contentInfo: this.data.info,
+      inputActive: false,
+      editField : '',
     }
   },
   methods: {
-    onClick() {
-      const actualIndex = _.indexOf(this.data.extra.status, this.contentInfo)
-      this.contentInfo = this.getNextElement(this.data.extra.status, actualIndex)
+    focusField(){
+      this.editField = this.contentInfo
+      this.inputActive = !this.inputActive
+      console.log(this.$refs)
+      console.log(this.$refs.input.focus())
+      // this.$refs.input.$el.focus()
     },
-    getNextElement(arr, actualIndex) {
-      const len = arr.length
-      if (actualIndex+1 >= len)
-        return arr[0]
-      return arr[actualIndex+1]
-    }
+    blurField(){
+      this.contentInfo = this.editField
+      this.inputActive = !this.inputActive
+    },
   },
   computed: {
     dataType() {
