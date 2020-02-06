@@ -21,6 +21,9 @@ let funcs = {
   async getOcurrenciasFromIdReunion(idReunion) {
     return axios.get(apiRoutes.getOcurrenciasFromIdReunion(idReunion))
   },
+  async getRichTableData(limit) {
+    return axios.get(apiRoutes.getReunionesEnriquecidas(limit))
+  },
   async _getHttpData() {
     let [reuniones, ocurrencias, grabaciones, archivos] = await Promise.all([
       this.getReuniones(),
@@ -151,10 +154,60 @@ let funcs = {
     }
     return finalData
   },
+  processData2(data) {
+    let processedReuniones = []
+    
+    // for (const reunion of data) {
+    //   processedReuniones.push(this.processReunion(reunion))
+    // }
+
+    return data
+  },
+  processReunion(reunion) {
+    // ✔️✔️  En este espacio deberían tomarse sólo los campos que estén en el modelo  ✔️✔️
+    // let reunionModel = richTableModel.fields.reunion
+    // console.log(reunionModel)
+
+    // ⚠️⚠️  Por ahora se toman todos los campos  ⚠️⚠️
+    let reunionData = _.omit(reunion, ['ocurrencias'])
+    let ocurrencias = _.pick(reunion, ['ocurrencias'])
+    ocurrencias = ocurrencias.ocurrencias
+    let ocurrenciasData
+    let grabaciones
+
+    let processedReunion = {}
+    processedReunion.reunion = {}
+    processedReunion.reunion.data = reunionData
+    processedReunion.reunion.ocurrencias = []
+    
+    for (const ocurrencia of ocurrencias) {
+      ocurrenciasData = _.omit(ocurrencia, ['grabaciones'])
+      grabaciones = _.pick(ocurrencia, ['grabaciones'])
+      grabaciones = grabaciones.grabaciones
+
+      for (const archivo of archivos) {
+        
+      }
+      ocurrencia = {}
+      ocurrencia.data = ocurrenciasData
+      ocurrencia.grabaciones = grabaciones
+      processedReunion.reunion.ocurrencias.push(ocurrencia)
+    }
+    
+    return processedReunion
+  },
   async getData() {
     let data = await this._getHttpData()
     let concatenatedData = this._concatenateData(data.reuniones, data.ocurrencias, data.grabaciones, data.archivos)
     return this.processData(concatenatedData)
+  },
+  async getData2(limit) {
+    let data = await this.getRichTableData(limit)
+    data = data.data
+    console.log(data)
+    // let prsData = this.processData2(data)
+    // console.log(prsData)
+    return data
   }
 }
 

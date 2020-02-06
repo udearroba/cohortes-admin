@@ -49,6 +49,11 @@ let apiRoutes =  {
   },getRespuestasFromIdFormulario: function(idFormulario) {
     return `${formulariosRoute}/${idFormulario}/${respuestasTableName}`
   },
+  
+  getReunionesEnriquecidas: function(limit) {
+    limit = limit ? limit : 10
+    return `${reunionesRoute}/listar?limit=${limit}`
+  },
 }
 
 export default apiRoutes;
