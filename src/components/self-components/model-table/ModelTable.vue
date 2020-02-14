@@ -164,4 +164,10 @@ export default {
     display: flex;
     justify-content: space-around;
   }
+  .table td {
+    max-width: 22px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 </style>

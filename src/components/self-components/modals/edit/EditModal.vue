@@ -16,7 +16,6 @@
                   <div class="form-group with-icon-left" v-bind:key="name">
                     <div class="input-group">
                       <input
-                      id="input-icon-left"
                       :name = "name"
                       :type = "entityModel[name].type"
                       v-model = "model[name]"

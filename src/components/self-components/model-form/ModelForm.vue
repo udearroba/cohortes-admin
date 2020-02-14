@@ -11,7 +11,7 @@
                 <div class="input-group date-input">
                     <div class="input-group">
                       <vuestic-date-picker
-                        id=model[name]
+                        v-bind:id="model[name]"
                         :config="configPicker"
                         v-model="model[name]"
                         @blur="blurDatePickerMethod(name, $event)"

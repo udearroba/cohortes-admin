@@ -73,7 +73,7 @@
                 <fieldset>
                   <div class="form-group with-icon-left">
                     <div class="input-group">
-                      <input id="input-icon-left" name="input-icon-left"
+                      <input name="input-icon-left"
                              required/>
                       <i class="fa fa-envelope-o icon-left input-icon"></i>
                       <label class="control-label" for="input-icon-left">{{'forms.inputs.inputWithIcon'
