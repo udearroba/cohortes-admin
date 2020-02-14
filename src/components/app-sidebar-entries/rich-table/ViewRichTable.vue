@@ -7,7 +7,7 @@
   @pageChanged="onPageChanged"
   />
   <template v-if="this.data">
-    <rich-table-2
+    <rich-table
     :tableData = this.data
     />
   </template>
@@ -18,7 +18,7 @@
 import Vue from 'vue'
 import _ from 'lodash'
 
-import RichTable2 from './RichTable2'
+import RichTable from './RichTable'
 import VuetablePagination from '../VuetablePagination'
 
 import richTableData from '../../../services/richTableData.service'
@@ -27,7 +27,7 @@ import RichTableController from '../../../controllers/richTable.controller.class
 export default {
   name: 'view-rich-table',
   components: {
-    RichTable2,
+    RichTable,
     VuetablePagination,
   },
   data() {

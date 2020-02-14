@@ -21,6 +21,28 @@ export default {
     TableElementContent,
   },
   props: {
+// [
+//    {
+//       "title":"idsistemaexterno",
+//       "info":"15465",
+//       "extra":{
+//          "alias":"Id sistema externo"
+//       }
+//    },
+//    {
+//       "title":"estadodescarga",
+//       "info":"ZOOM",
+//       "extra":{
+//          "alias":"Almacenado en",
+//          "needed":true,
+//          "format":"status",
+//          "status":[
+//             "ZOOM",
+//             "DRIVE"
+//          ]
+//       }
+//    }
+// ]
     rowData: {
       type: Array,
       default: () => {

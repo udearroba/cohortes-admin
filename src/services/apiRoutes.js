@@ -54,6 +54,10 @@ let apiRoutes =  {
     limit = limit ? limit : 10
     return `${reunionesRoute}/listar?limit=${limit}`
   },
+  getReunionesEnriquecidas2: function(limit) {
+    limit = limit ? limit : 10
+    return `${reunionesRoute}/richTable?limit=${limit}`
+  },
 }
 
 export default apiRoutes;

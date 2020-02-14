@@ -4,12 +4,6 @@
     <template v-if="dataType == 'link'">
       <link-element
       :data="this.data"/>
-      <!-- <div class="content-title">
-        {{title}}
-      </div>
-      <div class="content-info">
-        <a :href="data.info" target="_blank">{{data.info}}</a>
-      </div> -->
     </template>
 
     <template v-else-if="dataType == 'status'">
