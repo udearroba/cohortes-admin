@@ -251,6 +251,26 @@ let funcs = {
     data = data.data
     data = this.processData2(data)
     return data
+  },
+
+  async patchArchivo() {
+
+    let idArchivo = this.archivos[this.indexDato].id
+      this.archivoAux = validatedModel
+      axios.patch(apiRoutes.getArchivosFromId(idArchivo), validatedModel.model)
+      .then(res => {
+        delete this.archivos[this.indexDato]
+        let newArchivo = JSON.parse(JSON.stringify(this.archivoAux))
+        newArchivo = newArchivo.model
+        Vue.set(this.archivos, this.indexDato, newArchivo);
+        this.showSuccessToast('Cambios guardados')
+      })
+      .catch(error => {
+        console.log(error)
+        this.showErrorToast()
+      });
+
+
   }
 }
 

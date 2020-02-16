@@ -12,7 +12,13 @@
         >
       {{contentInfo}}
       </a>
-      <input v-model="editField" v-show="inputActive" @blur="blurField" ref="input">
+      <input
+        ref="input"
+        v-model="editField"
+        v-show="inputActive"
+        @blur="blurField"
+        @focus="$event.target.select()"
+        @keypress="enterPressed($event)">
     </div>
   </div>
 </template>
@@ -36,14 +42,24 @@ export default {
     focusField(){
       this.editField = this.contentInfo
       this.inputActive = !this.inputActive
-      console.log(this.$refs)
-      console.log(this.$refs.input.focus())
-      // this.$refs.input.$el.focus()
+      this.$nextTick(() => {
+      this.$refs.input.focus()
+      })
     },
     blurField(){
-      this.contentInfo = this.editField
+      // this.contentInfo = this.editField
+      if(this.contentInfo == this.editField.trim()) {
+        this.saveChanges()
+      }
       this.inputActive = !this.inputActive
     },
+    enterPressed(event) {
+      if (event.keyCode === 13) {
+        event.path[0].blur()
+      }
+    },
+    saveChanges() {
+    }
   },
   computed: {
     dataType() {
