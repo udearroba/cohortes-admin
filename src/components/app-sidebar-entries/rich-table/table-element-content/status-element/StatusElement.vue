@@ -11,7 +11,8 @@
 </template>
 
 <script>
-// import _ from 'lodash'
+import axios from 'axios'
+import apiRoutes from '../../../../../services/apiRoutes'
 
 export default {
   name: 'status-element-content',
@@ -28,7 +29,27 @@ export default {
   methods: {
     onClick() {
       const actualIndex = _.indexOf(this.data.extra.status, this.contentInfo)
-      this.contentInfo = this.getNextElement(this.data.extra.status, actualIndex)
+      let newContentInfo = this.getNextElement(this.data.extra.status, actualIndex)
+
+      let newRegister = _.cloneDeep(this.data.id.register)
+      newRegister[this.data.title] = newContentInfo
+
+      let routePath = ''
+      if (this.data.id.field == 'archivo') {
+        routePath = apiRoutes.archivosRoute
+      } else if (this.data.id.field == 'grabacion') {
+        routePath = apiRoutes.grabacionesRoute
+      }
+
+      axios.patch(routePath, newRegister)
+      .then(res => {
+        this.contentInfo = this.getNextElement(this.data.extra.status, actualIndex)
+        this.showSuccessToast('Cambios guardados correctamente')
+      }).catch(error => {
+        console.log(error)
+        console.error('Verificar que la ruta a la que se está apuntando en el back es correcta')
+        this.showErrorToast()
+      })
     },
     getNextElement(arr, actualIndex) {
       const len = arr.length

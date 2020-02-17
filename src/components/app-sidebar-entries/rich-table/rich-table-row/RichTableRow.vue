@@ -5,14 +5,12 @@
     v-for="(data, index) in rowData"
     :key="index">
       <table-element-content
-      :data="data"
-      />
+      :data="data"/>
     </div>
   </div>
 </template>
 
 <script>
-import Vue from 'vue'
 import TableElementContent from '../table-element-content/TableElementContent'
 
 export default {

@@ -165,7 +165,7 @@ let funcs = {
       const register = data[index]
       const registerFields = Object.keys(register)
       let finalRegister = []
-      
+      let findAnyNeededField = false
       for (let j = 0; j < registerFields.length; j++) {
         //normalmente 'field' es una tabla en la BD, pero no necesariamente debe ser así
         const field = registerFields[j]
@@ -187,7 +187,6 @@ let funcs = {
 
         //los datos se organizan de forma que la tabla pueda leerlos correctamente
         let finalField = {}
-        // let findAnyNeededField = false
         Object.entries(processedRegister).forEach(([key,value])=>{
           finalField.title = key
           finalField.info = value.toString()
@@ -197,13 +196,19 @@ let funcs = {
           if(Object.keys(_extra).length > 0) {
             finalField.extra = _extra
             finalRegister.push(_.cloneDeep(finalField))
-            // if (finalField.extra.needed)
-            //   findAnyNeededField = true
+            if (finalField.extra.needed)
+              findAnyNeededField = true
           }
+          //se añade el identificador al campo
+          finalField.id = {}
+          finalField.id.field = field
+          finalField.id.register = fieldRegister
         })
         // COMPARAR LAS LLAVES DEL OBJETO Y LAS LLAVES DEL MODELO (puede usarse Object.keys())
       }
-      finalData.push(_.cloneDeep(finalRegister))
+      if (findAnyNeededField) {
+        finalData.push(_.cloneDeep(finalRegister))
+      }
       // QUITAR DEL REGISTO CAMPOS QUE NO APAREZCAN EN EL MODELO
     }
     return finalData

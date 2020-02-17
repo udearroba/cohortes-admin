@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import TableElementRow from './rich-table-row/RichTableRow'
+import richTableData from '../../../services/richTableData.service'
 
 export default {
   name: 'rich-table',

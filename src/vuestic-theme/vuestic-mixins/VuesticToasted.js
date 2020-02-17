@@ -33,7 +33,7 @@ const addedToast = {
 const successToast = {
   icon: 'fa-check',
   position: 'bottom-right',
-  duration: 1300,
+  duration: 3000,
   containerClass: 'toast-added'
 }
 
@@ -49,6 +49,15 @@ export default {
     },
     showAddedToast (msg, options) {
       this.$toasted.show(msg || `Datos agregados`, options || addedToast)
+    },
+    showSavedToast(text) {
+      this.showAddedToast(text,
+        {
+          icon: 'fa-plus',
+          position: 'bottom-right',
+          duration: 5000,
+          containerClass: 'toast-added',
+        })
     },
     showErrorToast (msg, options, long) {
       if(long) {

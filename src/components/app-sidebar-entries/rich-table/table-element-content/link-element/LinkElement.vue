@@ -24,6 +24,9 @@
 </template>
 
 <script>
+import axios from 'axios'
+import apiRoutes from '../../../../../services/apiRoutes'
+
 export default {
   name: 'link-element-content',
   props: {
@@ -47,9 +50,9 @@ export default {
       })
     },
     blurField(){
-      // this.contentInfo = this.editField
-      if(this.contentInfo == this.editField.trim()) {
-        this.saveChanges()
+      let newValue = this.editField.trim()
+      if(this.contentInfo != newValue) {
+        this.saveChanges(newValue)
       }
       this.inputActive = !this.inputActive
     },
@@ -58,7 +61,26 @@ export default {
         event.path[0].blur()
       }
     },
-    saveChanges() {
+    saveChanges(newValue) {
+      let newRegister = _.cloneDeep(this.data.id.register)
+      newRegister[this.data.title] = newValue
+
+      let routePath = ''
+      if (this.data.id.field == 'archivo') {
+        routePath = apiRoutes.archivosRoute
+      } else if (this.data.id.field == 'grabacion') {
+        routePath = apiRoutes.grabacionesRoute
+      }
+
+      axios.patch(routePath, newRegister)
+      .then(res => {
+        this.contentInfo = newValue
+        this.showSuccessToast('Cambios guardados correctamente')
+      }).catch(error => {
+        console.log(error)
+        console.error('Verificar que la ruta a la que se está apuntando en el back es correcta')
+        this.showErrorToast()
+      })
     }
   },
   computed: {
