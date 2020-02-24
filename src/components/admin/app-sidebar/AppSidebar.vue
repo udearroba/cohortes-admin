@@ -6,7 +6,7 @@
         <span slot="title">
           <span
             class="sidebar-menu-item-icon vuestic-icon vuestic-icon-dashboard"></span>
-          <span>{{ $t('menu.dashboard') }}</span>
+          <span>Home</span>
         </span>
       </sidebar-link>
       <sidebar-link
@@ -14,7 +14,7 @@
         <span slot="title">
           <span
             class="sidebar-menu-item-icon va-icon fa fa-group "></span>
-          <span>{{ $t('Reuniones') }}</span>
+          <span>Reuniones</span>
         </span>
       </sidebar-link>
       <sidebar-link
@@ -22,7 +22,7 @@
         <span slot="title">
           <span
             class="sidebar-menu-item-icon vuestic-icon vuestic-icon-tables"></span>
-          <span>{{ $t('Rich table') }}</span>
+          <span>Reuniones compuestas</span>
         </span>
       </sidebar-link>
       <sidebar-link-group>
