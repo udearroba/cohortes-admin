@@ -24,6 +24,9 @@ let apiRoutes =  {
   getReunionesFromId: function(idReunion) {
     return `${reunionesRoute}/${idReunion}`
   },
+  getCountReuniones: function() {
+    return `${reunionesRoute}/count`
+  },
   getOcurrenciasFromId: function(idOcurrencia) {
     return `${ocurrenciasRoute}/${idOcurrencia}`
   },
@@ -54,9 +57,9 @@ let apiRoutes =  {
     limit = limit ? limit : 10
     return `${reunionesRoute}/listar?limit=${limit}`
   },
-  getReunionesEnriquecidas2: function(limit) {
+  getReunionesEnriquecidas2: function(limit, offset) {
     limit = limit ? limit : 10
-    return `${reunionesRoute}/richTable?limit=${limit}`
+    return `${reunionesRoute}/richTable?limit=${limit}&offset=${offset}`
   },
 }
 

@@ -40,6 +40,8 @@ export default {
       } else if (this.data.id.field == 'grabacion') {
         routePath = apiRoutes.grabacionesRoute
       }
+      
+      routePath = `${routePath}/${this.data.id.register.id}`
 
       axios.patch(routePath, newRegister)
       .then(res => {

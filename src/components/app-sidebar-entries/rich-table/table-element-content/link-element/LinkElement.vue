@@ -72,6 +72,8 @@ export default {
         routePath = apiRoutes.grabacionesRoute
       }
 
+      routePath = `${routePath}/${this.data.id.register.id}`
+
       axios.patch(routePath, newRegister)
       .then(res => {
         this.contentInfo = newValue

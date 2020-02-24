@@ -1,16 +1,22 @@
 <template>
 <div>
-  <vuetable-pagination
-  class="pagination-class"
-  ref="pagination"
-  :numberOfPages="numberOfPages"
-  @pageChanged="onPageChanged"
-  />
+  <template v-if="this.numberOfPages">
+    <vuetable-pagination
+    class="pagination-class"
+    ref="pagination"
+    :numberOfPages="numberOfPages"
+    @pageChanged="onPageChanged"
+    />
+  </template>
   <template v-if="this.data">
     <rich-table
     :tableData = this.data
     />
   </template>
+  <template v-else>
+    <p>Cargando...</p>
+  </template>
+  
 </div>
 </template>
 
@@ -37,20 +43,30 @@ export default {
     }
   },
   methods: {
-    getData(limit) {
-      return richTableData.getData2(limit)
+    getData(limit, page) {
+      this.data = null
+      return this.rtController.getDataPerPage(page)
     },
-    onPageChanged(page) {
-      this.data = this.rtController.getDataPerPage(page)
-    }
+    async onPageChanged(page) {
+      this.data = null
+      let limit = 1
+      this.data = await this.getData(limit, page)
+    },
+    // later(delay) {
+    // return new Promise(function(resolve) {
+    //   setTimeout(resolve, delay)
+    //   });
+    // },
   },
   async created() {
-    //el parámetro de getData es el número de reuniones a traer
-    let data = await this.getData(1)
-    // this.rtController = new RichTableController(res, 2)
-    // this.numberOfPages = this.rtController.getNumberOfPages()
+    let numeroReuniones = await richTableData.getReunionesCount()
+    // await this.later(2000)
+    this.rtController = new RichTableController(numeroReuniones)
+    this.numberOfPages = this.rtController.getNumberOfPages()
+    let data = await this.getData(1, 1)
     this.data = data
-  }
+  },
+  
 }
 </script>
 

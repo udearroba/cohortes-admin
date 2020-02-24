@@ -1,34 +1,23 @@
-import _ from 'lodash'
+import richTableData from '../services/richTableData.service'
 
 class RichTableController {
 
-  rawData = []
-  paginatedData = []
   numberOfPages
   registerPerPage
 
-  constructor(data, registerPerPage) {
-    this.rawData = data
-    this.registerPerPage = registerPerPage ? registerPerPage : 2
-    this.numberOfPages = Math.ceil(data.length / registerPerPage)
-
-    this.paginateData()
-  }
-
-  paginateData() {
-    this.paginatedData = _.chunk(this.rawData, this.registerPerPage);
+  constructor(numberOfPages) {
+    this.registerPerPage = 1
+    this.numberOfPages = numberOfPages
   }
 
   getNumberOfPages() {
     return this.numberOfPages
   }
 
-  getPaginatedData() {
-    return this.paginatedData
-  }
-
-  getDataPerPage(page) {
-    return this.paginatedData[page-1]
+  async getDataPerPage(page) {
+    // return this.paginatedData[page-1]
+    let data = await richTableData.getData(1, page-1)
+    return data
   }
 }
 

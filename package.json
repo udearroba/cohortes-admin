@@ -1,6 +1,6 @@
 {
   "name": "cohortes-admin",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "description": "Aplicación gestión de cohortes",
   "author": "Daniel Felipe Jaramillo <daniel.jaramillo7@udea.edu.co> - Mario Alberto Sanchez Castro <desarrollo2ude@udea.edu.co> - Alejandro Escobar <ealejandro101@gmail.com>",
   "private": false,
